@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\Main;
+use App\Models\Dataset;
 
 /**
  * Class: ShowTableController
@@ -27,7 +27,7 @@ class ShowTableController implements IController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'] ?? 'main';
+        $this->area = $requestData['area'] ?? 'dataset';
         $this->view = 'table';
     }
 
@@ -38,9 +38,9 @@ class ShowTableController implements IController
      */
     public function invoke(): array
     {
-        if ($this->area === 'main') {
-            $mains = (new Main())->getAllAsObjects();
-            return [ 'mains' => $mains ];
+        if ($this->area === 'dataset') {
+            $datasets = (new Dataset())->getAllAsObjects();
+            return [ 'datasets' => $datasets ];
         }
     }
 

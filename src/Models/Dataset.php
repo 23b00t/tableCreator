@@ -6,11 +6,11 @@ use App\Core\Db;
 use PDO;
 
 /**
- * Class: Main
+ * Class: Dataset
  *
  * @see IModel
  */
-class Main implements IModel
+class Dataset implements IModel
 {
     /**
      * @var int|null $id
@@ -21,7 +21,7 @@ class Main implements IModel
      */
     private ?string $name;
     /**
-     * @var MainAttributes[]
+     * @var DatasetAttributes[] $attributes
      */
     private array $attributes;
 
@@ -34,25 +34,25 @@ class Main implements IModel
         if (isset($id)) {
             $this->id = $id;
             $this->name = $name;
-            $this->attributes = (new MainAttributes())->getAllObjectsByMainId($id);
+            $this->attributes = (new DatasetAttributes())->getAllObjectsByDatasetId($id);
         }
     }
 
     /**
      * getAllAsObjects
      *
-     * @return Main[]
+     * @return Dataset[]
      */
     public function getAllAsObjects(): array
     {
         $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM main';
+        $sql = 'SELECT * FROM dataset';
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $return = [];
         foreach ($results as $object) {
-            $return[] = new Main(...$object);
+            $return[] = new Dataset(...$object);
         }
 
         return $return;
@@ -67,7 +67,7 @@ class Main implements IModel
     public function deleteObjectById(int $id): void
     {
         $pdo = Db::getConnection();
-        $sql = 'DELETE FROM main WHERE id = ?';
+        $sql = 'DELETE FROM dataset WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -76,16 +76,16 @@ class Main implements IModel
      * getObjectById
      *
      * @param int $id
-     * @return Main
+     * @return Dataset
      */
-    public function getObjectById(int $id): Main
+    public function getObjectById(int $id): Dataset
     {
         $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM main WHERE id = ?';
+        $sql = 'SELECT * FROM dataset WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $return = $result ? new Main(...$result) : null;
+        $return = $result ? new Dataset(...$result) : null;
 
         return $return;
     }
@@ -98,7 +98,7 @@ class Main implements IModel
     public function update(): void
     {
         $pdo = Db::getConnection();
-        $sql = 'UPDATE main SET name = ? WHERE id = ?';
+        $sql = 'UPDATE dataset SET name = ? WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(
             [$this->name, $this->id]
@@ -109,16 +109,16 @@ class Main implements IModel
      * insert
      *
      * @param string $name
-     * @return Main
+     * @return Dataset
      */
-    public function insert(string $name): Main
+    public function insert(string $name): Dataset
     {
         $pdo = Db::getConnection();
-        $sql = 'INSERT INTO main VALUES(NULL, ?)';
+        $sql = 'INSERT INTO dataset VALUES(NULL, ?)';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$name]);
         $id = $pdo->lastInsertId();
-        return new Main($id, $name);
+        return new Dataset($id, $name);
     }
 
     /**
@@ -144,7 +144,7 @@ class Main implements IModel
     /**
      * getAttributes
      *
-     * @return MainAttributes[]
+     * @return DatasetAttributes[]
      */
     public function getAttributes(): array
     {

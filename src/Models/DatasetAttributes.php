@@ -6,20 +6,20 @@ use App\Core\Db;
 use PDO;
 
 /**
- * Class: Main
+ * Class: DatasetAttributes
  *
  * @see IModel
  */
-class MainAttributes implements IModel
+class DatasetAttributes implements IModel
 {
     /**
      * @var int|null $id
      */
     private ?int $id;
     /**
-     * @var int|null $mainId
+     * @var int|null $datasetId
      */
-    private ?int $mainId;
+    private ?int $datasetId;
     /**
      * @var string|null $attributeName
      */
@@ -29,11 +29,11 @@ class MainAttributes implements IModel
      * @param int $id = null
      * @param string $name = null
      */
-    public function __construct(int $id = null, int $mainId = null, string $attributeName = null)
+    public function __construct(int $id = null, int $datasetId = null, string $attributeName = null)
     {
         if (isset($id)) {
             $this->id = $id;
-            $this->mainId = $mainId;
+            $this->datasetId = $datasetId;
             $this->attributeName = $attributeName;
         }
     }
@@ -41,18 +41,18 @@ class MainAttributes implements IModel
     /**
      * getAllAsObjects
      *
-     * @return MainAttributes[]
+     * @return DatasetAttributes[]
      */
     public function getAllAsObjects(): array
     {
         $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM mainAttributes';
+        $sql = 'SELECT * FROM datasetAttributes';
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $return = [];
         foreach ($results as $object) {
-            $return[] = new MainAttributes(...$object);
+            $return[] = new DatasetAttributes(...$object);
         }
 
         return $return;
@@ -67,7 +67,7 @@ class MainAttributes implements IModel
     public function deleteObjectById(int $id): void
     {
         $pdo = Db::getConnection();
-        $sql = 'DELETE FROM mainAttributes WHERE id = ?';
+        $sql = 'DELETE FROM datasetAttributes WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -76,16 +76,16 @@ class MainAttributes implements IModel
      * getObjectById
      *
      * @param int $id
-     * @return MainAttributes
+     * @return DatasetAttributes
      */
-    public function getObjectById(int $id): MainAttributes
+    public function getObjectById(int $id): DatasetAttributes
     {
         $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM mainAttributes WHERE id = ?';
+        $sql = 'SELECT * FROM datasetAttributes WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $return = $result ? new MainAttributes(...$result) : null;
+        $return = $result ? new DatasetAttributes(...$result) : null;
 
         return $return;
     }
@@ -97,9 +97,9 @@ class MainAttributes implements IModel
      */
     public function update(): void
     {
-        // INFO: No functionality for changeing mainId as it is not a valid use case
+        // INFO: No functionality for changeing datasetId as it is not a valid use case
         $pdo = Db::getConnection();
-        $sql = 'UPDATE mainAttributes SET attributename = ? WHERE id = ?';
+        $sql = 'UPDATE datasetAttributes SET attributename = ? WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(
             [$this->attributeName, $this->id]
@@ -109,36 +109,36 @@ class MainAttributes implements IModel
     /**
      * insert
      *
-     * @param int $mainId
+     * @param int $datasetId
      * @param string $attributeName
-     * @return MainAttributes
+     * @return DatasetAttributes
      */
-    public function insert(int $mainId, string $attributeName): MainAttributes
+    public function insert(int $datasetId, string $attributeName): DatasetAttributes
     {
         $pdo = Db::getConnection();
-        $sql = 'INSERT INTO mainAttributes VALUES(NULL, ?, ?)';
+        $sql = 'INSERT INTO datasetAttributes VALUES(NULL, ?, ?)';
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$mainId, $attributeName]);
+        $stmt->execute([$datasetId, $attributeName]);
         $id = $pdo->lastInsertId();
-        return new MainAttributes($id, $mainId, $attributeName);
+        return new DatasetAttributes($id, $datasetId, $attributeName);
     }
 
     /**
-     * getAllObjectsByMainId
+     * getAllObjectsByDatasetId
      *
-     * @param int $mainId
-     * @return MainAttributes[]
+     * @param int $datasetId
+     * @return DatasetAttributes[]
      */
-    public function getAllObjectsByMainId(int $mainId): array
+    public function getAllObjectsByDatasetId(int $datasetId): array
     {
         $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM mainAttributes WHERE mainId = ?';
+        $sql = 'SELECT * FROM datasetAttributes WHERE datasetId = ?';
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$mainId]);
+        $stmt->execute([$datasetId]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $return = [];
         foreach ($results as $object) {
-            $return[] = new MainAttributes(...$object);
+            $return[] = new DatasetAttributes(...$object);
         }
 
         return $return;
@@ -155,12 +155,12 @@ class MainAttributes implements IModel
     }
 
     /**
-     * getMainId
+     * getDatasetId
      *
      * @return int|null
      */
-    public function getMainId(): ?int
+    public function getDatasetId(): ?int
     {
-        return $this->mainId;
+        return $this->datasetId;
     }
 }

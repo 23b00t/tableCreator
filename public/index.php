@@ -7,7 +7,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 /**
  * @var string $area (Controller Name)
  */
-$area = $_REQUEST['area'] ?? 'main';
+$area = $_REQUEST['area'] ?? 'dataset';
 
 /**
  * @var string $action (Controller action)
