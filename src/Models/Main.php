@@ -15,11 +15,11 @@ class Main implements IModel
     /**
      * @var int|null $id
      */
-    private int $id;
+    private ?int $id;
     /**
      * @var string|null $name
      */
-    private string $name;
+    private ?string $name;
     /**
      * @var MainAttributes[]
      */
@@ -31,9 +31,11 @@ class Main implements IModel
      */
     public function __construct(int $id = null, string $name = null)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->attributes = (new MainAttributes())->getAllObjectsByMainId($id);
+        if (isset($id)) {
+            $this->id = $id;
+            $this->name = $name;
+            $this->attributes = (new MainAttributes())->getAllObjectsByMainId($id);
+        }
     }
 
     /**

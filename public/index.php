@@ -1,5 +1,7 @@
 <?php
 
+include_once __DIR__ . '/../config.php';
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -14,7 +16,7 @@ $area = $_REQUEST['area'] ?? 'main';
 $action = $_REQUEST['action'] ?? 'showTable';
 
 /** Build Action Controller Name from $action */
-$controllerName = ucfirst($action) . 'Controller';
+$controllerName = 'App\\Controllers\\' . ucfirst($action) . 'Controller';
 
 /**
  * Determine request method (POST or GET) and securely pass the corresponding
@@ -33,4 +35,4 @@ extract($array);
 $action = $controllerName === 'ShowFormController' ? $controller->getAction() : $action;
 
 /** Include requested view */
-include __DIR__ . '/views/application.html.php';
+include __DIR__ . '/../src/Views/application.php';
