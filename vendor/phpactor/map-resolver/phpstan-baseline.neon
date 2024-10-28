@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Phpactor\\\\MapResolver\\\\Resolver\\:\\:resolveDescriptions\\(\\) should return array\\<string, string\\> but returns array\\<int\\|string, string\\|false\\|null\\>\\.$#"
+			count: 1
+			path: lib/Resolver.php
+

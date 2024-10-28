@@ -1,0 +1,93 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+namespace Smeghead\PhpClassDiagram;
+
+use Smeghead\PhpClassDiagram\Config\Options;
+
+foreach (
+    [
+        __DIR__ . '/../../../autoload.php',
+        __DIR__ . '/../vendor/autoload.php'
+    ] as $file
+) {
+    if (file_exists($file)) {
+        require $file;
+        break;
+    }
+}
+
+$options = getopt('hv', [
+    'help',
+    'version',
+    'class-diagram',
+    'package-diagram',
+    'division-diagram',
+    'jig-diagram',
+    'enable-class-properties',
+    'disable-class-properties',
+    'enable-class-methods',
+    'disable-class-methods',
+    'enable-class-name-summary',
+    'disable-class-name-summary',
+    'hide-private',
+    'hide-private-properties',
+    'hide-private-methods',
+    'svg-topurl::',
+    'header::',
+    'include::',
+    'exclude::',
+], $rest_index);
+$arguments = array_slice($argv, $rest_index);
+
+$usage = <<<EOS
+usage: php-class-diagram [OPTIONS] <target php source directory>
+
+A CLI tool that parses the PHP source directory and generates PlantUML class diagram scripts as output.
+
+OPTIONS
+  -h, --help                       show this help page.
+  -v, --version                    show version.
+      --class-diagram              output class diagram script. (default)
+      --package-diagram            output package diagram script.
+      --division-diagram           output division diagram script.
+      --jig-diagram                output class diagram and package diagram and division diagram script.
+      --enable-class-properties    describe properties in class diagram. (default)
+      --disable-class-properties   not describe properties in class diagram.
+      --enable-class-methods       describe methods in class diagram. (default)
+      --disable-class-methods      not describe methods in class diagram.
+      --enable-class-name-summary  describe classname with Class summary of document comment. (default)
+      --disable-class-name-summary describe classname without Class summary of document comment.
+      --hide-private               hide private properties and methods.
+      --hide-private-properties    hide private properties.
+      --hide-private-methods       hide private methods.
+      --svg-topurl                 Specifies the top URL when displaying the class as a link when outputting in SVG format.
+      --header='header string'     additional header string. You can specify multiple header values.
+      --include='wildcard'         include target file pattern. (default: `*.php`) You can specify multiple include patterns.
+      --exclude='wildcard'         exclude target file pattern. You can specify multiple exclude patterns.
+
+EOS;
+
+if (isset($options['v']) || isset($options['version'])) {
+    fwrite(STDERR, sprintf('php-class-diagram %s%s', Main::VERSION, PHP_EOL));
+    exit(-1);
+}
+if (isset($options['h']) || isset($options['help'])) {
+    fwrite(STDERR, $usage);
+    exit(-1);
+}
+
+$directory = array_shift($arguments);
+if (empty($directory)) {
+    fwrite(STDERR, "ERROR: not specified php source file.\n");
+    fwrite(STDERR, $usage);
+    exit(-1);
+}
+if (!is_dir($directory)) {
+    fwrite(STDERR, sprintf("ERROR: specified directory dose not exists. directory: %s\n", $directory));
+    fwrite(STDERR, $usage);
+    exit(-1);
+}
+
+$main = new Main($directory, new Options($options));
+$main->run();

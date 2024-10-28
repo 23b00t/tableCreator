@@ -1,0 +1,4 @@
+DOMDocument:
+{% for node in object.childNodes %}
+    - {{ render(node) }}
+{%- endfor -%}

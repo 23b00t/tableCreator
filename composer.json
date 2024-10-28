@@ -1,0 +1,21 @@
+{
+    "name": "user/table-creator",
+    "type": "project",
+    "require": {
+        "phpactor/phpactor": "dev-master"
+    },
+    "require-dev": {
+        "phpactor/phpactor": "dev-master",
+        "smeghead/php-class-diagram": "dev-main"
+    },
+    "authors": [
+        {
+            "name": "Daniel Kipp",
+            "email": "daniel.kipp@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {"App\\": "src/"}
+    }
+}

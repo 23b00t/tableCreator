@@ -1,0 +1,7 @@
+includes:
+    - phpstan-baseline.neon
+parameters:
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - lib
+    level: 7

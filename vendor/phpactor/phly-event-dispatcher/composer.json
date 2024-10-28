@@ -1,0 +1,70 @@
+{
+    "name": "phpactor/phly-event-dispatcher",
+    "description": "Experimental event dispatcher for PSR-14",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "components",
+        "psr-14",
+        "event-dispatcher"
+    ],
+    "support": {
+        "issues": "https://github.com/phly/phly-event-dispatcher/issues",
+        "source": "https://github.com/phly/phly-event-dispatcher",
+        "rss": "https://github.com/phly/phly-event-dispatcher/releases.atom"
+    },
+    "require": {
+        "php": "^7.3||^8.0",
+        "psr/container": "^1.0||^2.0",
+        "psr/event-dispatcher": "^1.0"
+    },
+    "require-dev": {
+        "fig/event-dispatcher-util": "^1.0",
+        "friendsofphp/php-cs-fixer": "^2.17",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpstan/phpstan": "~0.12.0",
+        "phpunit/phpunit": "^9.0.0",
+        "zendframework/zend-coding-standard": "~1.0.0"
+    },
+    "conflict": {
+        "phpspec/prophecy": "<1.7.5"
+    },
+    "provide": {
+        "psr/event-dispatcher-implementation": "^1.0"
+    },
+    "autoload": {
+        "files": [
+            "src/functions/lazy_listener.php"
+        ],
+        "psr-4": {
+            "Phly\\EventDispatcher\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "files": [
+            "test/TestAsset/listener_function.php"
+        ],
+        "psr-4": {
+            "PhlyTest\\EventDispatcher\\": "test/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+}

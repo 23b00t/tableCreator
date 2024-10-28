@@ -1,0 +1,23 @@
+language: php
+
+sudo: false
+
+php:
+    - 7.2
+    - 7.3
+    - 7.4
+    - nightly
+
+jobs:
+    allow_failures:
+        - php: nightly
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+before_script:
+    - composer install
+
+script:
+    - composer integrate

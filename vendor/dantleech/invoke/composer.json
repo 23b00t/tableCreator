@@ -1,0 +1,50 @@
+{
+  "name": "dantleech/invoke",
+  "description": "Emulate named parameters",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "daniel leech",
+      "email": "daniel@dantleech.com"
+    }
+  ],
+
+  "require": {
+    "php": "^7.2||^8.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.13",
+    "phpunit/phpunit": "^8.0",
+    "phpstan/phpstan": "^0.12.0",
+    "phpbench/phpbench": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "DTL\\Invoke\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DTL\\Invoke\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "integrate": [
+      "@php-cs-fixer",
+      "@phpstan",
+      "@phpunit",
+      "@phpbench"
+    ],
+    "phpstan": "./vendor/bin/phpstan analyse --ansi --level=7",
+    "php-cs-fixer": "./vendor/bin/php-cs-fixer fix --ansi --dry-run",
+    "phpunit": "./vendor/bin/phpunit --colors=always",
+    "phpbench": "./vendor/bin/phpbench run --ansi"
+  },
+  "extra": {
+      "branch-alias": {
+          "dev-master": "1.2-dev"
+      }
+  }
+}
