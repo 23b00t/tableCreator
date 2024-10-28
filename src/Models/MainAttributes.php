@@ -39,7 +39,7 @@ class MainAttributes implements IModel
     /**
      * getAllAsObjects
      *
-     * @return array
+     * @return MainAttributes[]
      */
     public function getAllAsObjects(): array
     {
@@ -119,6 +119,27 @@ class MainAttributes implements IModel
         $stmt->execute([$mainId, $attributeName]);
         $id = $pdo->lastInsertId();
         return new MainAttributes($id, $mainId, $attributeName);
+    }
+
+    /**
+     * getAllObjectsByMainId
+     *
+     * @param int $mainId
+     * @return MainAttributes[]
+     */
+    public function getAllObjectsByMainId(int $mainId): array
+    {
+        $pdo = Db::getConnection();
+        $sql = 'SELECT * FROM mainAttributes WHERE mainId = ?';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$mainId]);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $return = [];
+        foreach ($results as $object) {
+            $return[] = new MainAttributes(...$object);
+        }
+
+        return $return;
     }
 
     /**

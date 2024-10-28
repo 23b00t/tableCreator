@@ -20,6 +20,10 @@ class Main implements IModel
      * @var string|null $name
      */
     private string $name;
+    /**
+     * @var MainAttributes[]
+     */
+    private array $attributes;
 
     /**
      * @param int $id = null
@@ -29,12 +33,13 @@ class Main implements IModel
     {
         $this->id = $id;
         $this->name = $name;
+        $this->attributes = (new MainAttributes())->getAllObjectsByMainId($id);
     }
 
     /**
      * getAllAsObjects
      *
-     * @return array
+     * @return Main[]
      */
     public function getAllAsObjects(): array
     {
@@ -132,5 +137,15 @@ class Main implements IModel
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * getAttributes
+     *
+     * @return MainAttributes[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 }
