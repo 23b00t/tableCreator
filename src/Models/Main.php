@@ -5,6 +5,11 @@ namespace App\Models;
 use App\Core\Db;
 use PDO;
 
+/**
+ * Class: Main
+ *
+ * @see IModel
+ */
 class Main implements IModel
 {
     /**
@@ -102,7 +107,7 @@ class Main implements IModel
     public function insert(string $name): Main
     {
         $pdo = Db::getConnection();
-        $sql = 'INSERT INTO employee VALUES(NULL, ?)';
+        $sql = 'INSERT INTO main VALUES(NULL, ?)';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$name]);
         $id = $pdo->lastInsertId();
