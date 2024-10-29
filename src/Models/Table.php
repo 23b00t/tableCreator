@@ -14,37 +14,16 @@ use PDO;
 class Table implements IModel
 {
     /**
-     * @var int|null $id
-     */
-    private ?int $id;
-    /**
-     * @var string|null $name
-     */
-    private ?string $name;
-    /**
-     * @var array $attributes
+     * @var array<int,mixed>
      */
     private array $attributes;
 
     /**
-     * @var array<int,mixed>
-     */
-    private array $attributeValues;
-
-    /**
-     * @param int $id = null
-     * @param string $name = null
      * @param array<int,mixed> $attributes
-     * @param array<int,mixed> $attributeValues
      */
-    public function __construct(int $id = null, string $name = null, array $attributes = null, array $attributeValues)
+    public function __construct(array $attributes)
     {
-        if (isset($id)) {
-            $this->id = $id;
-            $this->name = $name;
-            $this->attributes = $attributes;
-            $this->attributeValues = $attributeValues;
-        }
+        $this->attributes = $attributes;
     }
 
     /**
@@ -106,13 +85,12 @@ class Table implements IModel
      */
     public function update(): void
     {
-        $attributes = [];
-        foreach ($this->attributes as $attribute) {
-            $attributes[] = $attribute . ' = ?';
-        }
+        $attributeString = implode(', ', array_map(function ($attribute) {
+            return $attribute . ' = ?';
+        }, $this->attributes));
 
         $pdo = Db::getConnection();
-        $sql = 'UPDATE ' . $this->name . ' SET ' . implode(', ', $attributes) . ' WHERE id = ?';
+        $sql = 'UPDATE ' . $this->name . ' SET ' . $attributeString . ' WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(...$this->attributeValues);
     }
@@ -125,12 +103,15 @@ class Table implements IModel
      */
     public function insert(array $values): Table
     {
-        $placeholders = [];
-        foreach ($this->attributes as $_) {
-            $placeholders[] = '?';
-        }
+        // $placeholders = [];
+        // foreach ($this->attributes as $_) {
+        //     $placeholders[] = '?';
+        // }
+        // $pdo = Db::getConnection();
+        // $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . implode(', ', $placeholders) . ')';
+        $placeholders = rtrim(str_repeat('?, ', count($this->attributes)), ', ');
         $pdo = Db::getConnection();
-        $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . implode(', ', $placeholders) . ')';
+        $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . $placeholders . ')';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(...$values);
         $id = $pdo->lastInsertId();

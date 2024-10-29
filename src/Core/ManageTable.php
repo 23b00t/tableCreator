@@ -37,11 +37,15 @@ class ManageTable
      */
     public function create(): void
     {
-        $databaseAttributes = [];
-        foreach ($this->attributes as $attribute) {
-            $databaseAttributes[] = $attribute . ' VARCHAR(255)';
-        }
-        $attributeString = implode(', ', $databaseAttributes);
+        // $databaseAttributes = [];
+        // foreach ($this->attributes as $attribute) {
+        //     $databaseAttributes[] = $attribute . ' VARCHAR(255)';
+        // }
+        // $attributeString = implode(', ', $databaseAttributes);
+        $attributeString = implode(', ', array_map(function ($attribute) {
+            return $attribute . ' VARCHAR(255)';
+        }, $this->attributes));
+
         $sql = "CREATE TABLE IF NOT EXISTS `" . $this->tableName . "` (" . $attributeString . ");";
 
         $pdo = Db::getConnection();

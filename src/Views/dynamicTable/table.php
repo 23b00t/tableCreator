@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Views;
+namespace App\Views\dynamicTable;
 
 /** @var dataset[] $datasets  */
 ?>

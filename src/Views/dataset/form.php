@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Views;
+namespace App\Views\dataset;
 
 use App\Models\Dataset;
 
