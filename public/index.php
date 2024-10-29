@@ -32,7 +32,7 @@ $array = $controller->invoke();
 extract($array);
 
 /** After calling ShowFormController set the action depending on usecase - update or insert */
-$action = $controllerName === 'ShowFormController' ? $controller->getAction() : $action;
+$action = $controllerName === 'App\Controllers\ShowFormController' ? $controller->getAction() : $action;
 
 /** Include requested view */
 include __DIR__ . '/../src/Views/application.php';

@@ -33,11 +33,16 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
             </div>
         <?php endforeach; ?>
     <?php else : ?>
-        <div class="form-group">
-            <label for="numberOfFields">Spaltenanzahl</label>
-            <input type="number" id="numberOfFields" class="form-control" name="numberOfFields" min="1">
+      <div id="attributeFields">
+        <div id=fieldControll>
+          <div class="form-group">
+              <label for="numberOfFields">Spaltenanzahl</label>
+              <input type="number" id="numberOfFields" class="form-control" name="numberOfFields" min="1">
+          </div>
+          <button type="" id="submitAttributeNumber" class="btn btn-primary mt-2">Spalten erzeugen</button>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Spalten erzeugen</button>
+        <script src="./js/generateFields.js"></script>
+      </div>
     <?php endif; ?>
 
       <!-- Set area in hidden field -->
