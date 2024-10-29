@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\ManageTable;
 use App\Helpers\FilterData;
 use App\Models\Dataset;
 use App\Models\DatasetAttribute;
@@ -57,6 +58,8 @@ class InsertController implements IController
             foreach ($this->postData['attributes'] as $attribute) {
                 (new DatasetAttribute())->insert($id, $attribute);
             }
+
+            (new ManageTable($this->postData['datasetName'], array_values($this->postData['attributes'])))->create();
 
             $datasets = $dataset->getAllAsObjects();
             return [ 'datasets' => $datasets ];
