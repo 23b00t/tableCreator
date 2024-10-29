@@ -24,7 +24,7 @@ function generateFields() {
             input.type = 'text';
             input.className = 'form-control';
             input.id = `attribute${i + 1}`;
-            input.name = `attribute${i + 1}`;
+            input.name = `attributes[]`;
             input.placeholder = `Attribute ${i + 1}`;
 
             // Append label and input to the container
