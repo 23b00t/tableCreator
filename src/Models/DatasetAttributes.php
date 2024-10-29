@@ -163,4 +163,14 @@ class DatasetAttributes implements IModel
     {
         return $this->datasetId;
     }
+
+    /**
+     * getAttributeName
+     *
+     * @return string|null
+     */
+    public function getAttributeName(): ?string
+    {
+        return $this->attributeName;
+    }
 }

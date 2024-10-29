@@ -4,9 +4,10 @@ namespace App\Controllers;
 
 use App\Models\Dataset;
 
-/**
+/*
  * Class: ShowTableController
  *
+ * @see IController
  */
 class ShowTableController implements IController
 {
