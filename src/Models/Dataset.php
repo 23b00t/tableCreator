@@ -122,16 +122,6 @@ class Dataset implements IModel
     }
 
     /**
-     * getAttributeIds
-     *
-     * @return array
-     */
-    public function getAttributeIds(): array
-    {
-        return array_map(fn ($element) => $element->getId(), $this->getAttributes());
-    }
-
-    /**
      * getId
      *
      * @return int|null
