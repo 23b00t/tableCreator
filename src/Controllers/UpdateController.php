@@ -58,15 +58,8 @@ class UpdateController implements IController
             );
             $dataset->update();
 
-            // TODO: Refactor! New DatasetAttribute method to only get the id's?
-            // Get all DatasetAttributes that belong to the Dataset $dataset
-            $datasetAttributes = (new DatasetAttributes())->getAllObjectsByDatasetId($this->id);
-            // Iterate over each DatasetAttribute with index
-            foreach ($datasetAttributes as $index => $attribute) {
-                // Get the id of the DatasetAttribute
-                $id = $attribute->getId();
-                // Create new DatasetAttribute and access the new name in the POST data by index
-                $datasetAttribute = new DatasetAttributes($id, $this->id, $this->postData['attributes'][$index]);
+            foreach ($this->postData['attributes'] as $id => $name) {
+                $datasetAttribute = new DatasetAttributes($id, $this->id, $name);
                 $datasetAttribute->update();
             }
 
