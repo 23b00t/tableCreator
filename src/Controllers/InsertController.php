@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Helpers\FilterData;
 use App\Models\Dataset;
-use App\Models\DatasetAttributes;
+use App\Models\DatasetAttribute;
 
 /**
  * Class: InsertController
@@ -55,7 +55,7 @@ class InsertController implements IController
             $id = $datasetObj->getId();
 
             foreach ($this->postData['attributes'] as $attribute) {
-                (new DatasetAttributes())->insert($id, $attribute);
+                (new DatasetAttribute())->insert($id, $attribute);
             }
 
             $datasets = $dataset->getAllAsObjects();

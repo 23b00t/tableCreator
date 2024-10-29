@@ -8,7 +8,7 @@ CREATE TABLE dataset (
     name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE datasetAttributes (
+CREATE TABLE datasetAttribute (
     id INT AUTO_INCREMENT PRIMARY KEY,
     datasetId INT NOT NULL,
     attributeName VARCHAR(255) NOT NULL,
@@ -20,7 +20,7 @@ INSERT INTO dataset (id, name) VALUES
   ( 1, 'PHP' ),
   ( 2, 'Linux' );
 
-INSERT INTO datasetAttributes (id, datasetId, attributeName) VALUES 
+INSERT INTO datasetAttribute (id, datasetId, attributeName) VALUES 
   ( 1, 1, 'Code Snippet' ),
   ( 2, 1, 'Example' ),
   ( 3, 2, 'Command' ),

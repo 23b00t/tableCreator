@@ -3,7 +3,6 @@
 namespace App\Views;
 
 /**
- * @var string $area
  * @var object $controller
  */
 ?>

@@ -21,7 +21,7 @@ class Dataset implements IModel
      */
     private ?string $name;
     /**
-     * @var DatasetAttributes[] $attributes
+     * @var DatasetAttribute[] $attributes
      */
     private array $attributes;
 
@@ -34,7 +34,7 @@ class Dataset implements IModel
         if (isset($id)) {
             $this->id = $id;
             $this->name = $name;
-            $this->attributes = (new DatasetAttributes())->getAllObjectsByDatasetId($id);
+            $this->attributes = (new DatasetAttribute())->getAllObjectsByDatasetId($id);
         }
     }
 
@@ -144,7 +144,7 @@ class Dataset implements IModel
     /**
      * getAttributes
      *
-     * @return DatasetAttributes[]
+     * @return DatasetAttribute[]
      */
     public function getAttributes(): array
     {
