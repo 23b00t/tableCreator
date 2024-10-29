@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Helpers\FilterData;
 use App\Models\Dataset;
-use App\Models\DatasetAttributes;
+use App\Models\DatasetAttribute;
 
 /**
  * Class: UpdateController
@@ -56,10 +56,12 @@ class UpdateController implements IController
                 $this->id,
                 $this->postData['datasetName'],
             );
+
             $dataset->update();
 
+            // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
             foreach ($this->postData['attributes'] as $id => $name) {
-                $datasetAttribute = new DatasetAttributes($id, $this->id, $name);
+                $datasetAttribute = new DatasetAttribute($id, $this->id, $name);
                 $datasetAttribute->update();
             }
 

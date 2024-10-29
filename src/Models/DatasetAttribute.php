@@ -6,11 +6,11 @@ use App\Core\Db;
 use PDO;
 
 /**
- * Class: DatasetAttributes
+ * Class: DatasetAttribute
  *
  * @see IModel
  */
-class DatasetAttributes implements IModel
+class DatasetAttribute implements IModel
 {
     /**
      * @var int|null $id
@@ -41,18 +41,18 @@ class DatasetAttributes implements IModel
     /**
      * getAllAsObjects
      *
-     * @return DatasetAttributes[]
+     * @return DatasetAttribute[]
      */
     public function getAllAsObjects(): array
     {
         $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM datasetAttributes';
+        $sql = 'SELECT * FROM datasetAttribute';
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $return = [];
         foreach ($results as $object) {
-            $return[] = new DatasetAttributes(...$object);
+            $return[] = new DatasetAttribute(...$object);
         }
 
         return $return;
@@ -67,7 +67,7 @@ class DatasetAttributes implements IModel
     public function deleteObjectById(int $id): void
     {
         $pdo = Db::getConnection();
-        $sql = 'DELETE FROM datasetAttributes WHERE id = ?';
+        $sql = 'DELETE FROM datasetAttribute WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -76,16 +76,16 @@ class DatasetAttributes implements IModel
      * getObjectById
      *
      * @param int $id
-     * @return DatasetAttributes
+     * @return DatasetAttribute
      */
-    public function getObjectById(int $id): DatasetAttributes
+    public function getObjectById(int $id): DatasetAttribute
     {
         $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM datasetAttributes WHERE id = ?';
+        $sql = 'SELECT * FROM datasetAttribute WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $return = $result ? new DatasetAttributes(...$result) : null;
+        $return = $result ? new DatasetAttribute(...$result) : null;
 
         return $return;
     }
@@ -97,9 +97,9 @@ class DatasetAttributes implements IModel
      */
     public function update(): void
     {
-        // INFO: No functionality for changeing datasetId as it is not a valid use case
+        // INFO: No functionality for changing datasetId as it is not a valid use case
         $pdo = Db::getConnection();
-        $sql = 'UPDATE datasetAttributes SET attributename = ? WHERE id = ?';
+        $sql = 'UPDATE datasetAttribute SET attributename = ? WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(
             [$this->attributeName, $this->id]
@@ -111,34 +111,34 @@ class DatasetAttributes implements IModel
      *
      * @param int $datasetId
      * @param string $attributeName
-     * @return DatasetAttributes
+     * @return DatasetAttribute
      */
-    public function insert(int $datasetId, string $attributeName): DatasetAttributes
+    public function insert(int $datasetId, string $attributeName): DatasetAttribute
     {
         $pdo = Db::getConnection();
-        $sql = 'INSERT INTO datasetAttributes VALUES(NULL, ?, ?)';
+        $sql = 'INSERT INTO datasetAttribute VALUES(NULL, ?, ?)';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$datasetId, $attributeName]);
         $id = $pdo->lastInsertId();
-        return new DatasetAttributes($id, $datasetId, $attributeName);
+        return new DatasetAttribute($id, $datasetId, $attributeName);
     }
 
     /**
      * getAllObjectsByDatasetId
      *
      * @param int $datasetId
-     * @return DatasetAttributes[]
+     * @return DatasetAttribute[]
      */
     public function getAllObjectsByDatasetId(int $datasetId): array
     {
         $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM datasetAttributes WHERE datasetId = ?';
+        $sql = 'SELECT * FROM datasetAttribute WHERE datasetId = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$datasetId]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $return = [];
         foreach ($results as $object) {
-            $return[] = new DatasetAttributes(...$object);
+            $return[] = new DatasetAttribute(...$object);
         }
 
         return $return;
