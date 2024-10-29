@@ -28,7 +28,7 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
             <div class="form-group">
                 <label for="datasetAttributes"><?= $attribute->getAttributeName(); ?></label>
                 <input type="text" class="form-control" id="datasetAttribute<?= $attribute->getId(); ?>"
-                       name="datasetAttribute<?= $attribute->getId(); ?>"
+                       name="attributes[]"
                        value="<?= $attribute->getAttributeName(); ?>">
             </div>
         <?php endforeach; ?>
