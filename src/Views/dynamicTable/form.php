@@ -11,7 +11,8 @@ use App\Models\TableRow;
  */
 
 // Check if $tableRow exists and is an instance of TableRow (edit route)
-$tableRowExists = isset($tableRow) && $tableRow instanceof TableRow;
+$tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
+array_shift($columns);
 ?>
 
 <div class="row justify-content-center">
@@ -23,7 +24,7 @@ $tableRowExists = isset($tableRow) && $tableRow instanceof TableRow;
             <?php foreach ($tableRow->getAttributeValues() as $attributeName => $attributeValue) : ?>
               <div class="form-group">
                 <label for="name"><?= $attributeName; ?></label>
-                <input type="text" class="form-control"
+                <input type="text" class="form-control" name="attributes[]"
                   value="<?= $attributeValue; ?>">
               </div>
             <?php endforeach; ?>
@@ -31,19 +32,22 @@ $tableRowExists = isset($tableRow) && $tableRow instanceof TableRow;
             <?php foreach ($columns as $column) : ?>
               <div class="form-group">
                 <label for="name"><?= $column['COLUMN_NAME']; ?></label>
-                <input type="text" class="form-control"
+                <input type="text" class="form-control" name="attributes[]"
                   value="">
               </div>
             <?php endforeach; ?>
         <?php endif; ?>
       <!-- Set area in hidden field -->
-      <input type="hidden" name="area" value="tableRow">
+      <input type="hidden" name="area" value="dynamicTable">
 
       <!-- Set action in hidden field -->
       <input type="hidden" name="action" value="<?= $action; ?>">
 
       <!-- Set id in hidden field -->
       <input type="hidden" name="id" value="<?= $tableRowExists ? $tableRow->getId() : ''; ?>">
+
+      <!-- Set table name in hidden field -->
+      <input type="hidden" name="tableName" value="<?= $tableRow->getName(); ?>">
 
       <div class="form-group">
         <button type="submit" class="btn btn-primary btn-block mt-3">Speichern</button>

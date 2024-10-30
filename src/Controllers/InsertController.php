@@ -6,6 +6,7 @@ use App\Core\ManageTable;
 use App\Helpers\FilterData;
 use App\Models\Dataset;
 use App\Models\DatasetAttribute;
+use App\Models\TableRow;
 
 /**
  * Class: InsertController
@@ -63,6 +64,11 @@ class InsertController implements IController
 
             $datasets = $dataset->getAllAsObjects();
             return [ 'datasets' => $datasets ];
+        } elseif ($this->area === 'dynamicTable') {
+            $tableRow = new TableRow($this->postData['tableName']);
+            $tableRow->insert($this->postData['attributes']);
+            $tableRows = $tableRow->getAllAsObjects();
+            return [ 'tableRows' => $tableRows ];
         }
     }
 

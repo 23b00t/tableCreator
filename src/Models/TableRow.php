@@ -111,12 +111,12 @@ class TableRow implements IModel
     {
         $attributeString = implode(', ', array_map(function ($attribute) {
             return $attribute . ' = ?';
-        }, $this->attributes));
+        }, array_values($this->attributeValues)));
 
         $pdo = Db::getConnection();
         $sql = 'UPDATE ' . $this->name . ' SET ' . $attributeString . ' WHERE id = ?';
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(...$this->attributeValues);
+        $stmt->execute($this->attributeValues);
     }
 
     /**
@@ -127,13 +127,14 @@ class TableRow implements IModel
      */
     public function insert(array $values): TableRow
     {
-        $placeholders = rtrim(str_repeat('?, ', count($this->attributes)), ', ');
+        $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
         $pdo = Db::getConnection();
         $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . $placeholders . ')';
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(...$values);
+        $stmt->execute($values);
         $id = $pdo->lastInsertId();
-        return new TableRow($id, ...$values);
+
+        return new TableRow($this->name, null, $id, $values);
     }
 
     /**
