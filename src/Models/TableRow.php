@@ -96,7 +96,8 @@ class TableRow implements IModel
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $return = $result ? new TableRow(...$result) : null;
+
+        $return = $result ? new TableRow($this->name, null, array_shift($result), $result) : null;
 
         return $return;
     }
@@ -133,6 +134,20 @@ class TableRow implements IModel
         $stmt->execute(...$values);
         $id = $pdo->lastInsertId();
         return new TableRow($id, ...$values);
+    }
+
+    /**
+     * getColumsByTableName
+     *
+     * @return array
+     */
+    public function getColumsByTableName(): array
+    {
+        $pdo = Db::getConnection();
+        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" . $this->name . "';";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
