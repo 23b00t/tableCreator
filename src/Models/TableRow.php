@@ -17,11 +17,6 @@ class TableRow implements IModel
      * @var string|null $name
      */
     private ?string $name;
-    /**
-     * @var array|null $attributes
-     */
-    private ?array $attributes;
-
     private ?array $attributeValues;
     private ?int $id;
 
@@ -33,12 +28,10 @@ class TableRow implements IModel
      */
     public function __construct(
         string $name = null,
-        array $attributes = null,
         int $id = null,
         array $attributeValues = null
     ) {
         $this->name = $name;
-        $this->attributes = $attributes;
         $this->id = $id;
         $this->attributeValues = $attributeValues;
     }
@@ -59,7 +52,6 @@ class TableRow implements IModel
         foreach ($results as $attributeValues) {
             $return[] = new TableRow(
                 $this->name,
-                $this->attributes,
                 (int)array_shift($attributeValues),
                 $attributeValues
             );
@@ -97,7 +89,7 @@ class TableRow implements IModel
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $return = $result ? new TableRow($this->name, null, array_shift($result), $result) : null;
+        $return = $result ? new TableRow($this->name, array_shift($result), $result) : null;
 
         return $return;
     }
@@ -134,7 +126,7 @@ class TableRow implements IModel
         $stmt->execute($values);
         $id = $pdo->lastInsertId();
 
-        return new TableRow($this->name, null, $id, $values);
+        return new TableRow($this->name, $id, $values);
     }
 
     /**
@@ -169,16 +161,6 @@ class TableRow implements IModel
     public function getName(): ?string
     {
         return $this->name;
-    }
-
-    /**
-     * getAttributes
-     *
-     * @return array
-     */
-    public function getAttributes(): ?array
-    {
-        return $this->attributes;
     }
 
     public function getAttributeValues(): ?array

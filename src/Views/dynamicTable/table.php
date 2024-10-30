@@ -5,7 +5,6 @@ namespace App\Views\dynamicTable;
 /**
  * @var TableRow[] $tableRows
  */
-
 ?>
 
 <table class="table mt-4">

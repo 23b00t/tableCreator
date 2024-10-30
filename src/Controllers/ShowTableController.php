@@ -20,11 +20,7 @@ class ShowTableController implements IController
      * @var string $view
      */
     private string $view;
-    /**
-     * @var int|null $id
-     */
-    private $id;
-
+    private ?string $tableName;
 
     /**
      * __construct
@@ -35,7 +31,7 @@ class ShowTableController implements IController
     {
         $this->area = $requestData['area'] ?? 'dataset';
         $this->view = 'table';
-        $this->id = $requestData['id'] ?? null;
+        $this->tableName = $requestData['tableName'] ?? null;
     }
 
     /**
@@ -49,11 +45,7 @@ class ShowTableController implements IController
             $datasets = (new Dataset())->getAllAsObjects();
             return [ 'datasets' => $datasets ];
         } elseif ($this->area === 'dynamicTable') {
-            $dataset = (new Dataset())->getObjectById($this->id);
-            $tableName = $dataset->getName();
-            $attributes = $dataset->getAttributeNames();
-
-            $tableRow = (new TableRow($tableName, $attributes));
+            $tableRow = (new TableRow($this->tableName));
             $tableRows = $tableRow->getAllAsObjects();
 
             return [ 'tableRows' => $tableRows ];

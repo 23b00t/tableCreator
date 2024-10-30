@@ -14,7 +14,7 @@ namespace App\Views\dataset;
   <?php foreach ($datasets as $dataset) : ?>
     <tr>
       <td>
-        <a href="index.php?area=dynamicTable&action=showTable&id=<?= $dataset->getId(); ?>">
+        <a href="index.php?area=dynamicTable&action=showTable&tableName=<?= $dataset->getName(); ?>">
             <?= $dataset->getName(); ?>
         </a>
       </td>
