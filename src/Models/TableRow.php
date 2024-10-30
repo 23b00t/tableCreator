@@ -14,20 +14,26 @@ use PDO;
 class TableRow implements IModel
 {
     /**
-     * @var string|null $name
+     * @var string $name
      */
-    private ?string $name;
-    private ?array $attributeValues;
+    private string $name;
+    /**
+     * @var int|null $id
+     */
     private ?int $id;
+    /**
+     * @var array|null $attributeValues
+     */
+    private ?array $attributeValues;
 
 
     /**
-     * @param string|null $name
-     * @param array|null $attributes
-     * @param array<int,mixed> $attributeValues
+     * @param string $name
+     * @param int $id
+     * @param array $attributeValues
      */
     public function __construct(
-        string $name = null,
+        string $name,
         int $id = null,
         array $attributeValues = null
     ) {
@@ -52,7 +58,7 @@ class TableRow implements IModel
         foreach ($results as $attributeValues) {
             $return[] = new TableRow(
                 $this->name,
-                (int)array_shift($attributeValues),
+                array_shift($attributeValues),
                 $attributeValues
             );
         }
@@ -114,8 +120,8 @@ class TableRow implements IModel
     /**
      * insert
      *
-     * @param array<int,mixed> $values
-     * @return Table
+     * @param array $values
+     * @return TableRow
      */
     public function insert(array $values): TableRow
     {
@@ -132,15 +138,22 @@ class TableRow implements IModel
     /**
      * getColumsByTableName
      *
-     * @return array
+     * @return TableRow
      */
-    public function getColumsByTableName(): array
+    public function getColumsByTableName(): TableRow
     {
         $pdo = Db::getConnection();
-        $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" . $this->name . "';";
+        $sql = "SELECT COLUMN_NAME 
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = '" . $this->name . "' 
+                AND COLUMN_NAME != 'id';";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $obj = new TableRow($this->name, null, $result);
+
+        return $obj;
     }
 
     /**
@@ -156,9 +169,9 @@ class TableRow implements IModel
     /**
      * getName
      *
-     * @return string|null
+     * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

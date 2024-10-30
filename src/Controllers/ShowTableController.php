@@ -20,6 +20,9 @@ class ShowTableController implements IController
      * @var string $view
      */
     private string $view;
+    /**
+     * @var string|null $tableName
+     */
     private ?string $tableName;
 
     /**
@@ -47,6 +50,7 @@ class ShowTableController implements IController
         } elseif ($this->area === 'dynamicTable') {
             $tableRow = (new TableRow($this->tableName));
             $tableRows = $tableRow->getAllAsObjects();
+            // $tableRows = empty($tableRows) ? [$tableRow->getColumsByTableName()] : $tableRows;
 
             return [ 'tableRows' => $tableRows ];
         }

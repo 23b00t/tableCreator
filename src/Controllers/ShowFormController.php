@@ -17,7 +17,7 @@ class ShowFormController implements IController
      */
     private string $area;
     /**
-     * @var ?int $id
+     * @var int|null $id
      */
     private ?int $id;
     /**
@@ -28,7 +28,10 @@ class ShowFormController implements IController
      * @var string $action
      */
     private string $action;
-    private string $tableName;
+    /**
+     * @var string|null $tableName
+     */
+    private ?string $tableName;
 
     /**
      * __construct
@@ -64,9 +67,8 @@ class ShowFormController implements IController
             }
         } else {
             if ($this->area === 'dynamicTable') {
-                $tableRow = (new TableRow($this->tableName));
-                $columns = $tableRow->getColumsByTableName();
-                $array = [ 'columns' => $columns, 'tableRow' => $tableRow ];
+                $tableRow = (new TableRow($this->tableName))->getColumsByTableName();
+                $array = [ 'tableRow' => $tableRow ];
             }
         }
         return $array;

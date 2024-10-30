@@ -6,13 +6,11 @@ use App\Models\TableRow;
 
 /**
  * @var TableRow $tableRow
- * @var array $columns
  * @var string $action
  */
 
 // Check if $tableRow exists and is an instance of TableRow (edit route)
 $tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
-!isset($columns) ?: array_shift($columns);
 ?>
 
 <div class="row justify-content-center">
@@ -29,9 +27,9 @@ $tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
               </div>
             <?php endforeach; ?>
         <?php else : ?>
-            <?php foreach ($columns as $column) : ?>
+            <?php foreach ($tableRow->getAttributeValues() as $attributeName) : ?>
               <div class="form-group">
-                <label for="name"><?= $column['COLUMN_NAME']; ?></label>
+                <label for="name"><?= $attributeName['COLUMN_NAME']; ?></label>
                 <input type="text" class="form-control" name="attributes[]"
                   value="">
               </div>
