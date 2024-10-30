@@ -77,7 +77,8 @@ class TableRow implements IModel
     public function deleteObjectById(int $id): void
     {
         $pdo = Db::getConnection();
-        $sql = 'DELETE FROM ' . $this->name . ' WHERE id = ?';
+        $sql = "DELETE FROM " . $this->name . " WHERE id = ?";
+
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -159,7 +160,7 @@ class TableRow implements IModel
      *
      * @return array
      */
-    public function getAttributes(): array
+    public function getAttributes(): ?array
     {
         return $this->attributes;
     }

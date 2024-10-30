@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Dataset;
+use App\Models\TableRow;
 
 /**
  * Class: DeleteController
@@ -23,6 +24,7 @@ class DeleteController implements IController
      * @var string $view
      */
     private string $view;
+    private string $tableName;
 
 
     /**
@@ -35,6 +37,7 @@ class DeleteController implements IController
         $this->area = $requestData['area'];
         $this->id = $requestData['id'];
         $this->view = 'table';
+        $this->tableName = $requestData['tableName'];
     }
 
     /**
@@ -50,6 +53,13 @@ class DeleteController implements IController
 
             $datasets = $dataset->getAllAsObjects();
             return [ 'datasets' => $datasets ];
+        } elseif ($this->area === 'dynamicTable') {
+            $tableRow = (new TableRow($this->tableName));
+            $tableRow->deleteObjectById($this->id);
+
+            $tableRows = $tableRow->getAllAsObjects();
+
+            return [ 'tableRows' => $tableRows ];
         }
     }
 

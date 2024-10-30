@@ -53,10 +53,10 @@ class ShowTableController implements IController
             $tableName = $dataset->getName();
             $attributes = $dataset->getAttributeNames();
 
-            $tableRow = (new TableRow($tableName, $attributes, null, null));
+            $tableRow = (new TableRow($tableName, $attributes));
             $tableRows = $tableRow->getAllAsObjects();
 
-            return [ 'tableRows' => $tableRows, 'dataset' => $dataset ];
+            return [ 'tableRows' => $tableRows ];
         }
     }
 
