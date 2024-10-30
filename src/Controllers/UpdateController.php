@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Helpers\FilterData;
 use App\Models\Dataset;
 use App\Models\DatasetAttribute;
+use App\Models\TableRow;
 
 /**
  * Class: UpdateController
@@ -67,6 +68,11 @@ class UpdateController implements IController
 
             $datasets = $dataset->getAllAsObjects();
             return [ 'datasets' => $datasets ];
+        } elseif ($this->area === 'dynamicTable') {
+            $tableRow = new TableRow($this->postData['tableName'], null, $this->id, $this->postData['attributes']);
+            $tableRow->update();
+            $tableRows = $tableRow->getAllAsObjects();
+            return [ 'tableRows' => $tableRows ];
         }
     }
 

@@ -12,7 +12,7 @@ use App\Models\TableRow;
 
 // Check if $tableRow exists and is an instance of TableRow (edit route)
 $tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
-array_shift($columns);
+!isset($columns) ?: array_shift($columns);
 ?>
 
 <div class="row justify-content-center">
@@ -24,7 +24,7 @@ array_shift($columns);
             <?php foreach ($tableRow->getAttributeValues() as $attributeName => $attributeValue) : ?>
               <div class="form-group">
                 <label for="name"><?= $attributeName; ?></label>
-                <input type="text" class="form-control" name="attributes[]"
+                <input type="text" class="form-control" name="attributes[<?= $attributeName; ?>]"
                   value="<?= $attributeValue; ?>">
               </div>
             <?php endforeach; ?>

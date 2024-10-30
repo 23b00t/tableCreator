@@ -111,12 +111,12 @@ class TableRow implements IModel
     {
         $attributeString = implode(', ', array_map(function ($attribute) {
             return $attribute . ' = ?';
-        }, array_values($this->attributeValues)));
+        }, array_keys($this->attributeValues)));
 
         $pdo = Db::getConnection();
         $sql = 'UPDATE ' . $this->name . ' SET ' . $attributeString . ' WHERE id = ?';
         $stmt = $pdo->prepare($sql);
-        $stmt->execute($this->attributeValues);
+        $stmt->execute(array_merge(array_values($this->attributeValues), [$this->id]));
     }
 
     /**
