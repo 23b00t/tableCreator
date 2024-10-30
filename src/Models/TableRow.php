@@ -6,30 +6,47 @@ use App\Core\Db;
 use PDO;
 
 /**
- * Class: Table
+ * Class: TableRow
  * Dynamic table model
  *
  * @see IModel
  */
-class Table implements IModel
+class TableRow implements IModel
 {
     /**
-     * @var array<int,mixed>
+     * @var string|null $name
      */
-    private array $attributes;
+    private ?string $name;
+    /**
+     * @var array|null $attributes
+     */
+    private ?array $attributes;
+
+    private ?array $attributeValues;
+    private ?int $id;
+
 
     /**
-     * @param array<int,mixed> $attributes
+     * @param string|null $name
+     * @param array|null $attributes
+     * @param array<int,mixed> $attributeValues
      */
-    public function __construct(array $attributes)
-    {
+    public function __construct(
+        string $name = null,
+        array $attributes = null,
+        int $id = null,
+        array $attributeValues = null
+    ) {
+        $this->name = $name;
         $this->attributes = $attributes;
+        $this->id = $id;
+        $this->attributeValues = $attributeValues;
     }
 
     /**
      * getAllAsObjects
      *
-     * @return Table[]
+     * @return TableRow[]
      */
     public function getAllAsObjects(): array
     {
@@ -39,8 +56,13 @@ class Table implements IModel
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $return = [];
-        foreach ($results as $object) {
-            $return[] = new Table(...$object);
+        foreach ($results as $attributeValues) {
+            $return[] = new TableRow(
+                $this->name,
+                $this->attributes,
+                (int)array_shift($attributeValues),
+                $attributeValues
+            );
         }
 
         return $return;
@@ -64,16 +86,16 @@ class Table implements IModel
      * getObjectById
      *
      * @param int $id
-     * @return Table
+     * @return TableRow
      */
-    public function getObjectById(int $id): Table
+    public function getObjectById(int $id): TableRow
     {
         $pdo = Db::getConnection();
         $sql = 'SELECT * FROM ' . $this->name . ' WHERE id = ?';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $return = $result ? new Table(...$result) : null;
+        $return = $result ? new TableRow(...$result) : null;
 
         return $return;
     }
@@ -101,21 +123,15 @@ class Table implements IModel
      * @param array<int,mixed> $values
      * @return Table
      */
-    public function insert(array $values): Table
+    public function insert(array $values): TableRow
     {
-        // $placeholders = [];
-        // foreach ($this->attributes as $_) {
-        //     $placeholders[] = '?';
-        // }
-        // $pdo = Db::getConnection();
-        // $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . implode(', ', $placeholders) . ')';
         $placeholders = rtrim(str_repeat('?, ', count($this->attributes)), ', ');
         $pdo = Db::getConnection();
         $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . $placeholders . ')';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(...$values);
         $id = $pdo->lastInsertId();
-        return new Table($id, ...$values);
+        return new TableRow($id, ...$values);
     }
 
     /**
@@ -147,12 +163,8 @@ class Table implements IModel
     {
         return $this->attributes;
     }
-    /**
-     * getAttributeValues
-     *
-     * @return array<int,mixed>
-     */
-    public function getAttributeValues(): array
+
+    public function getAttributeValues(): ?array
     {
         return $this->attributeValues;
     }

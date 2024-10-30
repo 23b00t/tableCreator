@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Dataset;
+use App\Models\TableRow;
 
 /*
  * Class: ShowTableController
@@ -19,6 +20,10 @@ class ShowTableController implements IController
      * @var string $view
      */
     private string $view;
+    /**
+     * @var int|null $id
+     */
+    private $id;
 
 
     /**
@@ -30,6 +35,7 @@ class ShowTableController implements IController
     {
         $this->area = $requestData['area'] ?? 'dataset';
         $this->view = 'table';
+        $this->id = $requestData['id'] ?? null;
     }
 
     /**
@@ -42,6 +48,15 @@ class ShowTableController implements IController
         if ($this->area === 'dataset') {
             $datasets = (new Dataset())->getAllAsObjects();
             return [ 'datasets' => $datasets ];
+        } elseif ($this->area === 'dynamicTable') {
+            $dataset = (new Dataset())->getObjectById($this->id);
+            $tableName = $dataset->getName();
+            $attributes = $dataset->getAttributeNames();
+
+            $tableRow = (new TableRow($tableName, $attributes, null, null));
+            $tableRows = $tableRow->getAllAsObjects();
+
+            return [ 'tableRows' => $tableRows, 'dataset' => $dataset ];
         }
     }
 

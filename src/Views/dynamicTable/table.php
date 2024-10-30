@@ -2,24 +2,34 @@
 
 namespace App\Views\dynamicTable;
 
-/** @var dataset[] $datasets  */
+/**
+ * @var TableRow[] $tableRows
+ * @var Dataset $dataset
+ */
+
 ?>
 
 <table class="table mt-4">
   <tr>
-    <th scope="col">Name</th>
+    <?php foreach ($dataset->getAttributeNames() as $attributeName) : ?>
+        <th scope="col"><?= $attributeName; ?></th>
+    <?php endforeach; ?>
     <th scope="col">Löschen</th>
     <th scope="col">Ändern</th>
   </tr>
-  <?php foreach ($datasets as $dataset) : ?>
+  <?php foreach ($tableRows as $tableRow) : ?>
     <tr>
-      <td><?= $dataset->getName(); ?></td>
-      <td><a href="index.php?area=dataset&action=delete&id=<?= $dataset->getId(); ?>">
-        <button class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i></button>
-      </a></td>
-      <td><a href="index.php?area=dataset&action=showForm&id=<?= $dataset->getId(); ?>">
-        <button class="btn btn-outline-warning"><i class="fa-solid fa-pencil"></i></button>
-      </a></td>
+        <?php foreach (array_values($tableRow->getAttributeValues()) as $value) : ?>
+          <td>
+            <?= $value; ?>
+          </td>
+        <?php endforeach; ?>
+        <td><a href="index.php?area=dynamicTable&action=delete&id=<?= $tableRow->getId(); ?>">
+          <button class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i></button>
+        </a></td>
+        <td><a href="index.php?area=dynamicTable&action=showForm&id=<?= $tableRow->getId(); ?>">
+          <button class="btn btn-outline-warning"><i class="fa-solid fa-pencil"></i></button>
+        </a></td>
     </tr>
   <?php endforeach; ?>
 </table> 

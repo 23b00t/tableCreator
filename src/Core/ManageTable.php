@@ -46,7 +46,7 @@ class ManageTable
             return $attribute . ' VARCHAR(255)';
         }, $this->attributes));
 
-        $sql = "CREATE TABLE IF NOT EXISTS `" . $this->tableName . "` (" . $attributeString . ");";
+        $sql = "CREATE TABLE IF NOT EXISTS `" . $this->tableName . "` (id INT AUTO_INCREMENT PRIMARY KEY, " . $attributeString . ");";
 
         $pdo = Db::getConnection();
         $pdo->exec($sql);
