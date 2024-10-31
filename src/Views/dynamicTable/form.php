@@ -19,7 +19,7 @@ $tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
     <form action="index.php" method="POST">
       <!-- TableRow fields -->
         <?php if ($tableRowExists) : ?>
-            <?php foreach ($tableRow->getAttributeValues() as $attributeName => $attributeValue) : ?>
+            <?php foreach ($tableRow->getAttributeArray() as $attributeName => $attributeValue) : ?>
               <div class="form-group">
                 <label for="name"><?= $attributeName; ?></label>
                 <input type="text" class="form-control" name="attributes[<?= $attributeName; ?>]"
@@ -27,9 +27,9 @@ $tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
               </div>
             <?php endforeach; ?>
         <?php else : ?>
-            <?php foreach ($tableRow->getAttributeValues() as $attributeName) : ?>
+            <?php foreach ($tableRow->getAttributeArray() as $attributeName => $_) : ?>
               <div class="form-group">
-                <label for="name"><?= $attributeName['COLUMN_NAME']; ?></label>
+                <label for="name"><?= $attributeName; ?></label>
                 <input type="text" class="form-control" name="attributes[]"
                   value="">
               </div>

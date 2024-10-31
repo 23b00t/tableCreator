@@ -9,19 +9,20 @@ namespace App\Views\dynamicTable;
 
 <table class="table mt-4">
     <tr>
-        <?php foreach (array_keys($tableRows[0]->getAttributeValues()) as $attributeName) : ?>
+        <?php foreach (array_keys($tableRows[0]->getAttributeArray()) as $attributeName) : ?>
             <th scope="col"><?= $attributeName; ?></th>
         <?php endforeach; ?>
         <th scope="col">Löschen</th>
         <th scope="col">Ändern</th>
     </tr>
-  <?php foreach ($tableRows as $tableRow) : ?>
-    <tr>
-        <?php foreach (array_values($tableRow->getAttributeValues()) as $value) : ?>
-          <td>
-            <?= $value; ?>
-          </td>
-        <?php endforeach; ?>
+    <?php foreach ($tableRows as $tableRow) : ?>
+        <?php if ($tableRow->getId() !== null) : ?>
+        <tr>
+            <?php foreach (array_values($tableRow->getAttributeArray()) as $value) : ?>
+              <td>
+                <?= $value; ?>
+              </td>
+            <?php endforeach; ?>
         <td>
           <a href="index.php?area=dynamicTable&action=delete&id=
             <?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
@@ -34,8 +35,9 @@ namespace App\Views\dynamicTable;
             <?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
           <button class="btn btn-outline-warning"><i class="fa-solid fa-pencil"></i></button>
         </a></td>
-    </tr>
-  <?php endforeach; ?>
+        </tr>
+        <?php endif; ?>
+    <?php endforeach; ?>
 </table> 
 
 <div>
