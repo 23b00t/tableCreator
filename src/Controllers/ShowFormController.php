@@ -67,7 +67,7 @@ class ShowFormController implements IController
             }
         } else {
             if ($this->area === 'dynamicTable') {
-                $tableRow = (new TableRow($this->tableName))->getColumsByTableName();
+                $tableRow = (new TableRow($this->tableName))->getColumnsByTableName();
                 $array = [ 'tableRow' => $tableRow ];
             }
         }

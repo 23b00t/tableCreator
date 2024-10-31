@@ -50,7 +50,7 @@ class ShowTableController implements IController
         } elseif ($this->area === 'dynamicTable') {
             $tableRow = (new TableRow($this->tableName));
             $tableRows = $tableRow->getAllAsObjects();
-            // $tableRows = empty($tableRows) ? [$tableRow->getColumsByTableName()] : $tableRows;
+            $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
 
             return [ 'tableRows' => $tableRows ];
         }

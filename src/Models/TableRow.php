@@ -22,24 +22,24 @@ class TableRow implements IModel
      */
     private ?int $id;
     /**
-     * @var array|null $attributeValues
+     * @var array|null $attributeArray
      */
-    private ?array $attributeValues;
+    private ?array $attributeArray;
 
 
     /**
      * @param string $name
      * @param int $id
-     * @param array $attributeValues
+     * @param array $attributeArray
      */
     public function __construct(
         string $name,
         int $id = null,
-        array $attributeValues = null
+        array $attributeArray = null
     ) {
         $this->name = $name;
         $this->id = $id;
-        $this->attributeValues = $attributeValues;
+        $this->attributeArray = $attributeArray;
     }
 
     /**
@@ -55,11 +55,11 @@ class TableRow implements IModel
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $return = [];
-        foreach ($results as $attributeValues) {
+        foreach ($results as $attributeArray) {
             $return[] = new TableRow(
                 $this->name,
-                array_shift($attributeValues),
-                $attributeValues
+                array_shift($attributeArray),
+                $attributeArray
             );
         }
 
@@ -109,12 +109,12 @@ class TableRow implements IModel
     {
         $attributeString = implode(', ', array_map(function ($attribute) {
             return $attribute . ' = ?';
-        }, array_keys($this->attributeValues)));
+        }, array_keys($this->attributeArray)));
 
         $pdo = Db::getConnection();
         $sql = 'UPDATE ' . $this->name . ' SET ' . $attributeString . ' WHERE id = ?';
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(array_merge(array_values($this->attributeValues), [$this->id]));
+        $stmt->execute(array_merge(array_values($this->attributeArray), [$this->id]));
     }
 
     /**
@@ -136,24 +136,27 @@ class TableRow implements IModel
     }
 
     /**
-     * getColumsByTableName
+     * getColumnsByTableName
      *
      * @return TableRow
      */
-    public function getColumsByTableName(): TableRow
+    public function getColumnsByTableName(): TableRow
     {
         $pdo = Db::getConnection();
-        $sql = "SELECT COLUMN_NAME 
-                FROM INFORMATION_SCHEMA.COLUMNS 
-                WHERE TABLE_NAME = '" . $this->name . "' 
-                AND COLUMN_NAME != 'id';";
+        $sql = <<<SQL
+               SELECT COLUMN_NAME 
+               FROM INFORMATION_SCHEMA.COLUMNS 
+               WHERE TABLE_NAME = '$this->name' 
+               AND COLUMN_NAME != 'id';"
+               SQL;
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // array_column: get from $result all values with key COLUMN_NAME
+        // array_fill_keys: take result from array_column as keys and fill the values with null
+        $attributes = array_fill_keys(array_column($result, 'COLUMN_NAME'), null);
 
-        $obj = new TableRow($this->name, null, $result);
-
-        return $obj;
+        return new TableRow($this->name, null, $attributes);
     }
 
     /**
@@ -176,8 +179,8 @@ class TableRow implements IModel
         return $this->name;
     }
 
-    public function getAttributeValues(): ?array
+    public function getAttributeArray(): ?array
     {
-        return $this->attributeValues;
+        return $this->attributeArray;
     }
 }
