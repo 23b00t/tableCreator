@@ -4,10 +4,6 @@ namespace App\Core;
 
 /**
  * Class: ManageTable
- *
- * @method create()
- * @method alter()
- * @method drop()
  */
 class ManageTable
 {
