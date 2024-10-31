@@ -18,13 +18,13 @@ class ManageTable
     /**
      * @var array $attributes
      */
-    private array $attributes;
+    private ?array $attributes;
 
     /**
      * @param string $name
      * @param array $attributes
      */
-    public function __construct(string $name, array $attributes)
+    public function __construct(string $name, array $attributes = null)
     {
         $this->tableName = $name;
         $this->attributes = $attributes;
@@ -37,6 +37,7 @@ class ManageTable
      */
     public function create(): void
     {
+        $pdo = Db::getConnection();
         // Iterate over attribute names, add default datatype VARCHAR(255) to them.
         // Implode the resulting array to a comma seperated string.
         $attributeString = implode(', ', array_map(function ($attribute) {
@@ -49,7 +50,6 @@ class ManageTable
                     $attributeString);
                 SQL;
 
-        $pdo = Db::getConnection();
         $pdo->exec($sql);
     }
 
@@ -77,5 +77,17 @@ class ManageTable
         foreach ($sql as $statement) {
             $pdo->exec($statement);
         }
+    }
+
+    /**
+     * drop
+     *
+     * @return void
+     */
+    public function drop(): void
+    {
+        $pdo = Db::getConnection();
+        $sql = 'DROP TABLE ' . $this->tableName;
+        $pdo->exec($sql);
     }
 }
