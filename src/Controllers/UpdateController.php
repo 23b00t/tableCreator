@@ -8,17 +8,8 @@ use App\Models\Dataset;
 use App\Models\DatasetAttribute;
 use App\Models\TableRow;
 
-/**
- * Class: UpdateController
- *
- * @see IController
- */
-class UpdateController implements IController
+class UpdateController extends BaseController
 {
-    /**
-     * @var string $area
-     */
-    private string $area;
     /**
      * @var int $id
      */
@@ -27,10 +18,6 @@ class UpdateController implements IController
      * @var array $postData
      */
     private array $postData;
-    /**
-     * @var string $view
-     */
-    private string $view;
 
     /**
      * __construct
@@ -39,11 +26,10 @@ class UpdateController implements IController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'];
+        parent::__construct($requestData);
         $this->id = $requestData['id'];
         // Extract object attribute values from POST requestData
         $this->postData = (new FilterData($requestData))->filter();
-        $this->view = 'table';
     }
 
     /**
@@ -84,15 +70,5 @@ class UpdateController implements IController
             $tableRows = $tableRow->getAllAsObjects();
             return [ 'tableRows' => $tableRows ];
         }
-    }
-
-    /**
-     * getView
-     *
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->view;
     }
 }

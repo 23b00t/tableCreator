@@ -5,21 +5,13 @@ namespace App\Controllers;
 use App\Models\Dataset;
 use App\Models\TableRow;
 
-/*
+/**
  * Class: ShowTableController
  *
- * @see IController
+ * @see BaseController
  */
-class ShowTableController implements IController
+class ShowTableController extends BaseController
 {
-    /**
-     * @var string $area
-     */
-    private string $area;
-    /**
-     * @var string $view
-     */
-    private string $view;
     /**
      * @var string|null $tableName
      */
@@ -32,8 +24,7 @@ class ShowTableController implements IController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'] ?? 'dataset';
-        $this->view = 'table';
+        parent::__construct($requestData);
         $this->tableName = $requestData['tableName'] ?? null;
     }
 
@@ -54,15 +45,5 @@ class ShowTableController implements IController
 
             return [ 'tableRows' => $tableRows ];
         }
-    }
-
-    /**
-     * getView
-     *
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->view;
     }
 }

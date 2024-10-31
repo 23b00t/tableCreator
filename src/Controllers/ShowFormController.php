@@ -8,22 +8,14 @@ use App\Models\TableRow;
 /**
  * Class: ShowFormController
  *
- * @see IController
+ * @see BaseController
  */
-class ShowFormController implements IController
+class ShowFormController extends BaseController
 {
-    /**
-     * @var string $area
-     */
-    private string $area;
     /**
      * @var int|null $id
      */
     private ?int $id;
-    /**
-     * @var string $view
-     */
-    private string $view;
     /**
      * @var string $action
      */
@@ -40,10 +32,10 @@ class ShowFormController implements IController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'];
+        parent::__construct($requestData);
         $this->id = $requestData['id'] ?? null;
-        $this->view = 'form';
         $this->action = 'insert';
+        $this->view = 'form';
         $this->tableName = $requestData['tableName'] ?? null;
     }
 
@@ -72,16 +64,6 @@ class ShowFormController implements IController
             }
         }
         return $array;
-    }
-
-    /**
-     * getView
-     *
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->view;
     }
 
     /**

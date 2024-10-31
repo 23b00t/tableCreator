@@ -9,22 +9,14 @@ use App\Models\TableRow;
 /**
  * Class: DeleteController
  *
- * @see IController
+ * @see BaseController
  */
-class DeleteController implements IController
+class DeleteController extends BaseController
 {
-    /**
-     * @var string $area
-     */
-    private string $area;
     /**
      * @var int $id
      */
     private int $id;
-    /**
-     * @var string $view
-     */
-    private string $view;
     /**
      * @var string|null $tableName
      */
@@ -38,9 +30,8 @@ class DeleteController implements IController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'];
+        parent::__construct($requestData);
         $this->id = $requestData['id'];
-        $this->view = 'table';
         $this->tableName = $requestData['tableName'] ?? null;
     }
 
@@ -69,15 +60,5 @@ class DeleteController implements IController
 
             return [ 'tableRows' => $tableRows ];
         }
-    }
-
-    /**
-     * getView
-     *
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->view;
     }
 }
