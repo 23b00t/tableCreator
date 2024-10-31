@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\ManageTable;
 use App\Models\Dataset;
 use App\Models\TableRow;
 
@@ -24,7 +25,10 @@ class DeleteController implements IController
      * @var string $view
      */
     private string $view;
-    private string $tableName;
+    /**
+     * @var string|null $tableName
+     */
+    private ?string $tableName;
 
 
     /**
@@ -37,7 +41,7 @@ class DeleteController implements IController
         $this->area = $requestData['area'];
         $this->id = $requestData['id'];
         $this->view = 'table';
-        $this->tableName = $requestData['tableName'];
+        $this->tableName = $requestData['tableName'] ?? null;
     }
 
     /**
@@ -48,8 +52,12 @@ class DeleteController implements IController
     public function invoke(): array
     {
         if ($this->area === 'dataset') {
-            $dataset = new Dataset();
+            // Instanciate object by id to hand over its name to ManageTable
+            $dataset = (new Dataset())->getObjectById($this->id);
+            // Delete it from index table
             $dataset->deleteObjectById($this->id);
+            // Delete it from DB
+            (new ManageTable($dataset->getName()))->drop();
 
             $datasets = $dataset->getAllAsObjects();
             return [ 'datasets' => $datasets ];
