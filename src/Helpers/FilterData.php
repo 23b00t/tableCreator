@@ -34,6 +34,7 @@ class FilterData
         // Define attribute arrays for different areas
         $attributesMap = [
             'dataset' => ['datasetName', 'attributes'],
+            'dynamicTable' => ['tableName', 'attributes']
         ];
 
         // Check if area exists in the attributes map

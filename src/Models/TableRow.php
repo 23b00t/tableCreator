@@ -1,0 +1,183 @@
+<?php
+
+namespace App\Models;
+
+use App\Core\Db;
+use PDO;
+
+/**
+ * Class: TableRow
+ * Dynamic table model
+ *
+ * @see IModel
+ */
+class TableRow implements IModel
+{
+    /**
+     * @var string $name
+     */
+    private string $name;
+    /**
+     * @var int|null $id
+     */
+    private ?int $id;
+    /**
+     * @var array|null $attributeValues
+     */
+    private ?array $attributeValues;
+
+
+    /**
+     * @param string $name
+     * @param int $id
+     * @param array $attributeValues
+     */
+    public function __construct(
+        string $name,
+        int $id = null,
+        array $attributeValues = null
+    ) {
+        $this->name = $name;
+        $this->id = $id;
+        $this->attributeValues = $attributeValues;
+    }
+
+    /**
+     * getAllAsObjects
+     *
+     * @return TableRow[]
+     */
+    public function getAllAsObjects(): array
+    {
+        $pdo = Db::getConnection();
+        $sql = 'SELECT * FROM ' . $this->name;
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $return = [];
+        foreach ($results as $attributeValues) {
+            $return[] = new TableRow(
+                $this->name,
+                array_shift($attributeValues),
+                $attributeValues
+            );
+        }
+
+        return $return;
+    }
+
+    /**
+     * deleteObjectById
+     *
+     * @param int $id
+     * @return void
+     */
+    public function deleteObjectById(int $id): void
+    {
+        $pdo = Db::getConnection();
+        $sql = "DELETE FROM " . $this->name . " WHERE id = ?";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+    }
+
+    /**
+     * getObjectById
+     *
+     * @param int $id
+     * @return TableRow
+     */
+    public function getObjectById(int $id): TableRow
+    {
+        $pdo = Db::getConnection();
+        $sql = 'SELECT * FROM ' . $this->name . ' WHERE id = ?';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $return = $result ? new TableRow($this->name, array_shift($result), $result) : null;
+
+        return $return;
+    }
+
+    /**
+     * update
+     *
+     * @return void
+     */
+    public function update(): void
+    {
+        $attributeString = implode(', ', array_map(function ($attribute) {
+            return $attribute . ' = ?';
+        }, array_keys($this->attributeValues)));
+
+        $pdo = Db::getConnection();
+        $sql = 'UPDATE ' . $this->name . ' SET ' . $attributeString . ' WHERE id = ?';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array_merge(array_values($this->attributeValues), [$this->id]));
+    }
+
+    /**
+     * insert
+     *
+     * @param array $values
+     * @return TableRow
+     */
+    public function insert(array $values): TableRow
+    {
+        $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
+        $pdo = Db::getConnection();
+        $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . $placeholders . ')';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($values);
+        $id = $pdo->lastInsertId();
+
+        return new TableRow($this->name, $id, $values);
+    }
+
+    /**
+     * getColumsByTableName
+     *
+     * @return TableRow
+     */
+    public function getColumsByTableName(): TableRow
+    {
+        $pdo = Db::getConnection();
+        $sql = "SELECT COLUMN_NAME 
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = '" . $this->name . "' 
+                AND COLUMN_NAME != 'id';";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $obj = new TableRow($this->name, null, $result);
+
+        return $obj;
+    }
+
+    /**
+     * getId
+     *
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * getName
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getAttributeValues(): ?array
+    {
+        return $this->attributeValues;
+    }
+}

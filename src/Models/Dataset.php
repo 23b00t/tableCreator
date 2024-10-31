@@ -150,4 +150,14 @@ class Dataset implements IModel
     {
         return $this->attributes;
     }
+
+    /**
+     * getAttributeNames
+     *
+     * @return array
+     */
+    public function getAttributeNames(): array
+    {
+        return array_map(fn ($attribute) => $attribute->getAttributeName(), $this->attributes);
+    }
 }

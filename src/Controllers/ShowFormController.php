@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Dataset;
+use App\Models\TableRow;
 
 /**
  * Class: ShowFormController
@@ -16,7 +17,7 @@ class ShowFormController implements IController
      */
     private string $area;
     /**
-     * @var ?int $id
+     * @var int|null $id
      */
     private ?int $id;
     /**
@@ -27,6 +28,10 @@ class ShowFormController implements IController
      * @var string $action
      */
     private string $action;
+    /**
+     * @var string|null $tableName
+     */
+    private ?string $tableName;
 
     /**
      * __construct
@@ -39,6 +44,7 @@ class ShowFormController implements IController
         $this->id = $requestData['id'] ?? null;
         $this->view = 'form';
         $this->action = 'insert';
+        $this->tableName = $requestData['tableName'] ?? null;
     }
 
     /**
@@ -55,6 +61,14 @@ class ShowFormController implements IController
             if ($this->area === 'dataset') {
                 $dataset = (new Dataset())->getObjectById($this->id);
                 $array = [  'dataset' => $dataset ];
+            } elseif ($this->area = 'dynamicTable') {
+                $tableRow = (new TableRow($this->tableName))->getObjectById($this->id);
+                $array = [ 'tableRow' => $tableRow ];
+            }
+        } else {
+            if ($this->area === 'dynamicTable') {
+                $tableRow = (new TableRow($this->tableName))->getColumsByTableName();
+                $array = [ 'tableRow' => $tableRow ];
             }
         }
         return $array;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Views;
+namespace App\Views\dataset;
 
-/** @var dataset[] $datasets  */
+/** @var Dataset[] $datasets  */
 ?>
 
 <table class="table mt-4">
@@ -13,7 +13,11 @@ namespace App\Views;
   </tr>
   <?php foreach ($datasets as $dataset) : ?>
     <tr>
-      <td><?= $dataset->getName(); ?></td>
+      <td>
+        <a href="index.php?area=dynamicTable&action=showTable&tableName=<?= $dataset->getName(); ?>">
+            <?= $dataset->getName(); ?>
+        </a>
+      </td>
       <td><a href="index.php?area=dataset&action=delete&id=<?= $dataset->getId(); ?>">
         <button class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i></button>
       </a></td>

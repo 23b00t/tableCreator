@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Core\ManageTable;
 use App\Helpers\FilterData;
 use App\Models\Dataset;
 use App\Models\DatasetAttribute;
+use App\Models\TableRow;
 
 /**
  * Class: InsertController
@@ -58,8 +60,15 @@ class InsertController implements IController
                 (new DatasetAttribute())->insert($id, $attribute);
             }
 
+            (new ManageTable($this->postData['datasetName'], array_values($this->postData['attributes'])))->create();
+
             $datasets = $dataset->getAllAsObjects();
             return [ 'datasets' => $datasets ];
+        } elseif ($this->area === 'dynamicTable') {
+            $tableRow = new TableRow($this->postData['tableName']);
+            $tableRow->insert($this->postData['attributes']);
+            $tableRows = $tableRow->getAllAsObjects();
+            return [ 'tableRows' => $tableRows ];
         }
     }
 
