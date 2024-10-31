@@ -41,13 +41,14 @@ class ManageTable
         // Iterate over attribute names, add default datatype VARCHAR(255) to them.
         // Implode the resulting array to a comma seperated string.
         $attributeString = implode(', ', array_map(function ($attribute) {
-            return $attribute . ' VARCHAR(255)';
+            return '`' . $attribute . '`' . ' VARCHAR(255)';
         }, $this->attributes));
 
         $sql = <<<SQL
                 CREATE TABLE IF NOT EXISTS `$this->tableName` (
                     id INT AUTO_INCREMENT PRIMARY KEY, 
-                    $attributeString);
+                    $attributeString
+                );
                 SQL;
 
         $pdo->exec($sql);
@@ -87,7 +88,7 @@ class ManageTable
     public function drop(): void
     {
         $pdo = Db::getConnection();
-        $sql = 'DROP TABLE ' . $this->tableName;
+        $sql = 'DROP TABLE `' . $this->tableName . '`;';
         $pdo->exec($sql);
     }
 }

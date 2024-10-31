@@ -33,7 +33,7 @@ class FilterData
 
         // Define attribute arrays for different areas
         $attributesMap = [
-            'dataset' => ['datasetName', 'oldName', 'oldAttributes', 'attributes'],
+            'dataset' => ['datasetName', 'attributes'],
             'dynamicTable' => ['tableName', 'attributes']
         ];
 
