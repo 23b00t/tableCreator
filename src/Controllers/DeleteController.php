@@ -24,7 +24,10 @@ class DeleteController implements IController
      * @var string $view
      */
     private string $view;
-    private string $tableName;
+    /**
+     * @var string|null $tableName
+     */
+    private ?string $tableName;
 
 
     /**
@@ -37,7 +40,7 @@ class DeleteController implements IController
         $this->area = $requestData['area'];
         $this->id = $requestData['id'];
         $this->view = 'table';
-        $this->tableName = $requestData['tableName'];
+        $this->tableName = $requestData['tableName'] ?? null;
     }
 
     /**

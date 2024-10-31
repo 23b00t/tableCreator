@@ -37,16 +37,17 @@ class ManageTable
      */
     public function create(): void
     {
-        // $databaseAttributes = [];
-        // foreach ($this->attributes as $attribute) {
-        //     $databaseAttributes[] = $attribute . ' VARCHAR(255)';
-        // }
-        // $attributeString = implode(', ', $databaseAttributes);
+        // Iterate over attribute names, add default datatype VARCHAR(255) to them.
+        // Implode the resulting array to a comma seperated string.
         $attributeString = implode(', ', array_map(function ($attribute) {
             return $attribute . ' VARCHAR(255)';
         }, $this->attributes));
 
-        $sql = "CREATE TABLE IF NOT EXISTS `" . $this->tableName . "` (id INT AUTO_INCREMENT PRIMARY KEY, " . $attributeString . ");";
+        $sql = <<<SQL
+                CREATE TABLE IF NOT EXISTS `$this->tableName` (
+                    id INT AUTO_INCREMENT PRIMARY KEY, 
+                    $attributeString);
+                SQL;
 
         $pdo = Db::getConnection();
         $pdo->exec($sql);
