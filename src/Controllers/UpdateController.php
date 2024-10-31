@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\ManageTable;
 use App\Helpers\FilterData;
 use App\Models\Dataset;
 use App\Models\DatasetAttribute;
@@ -53,6 +54,10 @@ class UpdateController implements IController
     public function invoke(): array
     {
         if ($this->area === 'dataset') {
+            $oldDataset = (new Dataset())->getObjectById($this->id);
+            $oldName = $oldDataset->getName();
+            $oldAttributes = $oldDataset->getAttributes();
+
             $dataset = new Dataset(
                 $this->id,
                 $this->postData['datasetName'],
@@ -65,6 +70,11 @@ class UpdateController implements IController
                 $datasetAttribute = new DatasetAttribute($id, $this->id, $name);
                 $datasetAttribute->update();
             }
+
+            (new ManageTable(
+                $this->postData['datasetName'],
+                array_values($this->postData['attributes'])
+            ))->alter($oldName, $oldAttributes);
 
             $datasets = $dataset->getAllAsObjects();
             return [ 'datasets' => $datasets ];

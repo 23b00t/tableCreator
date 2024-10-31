@@ -52,4 +52,30 @@ class ManageTable
         $pdo = Db::getConnection();
         $pdo->exec($sql);
     }
+
+    /**
+     * alter
+     *
+     * @param string $oldName
+     * @param array $oldAttributes
+     * @return void
+     */
+    public function alter(string $oldName, array $oldAttributes): void
+    {
+        $pdo = Db::getConnection();
+        $sql = [];
+        $sql[] = 'ALTER TABLE ' . $oldName . ' RENAME TO ' . $this->tableName;
+        foreach ($this->attributes as $index => $column) {
+            $oldAttribute = $oldAttributes[$index]->getAttributeName();
+            $sql[] = <<<SQL
+                     ALTER TABLE `$this->tableName` 
+                     CHANGE `$oldAttribute` `$column` VARCHAR(255);
+                     SQL;
+        }
+        // Modify datatype:
+        // ALTER TABLE table_name MODIFY COLUMN column_name new_data_type;
+        foreach ($sql as $statement) {
+            $pdo->exec($statement);
+        }
+    }
 }

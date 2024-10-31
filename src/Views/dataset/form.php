@@ -59,7 +59,13 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
       <input type="hidden" name="action" value="<?= $action; ?>">
 
       <!-- Set id in hidden field -->
-      <input type="hidden" name="id" value="<?= $datasetExists ? $dataset->getId() : ''; ?>">
+      <input type="hidden" name="id" value="<?= !$datasetExists ?: $dataset->getId(); ?>">
+
+      <!-- Set old name in hidden field -->
+      <input type="hidden" name="oldName" value="<?= !$datasetExists ?: $dataset->getName(); ?>">
+
+      <!-- Set old attributes in hidden field -->
+      <input type="hidden" name="oldAttributes[]" value="<?= !$datasetExists ?: $dataset->getAttributes(); ?>">
 
       <div class="form-group">
         <button type="submit" class="btn btn-primary btn-block mt-3">Speichern</button>
