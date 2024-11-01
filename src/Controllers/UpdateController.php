@@ -8,17 +8,8 @@ use App\Models\Dataset;
 use App\Models\DatasetAttribute;
 use App\Models\TableRow;
 
-/**
- * Class: UpdateController
- *
- * @see IController
- */
-class UpdateController implements IController
+class UpdateController extends BaseController
 {
-    /**
-     * @var string $area
-     */
-    private string $area;
     /**
      * @var int $id
      */
@@ -27,10 +18,6 @@ class UpdateController implements IController
      * @var array $postData
      */
     private array $postData;
-    /**
-     * @var string $view
-     */
-    private string $view;
 
     /**
      * __construct
@@ -39,60 +26,55 @@ class UpdateController implements IController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'];
+        parent::__construct($requestData);
         $this->id = $requestData['id'];
         // Extract object attribute values from POST requestData
         $this->postData = (new FilterData($requestData))->filter();
-        $this->view = 'table';
     }
 
     /**
-     * invoke
+     * datasetAction
+     *
+     * @return void
+     */
+    protected function datasetAction(): void
+    {
+        // Update main table
+        (new Dataset($this->id, $this->postData['datasetName']))->update();
+
+        // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
+        foreach ($this->postData['attributes'] as $id => $name) {
+            (new DatasetAttribute($id, $this->id, $name))->update();
+        }
+
+        // Update child table
+        (new ManageTable(
+            $this->postData['datasetName'],
+            array_values($this->postData['attributes'])
+        ))->alter(...$this->getOldObject());
+    }
+
+    /**
+     * tableRowAction
+     *
+     * @param TableRow $tableRow
+     * @return void
+     */
+    protected function tableRowAction(TableRow $tableRow): void
+    {
+        (new TableRow($this->postData['tableName'], $this->id, $this->postData['attributes']))->update();
+    }
+
+    /**
+     * getOldObject
      *
      * @return array
      */
-    public function invoke(): array
+    private function getOldObject(): array
     {
-        if ($this->area === 'dataset') {
-            $oldDataset = (new Dataset())->getObjectById($this->id);
-            $oldName = $oldDataset->getName();
-            $oldAttributes = $oldDataset->getAttributes();
-
-            $dataset = new Dataset(
-                $this->id,
-                $this->postData['datasetName'],
-            );
-
-            $dataset->update();
-
-            // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
-            foreach ($this->postData['attributes'] as $id => $name) {
-                $datasetAttribute = new DatasetAttribute($id, $this->id, $name);
-                $datasetAttribute->update();
-            }
-
-            (new ManageTable(
-                $this->postData['datasetName'],
-                array_values($this->postData['attributes'])
-            ))->alter($oldName, $oldAttributes);
-
-            $datasets = $dataset->getAllAsObjects();
-            return [ 'datasets' => $datasets ];
-        } elseif ($this->area === 'dynamicTable') {
-            $tableRow = new TableRow($this->postData['tableName'], $this->id, $this->postData['attributes']);
-            $tableRow->update();
-            $tableRows = $tableRow->getAllAsObjects();
-            return [ 'tableRows' => $tableRows ];
-        }
-    }
-
-    /**
-     * getView
-     *
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->view;
+        $oldDataset = (new Dataset())->getObjectById($this->id);
+        $oldName = $oldDataset->getName();
+        $oldAttributes = $oldDataset->getAttributes();
+        return [$oldName, $oldAttributes];
     }
 }

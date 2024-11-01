@@ -11,22 +11,14 @@ use App\Models\TableRow;
 /**
  * Class: InsertController
  *
- * @see IController
+ * @see BaseController
  */
-class InsertController implements IController
+class InsertController extends BaseController
 {
-    /**
-     * @var string $area
-     */
-    private string $area;
     /**
      * @var array $postData
      */
     private array $postData;
-    /**
-     * @var string $view
-     */
-    private string $view;
 
     /**
      * __construct
@@ -35,50 +27,37 @@ class InsertController implements IController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'];
+        parent::__construct($requestData);
         // Extract object attribute values from POST requestData
         $this->postData = (new FilterData($requestData))->filter();
-        $this->view = 'table';
     }
 
     /**
-     * invoke
+     * datasetAction
      *
-     * @return array
+     * @return void
      */
-    public function invoke(): array
+    protected function datasetAction(): void
     {
-        if ($this->area === 'dataset') {
-            $dataset = new Dataset();
-            $datasetObj = $dataset->insert(
-                $this->postData['datasetName'],
-            );
+        $dataset = (new Dataset())->insert($this->postData['datasetName']);
 
-            $id = $datasetObj->getId();
+        $id = $dataset->getId();
 
-            foreach ($this->postData['attributes'] as $attribute) {
-                (new DatasetAttribute())->insert($id, $attribute);
-            }
-
-            (new ManageTable($this->postData['datasetName'], array_values($this->postData['attributes'])))->create();
-
-            $datasets = $dataset->getAllAsObjects();
-            return [ 'datasets' => $datasets ];
-        } elseif ($this->area === 'dynamicTable') {
-            $tableRow = new TableRow($this->postData['tableName']);
-            $tableRow->insert($this->postData['attributes']);
-            $tableRows = $tableRow->getAllAsObjects();
-            return [ 'tableRows' => $tableRows ];
+        foreach ($this->postData['attributes'] as $attribute) {
+            (new DatasetAttribute())->insert($id, $attribute);
         }
+
+        (new ManageTable($this->postData['datasetName'], array_values($this->postData['attributes'])))->create();
     }
 
     /**
-     * getView
+     * tableRowAction
      *
-     * @return string
+     * @param TableRow $tableRow
+     * @return void
      */
-    public function getView(): string
+    protected function tableRowAction(TableRow $tableRow): void
     {
-        return $this->view;
+        $tableRow->insert($this->postData['attributes']);
     }
 }

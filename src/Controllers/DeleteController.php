@@ -9,27 +9,14 @@ use App\Models\TableRow;
 /**
  * Class: DeleteController
  *
- * @see IController
+ * @see BaseController
  */
-class DeleteController implements IController
+class DeleteController extends BaseController
 {
-    /**
-     * @var string $area
-     */
-    private string $area;
     /**
      * @var int $id
      */
     private int $id;
-    /**
-     * @var string $view
-     */
-    private string $view;
-    /**
-     * @var string|null $tableName
-     */
-    private ?string $tableName;
-
 
     /**
      * __construct
@@ -38,46 +25,33 @@ class DeleteController implements IController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'];
+        parent::__construct($requestData);
         $this->id = $requestData['id'];
-        $this->view = 'table';
-        $this->tableName = $requestData['tableName'] ?? null;
     }
 
     /**
-     * invoke
+     * datasetAction
      *
-     * @return array
+     * @return void
      */
-    public function invoke(): array
+    protected function datasetAction(): void
     {
-        if ($this->area === 'dataset') {
-            // Instanciate object by id to hand over its name to ManageTable
-            $dataset = (new Dataset())->getObjectById($this->id);
-            // Delete it from index table
-            $dataset->deleteObjectById($this->id);
-            // Delete it from DB
-            (new ManageTable($dataset->getName()))->drop();
-
-            $datasets = $dataset->getAllAsObjects();
-            return [ 'datasets' => $datasets ];
-        } elseif ($this->area === 'dynamicTable') {
-            $tableRow = (new TableRow($this->tableName));
-            $tableRow->deleteObjectById($this->id);
-
-            $tableRows = $tableRow->getAllAsObjects();
-
-            return [ 'tableRows' => $tableRows ];
-        }
+        // Instanciate object by id to hand over its name to ManageTable
+        $dataset = (new Dataset())->getObjectById($this->id);
+        // Delete it from index table
+        $dataset->deleteObjectById($this->id);
+        // Delete it from DB
+        (new ManageTable($dataset->getName()))->drop();
     }
 
     /**
-     * getView
+     * tableRowAction
      *
-     * @return string
+     * @param TableRow $tableRow
+     * @return void
      */
-    public function getView(): string
+    protected function tableRowAction(TableRow $tableRow): void
     {
-        return $this->view;
+        $tableRow->deleteObjectById($this->id);
     }
 }

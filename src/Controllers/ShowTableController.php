@@ -2,67 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Models\Dataset;
-use App\Models\TableRow;
-
-/*
+/**
  * Class: ShowTableController
  *
- * @see IController
+ * @see BaseController
  */
-class ShowTableController implements IController
+class ShowTableController extends BaseController
 {
-    /**
-     * @var string $area
-     */
-    private string $area;
-    /**
-     * @var string $view
-     */
-    private string $view;
-    /**
-     * @var string|null $tableName
-     */
-    private ?string $tableName;
-
-    /**
-     * __construct
-     *
-     * @param array $requestData
-     */
-    public function __construct(array $requestData)
-    {
-        $this->area = $requestData['area'] ?? 'dataset';
-        $this->view = 'table';
-        $this->tableName = $requestData['tableName'] ?? null;
-    }
-
-    /**
-     * invoke
-     *
-     * @return array
-     */
-    public function invoke(): array
-    {
-        if ($this->area === 'dataset') {
-            $datasets = (new Dataset())->getAllAsObjects();
-            return [ 'datasets' => $datasets ];
-        } elseif ($this->area === 'dynamicTable') {
-            $tableRow = (new TableRow($this->tableName));
-            $tableRows = $tableRow->getAllAsObjects();
-            $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
-
-            return [ 'tableRows' => $tableRows ];
-        }
-    }
-
-    /**
-     * getView
-     *
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->view;
-    }
 }
