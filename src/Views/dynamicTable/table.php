@@ -31,8 +31,7 @@ namespace App\Views\dynamicTable;
             </button>
           </a>
         </td>
-        <td><a href="index.php?area=dynamicTable&action=showForm&id=
-            <?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
+        <td><a href="index.php?area=dynamicTable&action=showForm&id=<?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
           <button class="btn btn-outline-warning"><i class="fa-solid fa-pencil"></i></button>
         </a></td>
         </tr>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Core\Db;
 use PDO;
+use PDOStatement;
 
 /**
  * Class: TableRow
@@ -32,11 +33,8 @@ class TableRow implements IModel
      * @param int $id
      * @param array $attributeArray
      */
-    public function __construct(
-        string $name,
-        int $id = null,
-        array $attributeArray = null
-    ) {
+    public function __construct(string $name, int $id = null, array $attributeArray = null)
+    {
         $this->name = $name;
         $this->id = $id;
         $this->attributeArray = $attributeArray;
@@ -50,8 +48,8 @@ class TableRow implements IModel
     public function getAllAsObjects(): array
     {
         $sql = 'SELECT * FROM ' . $this->name;
-        $result = $this->query($sql);
-        return $this->createObjects($result);
+        $stmt = $this->prepareAndExecuteQuery($sql);
+        return $this->fetchAndCreateObjects($stmt);
     }
 
     /**
@@ -62,11 +60,8 @@ class TableRow implements IModel
      */
     public function deleteObjectById(int $id): void
     {
-        $pdo = Db::getConnection();
         $sql = "DELETE FROM " . $this->name . " WHERE id = ?";
-
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
+        $this->prepareAndExecuteQuery($sql, [$id]);
     }
 
     /**
@@ -77,12 +72,10 @@ class TableRow implements IModel
      */
     public function getObjectById(int $id): TableRow
     {
-        $pdo = Db::getConnection();
         $sql = 'SELECT * FROM ' . $this->name . ' WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
+        $stmt = $this->prepareAndExecuteQuery($sql, [$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        // Retrun object or null if no object was found
         $return = $result ? new TableRow($this->name, array_shift($result), $result) : null;
 
         return $return;
@@ -99,10 +92,8 @@ class TableRow implements IModel
             return $attribute . ' = ?';
         }, array_keys($this->attributeArray)));
 
-        $pdo = Db::getConnection();
         $sql = 'UPDATE ' . $this->name . ' SET ' . $attributeString . ' WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(array_merge(array_values($this->attributeArray), [$this->id]));
+        $this->prepareAndExecuteQuery($sql, array_merge(array_values($this->attributeArray), [$this->id]));
     }
 
     /**
@@ -114,11 +105,9 @@ class TableRow implements IModel
     public function insert(array $values): TableRow
     {
         $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
-        $pdo = Db::getConnection();
         $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . $placeholders . ')';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($values);
-        $id = $pdo->lastInsertId();
+        $this->prepareAndExecuteQuery($sql, $values);
+        $id = Db::getConnection()->lastInsertId();
 
         return new TableRow($this->name, $id, $values);
     }
@@ -136,7 +125,7 @@ class TableRow implements IModel
             WHERE TABLE_NAME = '$this->name' 
             AND COLUMN_NAME != 'id';"
         SQL;
-        $result = $this->query($sql);
+        $result = $this->prepareAndExecuteQuery($sql)->fetchAll(PDO::FETCH_ASSOC);
         // array_column: get from $result all values with key COLUMN_NAME
         // array_fill_keys: take result from array_column as keys and fill the values with null
         $attributes = array_fill_keys(array_column($result, 'COLUMN_NAME'), null);
@@ -168,8 +157,8 @@ class TableRow implements IModel
         SQL;
 
         // Execute the query and create objects
-        $result = $this->query($sql);
-        return $this->createObjects($result);
+        $result = $this->prepareAndExecuteQuery($sql);
+        return $this->fetchAndCreateObjects($result);
     }
 
     /**
@@ -198,29 +187,31 @@ class TableRow implements IModel
     }
 
     /**
-     * queryObjects
+     * prepareAndExecuteQuery
      *
      * @param string $sql
-     * @return array
+     * @param array $params, default []
+     * @return PDOStatement
      */
-    private function query(string $sql): array
+    private function prepareAndExecuteQuery(string $sql, array $params = []): PDOStatement
     {
         $pdo = Db::getConnection();
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->execute($params);
+        return $stmt;
     }
 
     /**
      * createObjects
      *
-     * @param array $queryResults
+     * @param PDOStatement
      * @return TableRow[]
      */
-    private function createObjects(array $queryResults): array
+    private function fetchAndCreateObjects(PDOStatement $stmt): array
     {
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $return = [];
-        foreach ($queryResults as $attributeArray) {
+        foreach ($results as $attributeArray) {
             $return[] = new TableRow(
                 $this->name,
                 array_shift($attributeArray),
