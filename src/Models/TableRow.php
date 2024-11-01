@@ -144,11 +144,11 @@ class TableRow implements IModel
     {
         $pdo = Db::getConnection();
         $sql = <<<SQL
-               SELECT COLUMN_NAME 
-               FROM INFORMATION_SCHEMA.COLUMNS 
-               WHERE TABLE_NAME = '$this->name' 
-               AND COLUMN_NAME != 'id';"
-               SQL;
+            SELECT COLUMN_NAME 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_NAME = '$this->name' 
+            AND COLUMN_NAME != 'id';"
+        SQL;
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -157,6 +157,40 @@ class TableRow implements IModel
         $attributes = array_fill_keys(array_column($result, 'COLUMN_NAME'), null);
 
         return new TableRow($this->name, null, $attributes);
+    }
+
+    /**
+     * getObjectsByFulltextSearch
+     *
+     * @param string $searchTerm
+     * @return TableRow[]
+     */
+    public function getObjectsByFulltextSearch(string $searchTerm): array
+    {
+        $pdo = Db::getConnection();
+
+        $attributes = implode(', ', array_map(function ($attribute) {
+            return '`' . $attribute . '`';
+        }, array_keys($this->getColumnsByTableName()->getAttributeArray())));
+
+        $sql = <<<SQL
+            SELECT * FROM `$this->name`
+            WHERE MATCH($attributes) AGAINST('$searchTerm' IN NATURAL LANGUAGE MODE);
+        SQL;
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $return = [];
+        foreach ($results as $attributeArray) {
+            $return[] = new TableRow(
+                $this->name,
+                array_shift($attributeArray),
+                $attributeArray
+            );
+        }
+
+        return $return;
     }
 
     /**
