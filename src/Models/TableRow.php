@@ -49,21 +49,9 @@ class TableRow implements IModel
      */
     public function getAllAsObjects(): array
     {
-        $pdo = Db::getConnection();
         $sql = 'SELECT * FROM ' . $this->name;
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $return = [];
-        foreach ($results as $attributeArray) {
-            $return[] = new TableRow(
-                $this->name,
-                array_shift($attributeArray),
-                $attributeArray
-            );
-        }
-
-        return $return;
+        $result = $this->query($sql);
+        return $this->createObjects($result);
     }
 
     /**
@@ -142,16 +130,13 @@ class TableRow implements IModel
      */
     public function getColumnsByTableName(): TableRow
     {
-        $pdo = Db::getConnection();
         $sql = <<<SQL
             SELECT COLUMN_NAME 
             FROM INFORMATION_SCHEMA.COLUMNS 
             WHERE TABLE_NAME = '$this->name' 
             AND COLUMN_NAME != 'id';"
         SQL;
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->query($sql);
         // array_column: get from $result all values with key COLUMN_NAME
         // array_fill_keys: take result from array_column as keys and fill the values with null
         $attributes = array_fill_keys(array_column($result, 'COLUMN_NAME'), null);
@@ -167,8 +152,6 @@ class TableRow implements IModel
      */
     public function getObjectsByFulltextSearch(string $searchTerm): array
     {
-        $pdo = Db::getConnection();
-
         $attributes = implode(', ', array_map(function ($attribute) {
             return '`' . $attribute . '`';
         }, array_keys($this->getColumnsByTableName()->getAttributeArray())));
@@ -178,19 +161,8 @@ class TableRow implements IModel
             WHERE MATCH($attributes) AGAINST('$searchTerm' IN NATURAL LANGUAGE MODE);
         SQL;
 
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $return = [];
-        foreach ($results as $attributeArray) {
-            $return[] = new TableRow(
-                $this->name,
-                array_shift($attributeArray),
-                $attributeArray
-            );
-        }
-
-        return $return;
+        $result = $this->query($sql);
+        return $this->createObjects($result);
     }
 
     /**
@@ -216,5 +188,39 @@ class TableRow implements IModel
     public function getAttributeArray(): ?array
     {
         return $this->attributeArray;
+    }
+
+    /**
+     * queryObjects
+     *
+     * @param string $sql
+     * @return array
+     */
+    private function query(string $sql): array
+    {
+        $pdo = Db::getConnection();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * createObjects
+     *
+     * @param array $queryResults
+     * @return TableRow[]
+     */
+    private function createObjects(array $queryResults): array
+    {
+        $return = [];
+        foreach ($queryResults as $attributeArray) {
+            $return[] = new TableRow(
+                $this->name,
+                array_shift($attributeArray),
+                $attributeArray
+            );
+        }
+
+        return $return;
     }
 }

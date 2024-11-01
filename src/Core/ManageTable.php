@@ -47,13 +47,12 @@ class ManageTable
         $sql = <<<SQL
                 CREATE TABLE IF NOT EXISTS `$this->tableName` (
                     id INT AUTO_INCREMENT PRIMARY KEY, 
-                    $attributeString
+                    $attributeString,
+                    FULLTEXT INDEX idx_fulltext ($attributes)
                 );
                 SQL;
 
         $pdo->exec($sql);
-        $sqlIndex = "ALTER TABLE `$this->tableName` ADD FULLTEXT INDEX idx_fulltext ($attributes)";
-        $pdo->exec($sqlIndex);
     }
 
     /**

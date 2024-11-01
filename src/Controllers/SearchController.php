@@ -4,14 +4,12 @@ namespace App\Controllers;
 
 use App\Models\TableRow;
 
-class SearchController
+class SearchController extends BaseController
 {
-    private $searchTerm;
-    private $area;
-
-    private string $view;
-    private $tableName;
-
+    /**
+     * @var string $searchTerm
+     */
+    private string $searchTerm;
 
     /**
      * __construct
@@ -20,9 +18,7 @@ class SearchController
      */
     public function __construct(array $requestData)
     {
-        $this->area = $requestData['area'] ?? 'dataset';
-        $this->view = 'table';
-        $this->tableName = $requestData['tableName'] ?? null;
+        parent::__construct($requestData);
         $this->searchTerm = $requestData['searchTerm'];
     }
 
@@ -42,15 +38,5 @@ class SearchController
         } else {
             echo "Select a table";
         }
-    }
-
-    /**
-     * getView
-     *
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->view;
     }
 }
