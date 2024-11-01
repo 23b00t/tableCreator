@@ -26,7 +26,7 @@ namespace App\Views;
             <?= $errorMsg; ?>
         </div>
     <?php else : ?>
-        <?php include __DIR__ . '/navbar.html'; ?>
+        <?php include __DIR__ . '/navbar.php'; ?>
         <div class="container-md">
           <?php include __DIR__ . '/' . $area . '/' . $controller->getView() . '.php'; ?>
         </div>
