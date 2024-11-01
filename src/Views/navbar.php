@@ -42,6 +42,8 @@ namespace App\Views;
         <input type="hidden" name="area" value="<?= $area; ?>">
         <!-- Set table name in hidden field -->
         <input type="hidden" name="tableName" value="<?= isset($tableRows) ? $tableRows[0]->getName() : ''; ?>">
+        <!-- Reset button -->
+        <button class="btn btn-outline-secondary ms-2" type="submit">Reset</button>
       </form>
     </div>
   </div>
