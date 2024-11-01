@@ -152,15 +152,22 @@ class TableRow implements IModel
      */
     public function getObjectsByFulltextSearch(string $searchTerm): array
     {
-        $attributes = implode(', ', array_map(function ($attribute) {
-            return '`' . $attribute . '`';
-        }, array_keys($this->getColumnsByTableName()->getAttributeArray())));
+        // Prepare query
+        // Retrieve the attribute names from the table
+        $attributes = array_keys($this->getColumnsByTableName()->getAttributeArray());
+        // Join LIKE statements for each attribute using array_map and implode
+        $likeClause = implode(' OR ', array_map(fn ($attribute) => "`$attribute` LIKE '%$searchTerm%'", $attributes));
+        // Create the comma-separated list for MATCH
+        $matchAttributes = implode(', ', array_map(fn ($attribute) => "`$attribute`", $attributes));
 
+        // SQL query
         $sql = <<<SQL
             SELECT * FROM `$this->name`
-            WHERE MATCH($attributes) AGAINST('$searchTerm' IN NATURAL LANGUAGE MODE);
+            WHERE MATCH($matchAttributes) AGAINST('$searchTerm' IN NATURAL LANGUAGE MODE)
+            OR $likeClause;
         SQL;
 
+        // Execute the query and create objects
         $result = $this->query($sql);
         return $this->createObjects($result);
     }
