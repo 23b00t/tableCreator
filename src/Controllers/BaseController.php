@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\TableRow;
 use App\Models\Dataset;
 
-abstract class BaseController implements IController
+abstract class BaseController
 {
     /**
      * @var string $area
@@ -19,7 +19,6 @@ abstract class BaseController implements IController
      * @var string|null $tableName
      */
     protected ?string $tableName;
-
 
     /**
      * __construct

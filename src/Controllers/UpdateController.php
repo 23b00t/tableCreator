@@ -70,7 +70,7 @@ class UpdateController extends BaseController
      *
      * @return array
      */
-    public function getOldObject(): array
+    private function getOldObject(): array
     {
         $oldDataset = (new Dataset())->getObjectById($this->id);
         $oldName = $oldDataset->getName();
