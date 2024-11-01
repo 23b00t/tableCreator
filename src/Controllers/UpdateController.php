@@ -33,42 +33,48 @@ class UpdateController extends BaseController
     }
 
     /**
-     * invoke
+     * datasetAction
+     *
+     * @return void
+     */
+    protected function datasetAction(): void
+    {
+        // Update main table
+        (new Dataset($this->id, $this->postData['datasetName']))->update();
+
+        // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
+        foreach ($this->postData['attributes'] as $id => $name) {
+            (new DatasetAttribute($id, $this->id, $name))->update();
+        }
+
+        // Update child table
+        (new ManageTable(
+            $this->postData['datasetName'],
+            array_values($this->postData['attributes'])
+        ))->alter(...$this->getOldObject());
+    }
+
+    /**
+     * tableRowAction
+     *
+     * @param TableRow $tableRow
+     * @return void
+     */
+    protected function tableRowAction(TableRow $tableRow): void
+    {
+        (new TableRow($this->postData['tableName'], $this->id, $this->postData['attributes']))->update();
+    }
+
+    /**
+     * getOldObject
      *
      * @return array
      */
-    public function invoke(): array
+    public function getOldObject(): array
     {
-        if ($this->area === 'dataset') {
-            $oldDataset = (new Dataset())->getObjectById($this->id);
-            $oldName = $oldDataset->getName();
-            $oldAttributes = $oldDataset->getAttributes();
-
-            $dataset = new Dataset(
-                $this->id,
-                $this->postData['datasetName'],
-            );
-
-            $dataset->update();
-
-            // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
-            foreach ($this->postData['attributes'] as $id => $name) {
-                $datasetAttribute = new DatasetAttribute($id, $this->id, $name);
-                $datasetAttribute->update();
-            }
-
-            (new ManageTable(
-                $this->postData['datasetName'],
-                array_values($this->postData['attributes'])
-            ))->alter($oldName, $oldAttributes);
-
-            $datasets = $dataset->getAllAsObjects();
-            return [ 'datasets' => $datasets ];
-        } elseif ($this->area === 'dynamicTable') {
-            $tableRow = new TableRow($this->postData['tableName'], $this->id, $this->postData['attributes']);
-            $tableRow->update();
-            $tableRows = $tableRow->getAllAsObjects();
-            return [ 'tableRows' => $tableRows ];
-        }
+        $oldDataset = (new Dataset())->getObjectById($this->id);
+        $oldName = $oldDataset->getName();
+        $oldAttributes = $oldDataset->getAttributes();
+        return [$oldName, $oldAttributes];
     }
 }

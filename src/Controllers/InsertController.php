@@ -39,12 +39,9 @@ class InsertController extends BaseController
      */
     protected function datasetAction(): void
     {
-        $dataset = new Dataset();
-        $datasetObj = $dataset->insert(
-            $this->postData['datasetName'],
-        );
+        $dataset = (new Dataset())->insert($this->postData['datasetName']);
 
-        $id = $datasetObj->getId();
+        $id = $dataset->getId();
 
         foreach ($this->postData['attributes'] as $attribute) {
             (new DatasetAttribute())->insert($id, $attribute);
