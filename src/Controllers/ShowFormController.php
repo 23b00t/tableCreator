@@ -20,10 +20,6 @@ class ShowFormController extends BaseController
      * @var string $action
      */
     private string $action;
-    /**
-     * @var string|null $tableName
-     */
-    private ?string $tableName;
 
     /**
      * __construct
@@ -36,7 +32,6 @@ class ShowFormController extends BaseController
         $this->id = $requestData['id'] ?? null;
         $this->action = 'insert';
         $this->view = 'form';
-        $this->tableName = $requestData['tableName'] ?? null;
     }
 
     /**

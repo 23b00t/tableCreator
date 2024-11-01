@@ -17,11 +17,6 @@ class DeleteController extends BaseController
      * @var int $id
      */
     private int $id;
-    /**
-     * @var string|null $tableName
-     */
-    private ?string $tableName;
-
 
     /**
      * __construct
@@ -32,33 +27,31 @@ class DeleteController extends BaseController
     {
         parent::__construct($requestData);
         $this->id = $requestData['id'];
-        $this->tableName = $requestData['tableName'] ?? null;
     }
 
     /**
-     * invoke
+     * datasetAction
      *
-     * @return array
+     * @return void
      */
-    public function invoke(): array
+    protected function datasetAction(): void
     {
-        if ($this->area === 'dataset') {
-            // Instanciate object by id to hand over its name to ManageTable
-            $dataset = (new Dataset())->getObjectById($this->id);
-            // Delete it from index table
-            $dataset->deleteObjectById($this->id);
-            // Delete it from DB
-            (new ManageTable($dataset->getName()))->drop();
+        // Instanciate object by id to hand over its name to ManageTable
+        $dataset = (new Dataset())->getObjectById($this->id);
+        // Delete it from index table
+        $dataset->deleteObjectById($this->id);
+        // Delete it from DB
+        (new ManageTable($dataset->getName()))->drop();
+    }
 
-            $datasets = $dataset->getAllAsObjects();
-            return [ 'datasets' => $datasets ];
-        } elseif ($this->area === 'dynamicTable') {
-            $tableRow = (new TableRow($this->tableName));
-            $tableRow->deleteObjectById($this->id);
-
-            $tableRows = $tableRow->getAllAsObjects();
-
-            return [ 'tableRows' => $tableRows ];
-        }
+    /**
+     * tableRowAction
+     *
+     * @param TableRow $tableRow
+     * @return void
+     */
+    protected function tableRowAction(TableRow $tableRow): void
+    {
+        $tableRow->deleteObjectById($this->id);
     }
 }
