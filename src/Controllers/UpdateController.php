@@ -39,6 +39,12 @@ class UpdateController extends BaseController
      */
     protected function datasetAction(): void
     {
+        // Update child table
+        (new ManageTable(
+            $this->postData['datasetName'],
+            array_values($this->postData['attributes'])
+        ))->alter(...$this->getOldObject());
+
         // Update main table
         (new Dataset($this->id, $this->postData['datasetName']))->update();
 
@@ -46,12 +52,6 @@ class UpdateController extends BaseController
         foreach ($this->postData['attributes'] as $id => $name) {
             (new DatasetAttribute($id, $this->id, $name))->update();
         }
-
-        // Update child table
-        (new ManageTable(
-            $this->postData['datasetName'],
-            array_values($this->postData['attributes'])
-        ))->alter(...$this->getOldObject());
     }
 
     /**
