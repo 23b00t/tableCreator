@@ -40,9 +40,6 @@ class DeleteController extends BaseController
             $this->datasetAttributeAction($datasetAttribute);
             // Create new Dataset object and set area and view to redisplay the edit form without the deleted attribute
             $dataset = (new Dataset())->getObjectById($datasetAttribute->getDatasetId());
-            $this->area = 'dataset';
-            $this->view = 'form';
-            $this->action = 'update';
             $result = [ 'dataset' => $dataset ];
         }
         return $result;
@@ -84,5 +81,8 @@ class DeleteController extends BaseController
     {
         (new ManageTable($this->tableName))->dropColumn($datasetAttribute->getAttributeName());
         $datasetAttribute->deleteObjectById($this->id);
+        $this->area = 'dataset';
+        $this->view = 'form';
+        $this->action = 'update';
     }
 }

@@ -39,6 +39,7 @@ class UpdateController extends BaseController
      */
     protected function datasetAction(): void
     {
+        // If table doesn't contain columns set its attributes to []
         $values = isset($this->postData['attributes']) ? $this->postData['attributes'] : [];
         // Update child table
         (new ManageTable(

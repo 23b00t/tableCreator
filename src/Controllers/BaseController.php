@@ -19,6 +19,9 @@ abstract class BaseController
      * @var string|null $tableName
      */
     protected ?string $tableName;
+    /**
+     * @var string|null $action
+     */
     protected ?string $action;
 
     /**
@@ -99,12 +102,22 @@ abstract class BaseController
         $this->view = $view;
     }
 
+    /**
+     * getArea
+     *
+     * @return string
+     */
     public function getArea(): string
     {
         return $this->area;
     }
 
-    public function getAction()
+    /**
+     * getAction
+     *
+     * @return string
+     */
+    public function getAction(): string
     {
         return $this->action;
     }
