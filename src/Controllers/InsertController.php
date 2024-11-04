@@ -41,15 +41,24 @@ class InsertController extends BaseController
     protected function datasetAction(): void
     {
         if (isset($this->postData['attributes'])) {
-            $dataset = (new Dataset())->insert($this->postData['datasetName']);
+            try {
+                (new ManageTable(
+                    $this->postData['datasetName'],
+                    array_values($this->postData['attributes'])
+                ))->create();
+                $dataset = (new Dataset())->insert($this->postData['datasetName']);
 
-            $id = $dataset->getId();
+                $id = $dataset->getId();
 
-            foreach ($this->postData['attributes'] as $attribute) {
-                (new DatasetAttribute())->insert($id, $attribute);
+                foreach ($this->postData['attributes'] as $attribute) {
+                    (new DatasetAttribute())->insert($id, $attribute);
+                }
+            } catch (PublicMessageException) {
+                $this->setView('form');
+                throw new PublicMessageException(
+                    "Die Tabelle '" . $this->postData['datasetName'] . "' existiert bereits."
+                );
             }
-
-            (new ManageTable($this->postData['datasetName'], array_values($this->postData['attributes'])))->create();
         } else {
             $this->setView('form');
             throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');

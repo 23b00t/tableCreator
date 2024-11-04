@@ -45,14 +45,24 @@ class ManageTable
         }, $this->attributes));
 
         $sql = <<<SQL
-                CREATE TABLE IF NOT EXISTS `$this->tableName` (
+                CREATE TABLE `$this->tableName` (
                     id INT AUTO_INCREMENT PRIMARY KEY, 
                     $attributeString,
                     FULLTEXT INDEX idx_fulltext ($attributes)
                 );
                 SQL;
 
-        $pdo->exec($sql);
+        try {
+            $pdo->exec($sql);
+        } catch (\PDOException $e) {
+            // Check if the error message indicates that the table already exists
+            if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
+                throw new PublicMessageException("Die Tabelle '$this->tableName' existiert bereits.");
+            } else {
+                // For other PDO exceptions
+                throw new \Exception($e);
+            }
+        }
     }
 
     /**
