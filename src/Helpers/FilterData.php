@@ -50,6 +50,8 @@ class FilterData
             if (isset($this->requestData[$attribute])) {
                 $value = $this->requestData[$attribute] === '' ? null : $this->requestData[$attribute];
                 $sanitizedData[$attribute] = $value;
+            } else {
+                $sanitizedData[$attribute] = null;
             }
         }
 

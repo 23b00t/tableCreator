@@ -39,17 +39,18 @@ class UpdateController extends BaseController
      */
     protected function datasetAction(): void
     {
+        $values = isset($this->postData['attributes']) ? $this->postData['attributes'] : [];
         // Update child table
         (new ManageTable(
             $this->postData['datasetName'],
-            array_values($this->postData['attributes'])
+            array_values($values)
         ))->alter(...$this->getOldObject());
 
         // Update main table
         (new Dataset($this->id, $this->postData['datasetName']))->update();
 
         // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
-        foreach ($this->postData['attributes'] as $id => $name) {
+        foreach ($values as $id => $name) {
             $datasetAttribute = new DatasetAttribute($id, $this->id, $name);
             if ($datasetAttribute->getObjectById($id)) {
                 $datasetAttribute->update();
