@@ -52,6 +52,9 @@ abstract class BaseController
 
             return [ 'tableRows' => $tableRows ];
         }
+
+        // Fallback
+        return [];
     }
 
     /**
@@ -92,5 +95,10 @@ abstract class BaseController
     public function setView(string $view): void
     {
         $this->view = $view;
+    }
+
+    public function getArea(): string
+    {
+        return $this->area;
     }
 }

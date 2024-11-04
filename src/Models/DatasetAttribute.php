@@ -76,9 +76,9 @@ class DatasetAttribute implements IModel
      * getObjectById
      *
      * @param int $id
-     * @return DatasetAttribute
+     * @return DatasetAttribute|null
      */
-    public function getObjectById(int $id): DatasetAttribute
+    public function getObjectById(int $id): ?DatasetAttribute
     {
         $pdo = Db::getConnection();
         $sql = 'SELECT * FROM datasetAttribute WHERE id = ?';

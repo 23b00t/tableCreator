@@ -28,9 +28,9 @@ interface IModel
      * getObjectById
      *
      * @param int $id
-     * @return Object
+     * @return Object|null
      */
-    public function getObjectById(int $id): object;
+    public function getObjectById(int $id): ?object;
 
     /**
      * update

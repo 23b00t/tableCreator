@@ -27,30 +27,31 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
         <!-- datasetAttribute names -->
         <!-- Edit route -->
         <?php if ($datasetExists) : ?>
+            <label for="datasetAttributes">Spaltennamen:</label>
             <?php foreach ($dataset->getAttributes() as $attribute) : ?>
-                <div class="form-group">
-                    <label for="datasetAttribute"><?= $attribute->getAttributeName(); ?></label>
-                    <!-- Create associative array, named attributes, 
-                    with datasetAttribute->id as key and its name as value -->
-                    <input type="text" class="form-control" id="<?= $attribute->getId(); ?>"
+                <div class="form-group d-flex align-items-center">
+                    <input type="text" class="form-control me-2" id="<?= $attribute->getId(); ?>"
                            name="attributes[<?= $attribute->getId(); ?>]" 
                            value="<?= $attribute->getAttributeName(); ?>">
+                    <a href="index.php?area=datasetAttribute&action=delete&id=<?= $attribute->getId(); ?>&tableName=<?= $dataset->getName(); ?>" 
+                       class="btn btn-outline-danger" onclick="event.stopPropagation();">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </a>
                 </div>
             <?php endforeach; ?>
-        <!-- Insert route -->
-        <?php else : ?>
-          <div id="attributeFields">
-            <div id=fieldControll>
-              <div class="form-group">
-                  <label for="numberOfFields">Spaltenanzahl</label>
-                  <input type="number" id="numberOfFields" class="form-control" name="numberOfFields" min="1">
-              </div>
-              <button type="" id="submitAttributeNumber" class="btn btn-primary mt-2">Spalten erzeugen</button>
-            </div>
-            <!-- Use JS to generate n fields specified in input field -->
-            <script src="./js/generateFields.js"></script>
-          </div>
         <?php endif; ?>
+        <!-- Insert route -->
+        <div id="attributeFields">
+          <div id=fieldControll>
+            <div class="form-group">
+                <label for="numberOfFields">Spaltenanzahl</label>
+                <input type="number" id="numberOfFields" class="form-control" name="numberOfFields" min="1">
+            </div>
+            <button type="" id="submitAttributeNumber" class="btn btn-primary mt-2">Spalten erzeugen</button>
+          </div>
+          <!-- Use JS to generate n fields specified in input field -->
+          <script src="./js/generateFields.js"></script>
+        </div>
 
       <!-- Set area in hidden field -->
       <input type="hidden" name="area" value="dataset">
