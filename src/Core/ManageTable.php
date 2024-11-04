@@ -85,6 +85,7 @@ class ManageTable
                      CHANGE `$oldAttribute` `$columnname` VARCHAR(255);
                      SQL;
             } else {
+                // If more attributes are given than existed before, a new column is added
                 $sql[] = "ALTER TABLE `{$this->tableName}` ADD COLUMN `{$columnname}` VARCHAR(255);";
             }
         }
@@ -104,6 +105,19 @@ class ManageTable
     {
         $pdo = Db::getConnection();
         $sql = 'DROP TABLE `' . $this->tableName . '`;';
+        $pdo->exec($sql);
+    }
+
+    /**
+     * dropColumn
+     *
+     * @param string $attributeName
+     * @return void
+     */
+    public function dropColumn(string $attributeName): void
+    {
+        $pdo = Db::getConnection();
+        $sql = "ALTER TABLE `{$this->tableName}` DROP COLUMN `{$attributeName}`;";
         $pdo->exec($sql);
     }
 }

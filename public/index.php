@@ -39,6 +39,7 @@ try {
 
     /** Get view set in the controller (Before catch, because it's possible that $controller is invalid) */
     $view = $controller->getView();
+    $area = $controller->getArea();
 } catch (PublicMessageException $exception) {
     $msg = $exception->getMessage();
     $view = $controller->getView();

@@ -27,14 +27,16 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
         <!-- datasetAttribute names -->
         <!-- Edit route -->
         <?php if ($datasetExists) : ?>
+            <label for="datasetAttributes">Spaltennamen:</label>
             <?php foreach ($dataset->getAttributes() as $attribute) : ?>
-                <div class="form-group">
-                    <label for="datasetAttribute"><?= $attribute->getAttributeName(); ?></label>
-                    <!-- Create associative array, named attributes, 
-                    with datasetAttribute->id as key and its name as value -->
-                    <input type="text" class="form-control" id="<?= $attribute->getId(); ?>"
+                <div class="form-group d-flex align-items-center">
+                    <input type="text" class="form-control me-2" id="<?= $attribute->getId(); ?>"
                            name="attributes[<?= $attribute->getId(); ?>]" 
                            value="<?= $attribute->getAttributeName(); ?>">
+                    <a href="index.php?area=datasetAttribute&action=delete&id=<?= $attribute->getId(); ?>&tableName=<?= $dataset->getName(); ?>" 
+                       class="btn btn-outline-danger" onclick="event.stopPropagation();">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </a>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
