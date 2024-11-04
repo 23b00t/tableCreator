@@ -42,6 +42,7 @@ abstract class BaseController
         if ($this->area === 'dataset') {
             $this->datasetAction();
             $datasets = (new Dataset())->getAllAsObjects();
+
             return [ 'datasets' => $datasets ];
         } elseif ($this->area === 'dynamicTable') {
             $tableRow = (new TableRow($this->tableName));
@@ -80,16 +81,5 @@ abstract class BaseController
     public function getView(): string
     {
         return $this->view;
-    }
-
-    /**
-     * setView
-     *
-     * @param string $view
-     * @return string
-     */
-    public function setView(string $view): void
-    {
-        $this->view = $view;
     }
 }
