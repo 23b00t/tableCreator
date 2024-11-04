@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\PublicMessageException;
+
 try {
     include_once __DIR__ . '/../config.php';
 
@@ -37,9 +39,12 @@ try {
 
     /** Get view set in the controller (Before catch, because it's possible that $controller is invalid) */
     $view = $controller->getView();
-} catch (Throwable $exception) {
+} catch (PublicMessageException $exception) {
+    $msg = $exception->getMessage();
+    $view = $controller->getView();
+} catch (Throwable $error) {
     $timestamp = (new DateTime())->format('Y-m-d H:i:s ');
-    file_put_contents(LOG_PATH, $timestamp . $exception->getMessage() . "\n", FILE_APPEND);
+    file_put_contents(LOG_PATH, $timestamp . $error->getMessage() . "\n", FILE_APPEND);
     $area = 'error';
     $view = 'message';
 } finally {

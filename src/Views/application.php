@@ -5,6 +5,7 @@ namespace App\Views;
 /**
  * @var string $area
  * @var string $view
+ * @var string $msg
  */
 ?>
 
@@ -20,6 +21,7 @@ namespace App\Views;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   </head>
   <body>
+    <?= isset($msg) ? $msg : ''; ?>
     <?php include __DIR__ . '/navbar.php'; ?>
     <div class="container-md">
       <?php include __DIR__ . '/' . $area . '/' . $view . '.php'; ?>

@@ -20,7 +20,7 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
       <!-- Dataset name -->
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" id="datasetName" name="datasetName"
+        <input type="text" class="form-control" id="datasetName" name="datasetName" required
           value="<?= $datasetExists ? $dataset->getName() : ''; ?>">
       </div>
 
@@ -33,7 +33,7 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
                     <!-- Create associative array, named attributes, 
                     with datasetAttribute->id as key and its name as value -->
                     <input type="text" class="form-control" id="<?= $attribute->getId(); ?>"
-                           name="attributes[<?= $attribute->getId(); ?>]"
+                           name="attributes[<?= $attribute->getId(); ?>]" 
                            value="<?= $attribute->getAttributeName(); ?>">
                 </div>
             <?php endforeach; ?>

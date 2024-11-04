@@ -82,4 +82,15 @@ abstract class BaseController
     {
         return $this->view;
     }
+
+    /**
+     * setView
+     *
+     * @param string $view
+     * @return void
+     */
+    public function setView(string $view): void
+    {
+        $this->view = $view;
+    }
 }
