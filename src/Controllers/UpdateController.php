@@ -50,7 +50,12 @@ class UpdateController extends BaseController
 
         // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
         foreach ($this->postData['attributes'] as $id => $name) {
-            (new DatasetAttribute($id, $this->id, $name))->update();
+            $datasetAttribute = new DatasetAttribute($id, $this->id, $name);
+            if ($datasetAttribute->getObjectById($id)) {
+                $datasetAttribute->update();
+            } else {
+                $datasetAttribute->insert($this->id, $name);
+            }
         }
     }
 

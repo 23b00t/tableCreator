@@ -37,20 +37,19 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
                            value="<?= $attribute->getAttributeName(); ?>">
                 </div>
             <?php endforeach; ?>
-        <!-- Insert route -->
-        <?php else : ?>
-          <div id="attributeFields">
-            <div id=fieldControll>
-              <div class="form-group">
-                  <label for="numberOfFields">Spaltenanzahl</label>
-                  <input type="number" id="numberOfFields" class="form-control" name="numberOfFields" min="1">
-              </div>
-              <button type="" id="submitAttributeNumber" class="btn btn-primary mt-2">Spalten erzeugen</button>
-            </div>
-            <!-- Use JS to generate n fields specified in input field -->
-            <script src="./js/generateFields.js"></script>
-          </div>
         <?php endif; ?>
+        <!-- Insert route -->
+        <div id="attributeFields">
+          <div id=fieldControll>
+            <div class="form-group">
+                <label for="numberOfFields">Spaltenanzahl</label>
+                <input type="number" id="numberOfFields" class="form-control" name="numberOfFields" min="1">
+            </div>
+            <button type="" id="submitAttributeNumber" class="btn btn-primary mt-2">Spalten erzeugen</button>
+          </div>
+          <!-- Use JS to generate n fields specified in input field -->
+          <script src="./js/generateFields.js"></script>
+        </div>
 
       <!-- Set area in hidden field -->
       <input type="hidden" name="area" value="dataset">

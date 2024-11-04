@@ -77,12 +77,16 @@ class ManageTable
         $pdo = Db::getConnection();
         $sql = [];
         $sql[] = 'ALTER TABLE ' . $oldName . ' RENAME TO ' . $this->tableName;
-        foreach ($this->attributes as $index => $column) {
-            $oldAttribute = $oldAttributes[$index]->getAttributeName();
-            $sql[] = <<<SQL
+        foreach ($this->attributes as $index => $columnname) {
+            if (isset($oldAttributes[$index])) {
+                $oldAttribute = $oldAttributes[$index]->getAttributeName();
+                $sql[] = <<<SQL
                      ALTER TABLE `$this->tableName` 
-                     CHANGE `$oldAttribute` `$column` VARCHAR(255);
+                     CHANGE `$oldAttribute` `$columnname` VARCHAR(255);
                      SQL;
+            } else {
+                $sql[] = "ALTER TABLE `{$this->tableName}` ADD COLUMN `{$columnname}` VARCHAR(255);";
+            }
         }
         // Modify datatype:
         // ALTER TABLE table_name MODIFY COLUMN column_name new_data_type;
