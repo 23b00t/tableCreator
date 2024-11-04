@@ -16,10 +16,6 @@ class ShowFormController extends BaseController
      * @var int|null $id
      */
     private ?int $id;
-    /**
-     * @var string $action
-     */
-    private string $action;
 
     /**
      * __construct
@@ -59,15 +55,5 @@ class ShowFormController extends BaseController
             }
         }
         return $array;
-    }
-
-    /**
-     * getAction
-     *
-     * @return string
-     */
-    public function getAction(): string
-    {
-        return $this->action;
     }
 }

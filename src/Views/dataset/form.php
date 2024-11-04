@@ -33,8 +33,14 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
                     <input type="text" class="form-control me-2" id="<?= $attribute->getId(); ?>"
                            name="attributes[<?= $attribute->getId(); ?>]" 
                            value="<?= $attribute->getAttributeName(); ?>">
-                    <a href="index.php?area=datasetAttribute&action=delete&id=<?= $attribute->getId(); ?>&tableName=<?= $dataset->getName(); ?>" 
-                       class="btn btn-outline-danger" onclick="event.stopPropagation();">
+
+                    <?php
+                    $baseUrl = "index.php?area=datasetAttribute&action=delete";
+                    $idParam = "id=" . $attribute->getId();
+                    $tableNameParam = "tableName=" . $dataset->getName();
+                    ?>
+                    <a href="<?= $baseUrl . '&' . $idParam . '&' . $tableNameParam; ?>" 
+                      class="btn btn-outline-danger" onclick="event.stopPropagation();">
                         <i class="fa-regular fa-trash-can"></i>
                     </a>
                 </div>

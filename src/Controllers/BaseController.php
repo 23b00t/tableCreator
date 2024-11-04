@@ -19,6 +19,7 @@ abstract class BaseController
      * @var string|null $tableName
      */
     protected ?string $tableName;
+    protected ?string $action;
 
     /**
      * __construct
@@ -30,6 +31,7 @@ abstract class BaseController
         $this->area = $requestData['area'] ?? 'dataset';
         $this->view = 'table';
         $this->tableName = $requestData['tableName'] ?? null;
+        $this->action = $requestData['action'] ?? null;
     }
 
     /**
@@ -100,5 +102,10 @@ abstract class BaseController
     public function getArea(): string
     {
         return $this->area;
+    }
+
+    public function getAction()
+    {
+        return $this->action;
     }
 }

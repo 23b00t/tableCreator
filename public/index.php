@@ -35,11 +35,12 @@ try {
     extract($array);
 
     /** After calling ShowFormController set the action depending on usecase - update or insert */
-    $action = $controllerName === 'App\Controllers\ShowFormController' ? $controller->getAction() : $action;
+    // $action = $controllerName === 'App\Controllers\ShowFormController' ? $controller->getAction() : $action;
 
     /** Get view set in the controller (Before catch, because it's possible that $controller is invalid) */
     $view = $controller->getView();
     $area = $controller->getArea();
+    $action = $controller->getAction();
 } catch (PublicMessageException $exception) {
     $msg = $exception->getMessage();
     $view = $controller->getView();

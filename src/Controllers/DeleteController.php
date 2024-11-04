@@ -42,6 +42,7 @@ class DeleteController extends BaseController
             $dataset = (new Dataset())->getObjectById($datasetAttribute->getDatasetId());
             $this->area = 'dataset';
             $this->view = 'form';
+            $this->action = 'update';
             $result = [ 'dataset' => $dataset ];
         }
         return $result;
