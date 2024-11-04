@@ -17,14 +17,6 @@ namespace App\Views;
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="">Aktion</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="">
-            <i class="fa-solid fa-plus"></i> Aktion
-          </a>
-        </li> -->
         <li class="nav-item">
           <a class="nav-link" href="index.php?area=dataset&action=showForm">
             <i class="fa-solid fa-plus"></i> Tabelle erstellen
@@ -35,7 +27,6 @@ namespace App\Views;
       <form class="d-flex" action="index.php" method="POST">
         <input class="form-control me-2" type="search" placeholder="Search" name="searchTerm" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
-        
         <!-- Set action in hidden field -->
         <input type="hidden" name="action" value="search">
         <!-- Set area in hidden field -->

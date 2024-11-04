@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\PublicMessageException;
+
 try {
     include_once __DIR__ . '/../config.php';
 
@@ -34,8 +36,17 @@ try {
 
     /** After calling ShowFormController set the action depending on usecase - update or insert */
     $action = $controllerName === 'App\Controllers\ShowFormController' ? $controller->getAction() : $action;
-} catch (Exception $e) {
-    $errorMsg = $e;
+
+    /** Get view set in the controller (Before catch, because it's possible that $controller is invalid) */
+    $view = $controller->getView();
+} catch (PublicMessageException $exception) {
+    $msg = $exception->getMessage();
+    $view = $controller->getView();
+} catch (Throwable $error) {
+    $timestamp = (new DateTime())->format('Y-m-d H:i:s ');
+    file_put_contents(LOG_PATH, $timestamp . $error->getMessage() . "\n", FILE_APPEND);
+    $area = 'error';
+    $view = 'message';
 } finally {
     /** Include requested view */
     include __DIR__ . '/../src/Views/application.php';

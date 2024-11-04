@@ -26,6 +26,7 @@ function generateFields() {
             input.id = `attribute${i + 1}`;
             input.name = `attributes[]`;
             input.placeholder = `Attribute ${i + 1}`;
+            input.required = true;
 
             // Append label and input to the container
             formGroup.appendChild(label);

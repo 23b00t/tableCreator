@@ -47,8 +47,10 @@ class FilterData
         $sanitizedData = [];
         foreach ($areaAttributes as $attribute) {
             // If the attribute value is an empty string set it to null (neede for rentalTo)
-            $value = $this->requestData[$attribute] === '' ? null : $this->requestData[$attribute];
-            $sanitizedData[$attribute] = $value;
+            if (isset($this->requestData[$attribute])) {
+                $value = $this->requestData[$attribute] === '' ? null : $this->requestData[$attribute];
+                $sanitizedData[$attribute] = $value;
+            }
         }
 
         // If no requestData matches an empty array is returned

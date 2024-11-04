@@ -24,8 +24,7 @@ namespace App\Views\dynamicTable;
               </td>
             <?php endforeach; ?>
         <td>
-          <a href="index.php?area=dynamicTable&action=delete&id=
-            <?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
+          <a href="index.php?area=dynamicTable&action=delete&id=<?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
             <button class="btn btn-outline-danger">
               <i class="fa-regular fa-trash-can"></i>
             </button>

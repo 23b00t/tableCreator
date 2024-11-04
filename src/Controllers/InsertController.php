@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\ManageTable;
+use App\Core\PublicMessageException;
 use App\Helpers\FilterData;
 use App\Models\Dataset;
 use App\Models\DatasetAttribute;
@@ -39,15 +40,29 @@ class InsertController extends BaseController
      */
     protected function datasetAction(): void
     {
-        $dataset = (new Dataset())->insert($this->postData['datasetName']);
+        if (isset($this->postData['attributes'])) {
+            try {
+                (new ManageTable(
+                    $this->postData['datasetName'],
+                    array_values($this->postData['attributes'])
+                ))->create();
+                $dataset = (new Dataset())->insert($this->postData['datasetName']);
 
-        $id = $dataset->getId();
+                $id = $dataset->getId();
 
-        foreach ($this->postData['attributes'] as $attribute) {
-            (new DatasetAttribute())->insert($id, $attribute);
+                foreach ($this->postData['attributes'] as $attribute) {
+                    (new DatasetAttribute())->insert($id, $attribute);
+                }
+            } catch (PublicMessageException) {
+                $this->setView('form');
+                throw new PublicMessageException(
+                    "Die Tabelle '" . $this->postData['datasetName'] . "' existiert bereits."
+                );
+            }
+        } else {
+            $this->setView('form');
+            throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');
         }
-
-        (new ManageTable($this->postData['datasetName'], array_values($this->postData['attributes'])))->create();
     }
 
     /**
