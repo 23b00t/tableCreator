@@ -47,7 +47,7 @@ class TableRow implements IModel
      */
     public function getAllAsObjects(): array
     {
-        $sql = 'SELECT * FROM ' . $this->name;
+        $sql = "SELECT * FROM `$this->name`;";
         $stmt = $this->prepareAndExecuteQuery($sql);
         return $this->fetchAndCreateObjects($stmt);
     }
@@ -60,7 +60,7 @@ class TableRow implements IModel
      */
     public function deleteObjectById(int $id): void
     {
-        $sql = "DELETE FROM " . $this->name . " WHERE id = ?";
+        $sql = "DELETE FROM `{$this->name}` WHERE id = ?;";
         $this->prepareAndExecuteQuery($sql, [$id]);
     }
 
@@ -72,7 +72,7 @@ class TableRow implements IModel
      */
     public function getObjectById(int $id): TableRow
     {
-        $sql = 'SELECT * FROM ' . $this->name . ' WHERE id = ?';
+        $sql = "SELECT * FROM `{$this->name}` WHERE id = ?;";
         $stmt = $this->prepareAndExecuteQuery($sql, [$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         // Retrun object or null if no object was found
@@ -89,10 +89,10 @@ class TableRow implements IModel
     public function update(): void
     {
         $attributeString = implode(', ', array_map(function ($attribute) {
-            return $attribute . ' = ?';
+            return "`{$attribute}` = ?";
         }, array_keys($this->attributeArray)));
 
-        $sql = 'UPDATE ' . $this->name . ' SET ' . $attributeString . ' WHERE id = ?';
+        $sql = "UPDATE `{$this->name}` SET {$attributeString} WHERE id = ?;";
         $this->prepareAndExecuteQuery($sql, array_merge(array_values($this->attributeArray), [$this->id]));
     }
 
@@ -105,7 +105,7 @@ class TableRow implements IModel
     public function insert(array $values): TableRow
     {
         $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
-        $sql = 'INSERT INTO ' . $this->name . ' VALUES(NULL, ' . $placeholders . ')';
+        $sql = "INSERT INTO `{$this->name}` VALUES(NULL, {$placeholders});";
         $this->prepareAndExecuteQuery($sql, $values);
         $id = Db::getConnection()->lastInsertId();
 
