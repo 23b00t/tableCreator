@@ -21,17 +21,15 @@ $tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
         <?php if ($tableRowExists) : ?>
             <?php foreach ($tableRow->getAttributeArray() as $attributeName => $attributeValue) : ?>
               <div class="form-group">
-                <label for="name"><?= $attributeName; ?></label>
-                <input type="text" class="form-control" name="attributes[<?= $attributeName; ?>]"
-                  value="<?= $attributeValue; ?>">
+                <label for="<?= $attributeName; ?>"><?= $attributeName; ?></label>
+                <textarea class="form-control" name="attributes[<?= $attributeName; ?>]" rows="2"><?= htmlspecialchars($attributeValue); ?></textarea>
               </div>
             <?php endforeach; ?>
         <?php else : ?>
             <?php foreach ($tableRow->getAttributeArray() as $attributeName => $_) : ?>
               <div class="form-group">
-                <label for="name"><?= $attributeName; ?></label>
-                <input type="text" class="form-control" name="attributes[]"
-                  value="">
+                <label for="<?= $attributeName; ?>"><?= $attributeName; ?></label>
+                <textarea class="form-control" name="attributes[]" rows="2"></textarea>
               </div>
             <?php endforeach; ?>
         <?php endif; ?>
