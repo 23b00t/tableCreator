@@ -24,18 +24,20 @@ namespace App\Views;
         </li>
       </ul>
       <!-- Fulltext search -->
-      <form class="d-flex" action="index.php" method="POST">
-        <input class="form-control me-2" type="search" placeholder="Search" name="searchTerm" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-        <!-- Set action in hidden field -->
-        <input type="hidden" name="action" value="search">
-        <!-- Set area in hidden field -->
-        <input type="hidden" name="area" value="<?= $area; ?>">
-        <!-- Set table name in hidden field -->
-        <input type="hidden" name="tableName" value="<?= isset($tableRows) ? $tableRows[0]->getName() : ''; ?>">
-        <!-- Reset button -->
-        <button class="btn btn-outline-secondary ms-2" type="submit">Reset</button>
-      </form>
+      <?php if ($area === 'dynamicTable' && isset($tableRows)) : ?>
+        <form class="d-flex" action="index.php" method="POST">
+          <input class="form-control me-2" type="search" placeholder="Search" name="searchTerm" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+          <!-- Set action in hidden field -->
+          <input type="hidden" name="action" value="search">
+          <!-- Set area in hidden field -->
+          <input type="hidden" name="area" value="<?= $area; ?>">
+          <!-- Set table name in hidden field -->
+          <input type="hidden" name="tableName" value="<?= isset($tableRows) ? $tableRows[0]->getName() : ''; ?>">
+          <!-- Reset button -->
+          <button class="btn btn-outline-secondary ms-2" type="submit">Reset</button>
+        </form>
+      <?php endif; ?>
     </div>
   </div>
 </nav>

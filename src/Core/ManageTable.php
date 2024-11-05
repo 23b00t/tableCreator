@@ -40,15 +40,10 @@ class ManageTable
             return '`' . $attribute . '`' . ' VARCHAR(255)';
         }, $this->attributes));
 
-        $attributes = implode(', ', array_map(function ($attribute) {
-            return '`' . $attribute . '`';
-        }, $this->attributes));
-
         $sql = <<<SQL
             CREATE TABLE `$this->tableName` (
                 id INT AUTO_INCREMENT PRIMARY KEY, 
-                $attributeString,
-                FULLTEXT INDEX idx_fulltext ($attributes)
+                $attributeString
             );
         SQL;
 
