@@ -25,7 +25,7 @@ namespace App\Views;
       </ul>
       <!-- Fulltext search -->
       <?php if ($area === 'dynamicTable' && isset($tableRows)) : ?>
-        <form class="d-flex" action="index.php" method="POST">
+        <form class="d-flex ms-auto" action="index.php" method="POST">
           <input class="form-control me-2" type="search" placeholder="Search" name="searchTerm" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
           <!-- Set action in hidden field -->

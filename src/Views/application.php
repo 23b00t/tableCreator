@@ -21,7 +21,11 @@ namespace App\Views;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   </head>
   <body>
-    <?= isset($msg) ? $msg : ''; ?>
+    <?php if (isset($msg)) : ?>
+      <div class="alert alert-warning text-center" role="alert">
+          <?= $msg; ?>
+      </div>
+    <?php endif; ?>
     <?php include __DIR__ . '/navbar.php'; ?>
     <div class="container-md">
       <?php include __DIR__ . '/' . $area . '/' . $view . '.php'; ?>

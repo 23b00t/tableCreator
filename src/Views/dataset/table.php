@@ -6,6 +6,11 @@ namespace App\Views\dataset;
 ?>
 
 <table class="table mt-4">
+  <colgroup>
+    <col style="width: 80%;">
+    <col style="width: 10%;">
+    <col style="width: 10%;">
+  </colgroup>
   <tr>
     <th scope="col">Name</th>
     <th scope="col">Löschen</th>

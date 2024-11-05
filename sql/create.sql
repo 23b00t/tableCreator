@@ -32,9 +32,9 @@ DROP TABLE IF EXISTS `Linux`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Linux` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `Command` varchar(65535) DEFAULT NULL,
-  `Description` varchar(65535) DEFAULT NULL,
-  `#tag` varchar(65535) DEFAULT NULL,
+  `Command` text DEFAULT NULL,
+  `Description` text DEFAULT NULL,
+  `#tag` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -58,9 +58,9 @@ DROP TABLE IF EXISTS `Vim`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Vim` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `Command` varchar(65535) DEFAULT NULL,
-  `Description` varchar(65535) DEFAULT NULL,
-  `#tag` varchar(65535) DEFAULT NULL,
+  `Command` text DEFAULT NULL,
+  `Description` text DEFAULT NULL,
+  `#tag` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

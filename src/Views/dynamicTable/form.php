@@ -22,7 +22,8 @@ $tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
             <?php foreach ($tableRow->getAttributeArray() as $attributeName => $attributeValue) : ?>
               <div class="form-group">
                 <label for="<?= $attributeName; ?>"><?= $attributeName; ?></label>
-                <textarea class="form-control" name="attributes[<?= $attributeName; ?>]" rows="2"><?= htmlspecialchars($attributeValue); ?></textarea>
+        <textarea class="form-control" name="attributes[<?= $attributeName; ?>]" 
+          rows="2"><?= htmlspecialchars($attributeValue); ?></textarea>
               </div>
             <?php endforeach; ?>
         <?php else : ?>
@@ -46,7 +47,7 @@ $tableRowExists = $tableRow->getId() !== null && $tableRow instanceof TableRow;
       <input type="hidden" name="tableName" value="<?= $tableRow->getName(); ?>">
 
       <div class="form-group">
-        <button type="submit" class="btn btn-primary btn-block mt-3">Speichern</button>
+        <button type="submit" class="btn btn-outline-success btn-block mt-3">Speichern</button>
         <button type="reset" class="btn btn-outline-warning btn-block mt-3">Reset</button>
       </div>
     </form>
