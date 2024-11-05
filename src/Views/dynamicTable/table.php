@@ -20,19 +20,23 @@ namespace App\Views\dynamicTable;
         <tr>
             <?php foreach (array_values($tableRow->getAttributeArray()) as $value) : ?>
               <td>
-                <?= $value; ?>
+                <?= nl2br(htmlspecialchars($value)); ?>
               </td>
             <?php endforeach; ?>
-        <td>
-          <a href="index.php?area=dynamicTable&action=delete&id=<?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
-            <button class="btn btn-outline-danger">
-              <i class="fa-regular fa-trash-can"></i>
-            </button>
-          </a>
-        </td>
-        <td><a href="index.php?area=dynamicTable&action=showForm&id=<?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
-          <button class="btn btn-outline-warning"><i class="fa-solid fa-pencil"></i></button>
-        </a></td>
+          <td>
+            <a href="index.php?area=dynamicTable&action=delete&id=<?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
+              <button class="btn btn-outline-danger">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </a>
+          </td>
+          <td>
+            <a href="index.php?area=dynamicTable&action=showForm&id=<?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
+              <button class="btn btn-outline-warning">
+                <i class="fa-solid fa-pencil"></i>
+              </button>
+            </a>
+          </td>
         </tr>
         <?php endif; ?>
     <?php endforeach; ?>
