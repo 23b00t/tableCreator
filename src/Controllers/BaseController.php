@@ -58,7 +58,7 @@ abstract class BaseController
             return [ 'tableRows' => $tableRows ];
         }
 
-        // Fallback
+        // Fallback (neede in DeleteController)
         return [];
     }
 

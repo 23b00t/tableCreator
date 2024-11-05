@@ -36,8 +36,7 @@ class SearchController extends BaseController
 
             return [ 'tableRows' => $tableRows ];
         } else {
-            // exception handling
-            echo "Select a table";
+            throw new \Exception('SeachError: no valid table selected!');
         }
     }
 }

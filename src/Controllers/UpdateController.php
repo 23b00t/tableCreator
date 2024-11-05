@@ -80,6 +80,7 @@ class UpdateController extends BaseController
      */
     private function getOldObject(): array
     {
+        // ManageTable needs the old values to find the corresponding DB table and rows
         $oldDataset = (new Dataset())->getObjectById($this->id);
         $oldName = $oldDataset->getName();
         $oldAttributes = $oldDataset->getAttributes();

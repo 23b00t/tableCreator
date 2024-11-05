@@ -79,8 +79,11 @@ class DeleteController extends BaseController
      */
     private function datasetAttributeAction(DatasetAttribute $datasetAttribute): void
     {
+        // Delete from child table
         (new ManageTable($this->tableName))->dropColumn($datasetAttribute->getAttributeName());
+        // Delete from index table
         $datasetAttribute->deleteObjectById($this->id);
+        // Delete attributes in the Dataset edit form, so it has to be set as next route too
         $this->area = 'dataset';
         $this->view = 'form';
         $this->action = 'update';

@@ -48,6 +48,7 @@ class ShowFormController extends BaseController
                 $tableRow = (new TableRow($this->tableName))->getObjectById($this->id);
                 $array = [ 'tableRow' => $tableRow ];
             }
+        /** Show empty form for insert */
         } else {
             if ($this->area === 'dynamicTable') {
                 $tableRow = (new TableRow($this->tableName))->getColumnsByTableName();

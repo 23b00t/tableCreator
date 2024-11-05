@@ -51,6 +51,7 @@ class FilterData
                 $value = $this->requestData[$attribute] === '' ? null : $this->requestData[$attribute];
                 $sanitizedData[$attribute] = $value;
             } else {
+                // Set not existing but expected keys to null to avoid errors in the controllers
                 $sanitizedData[$attribute] = null;
             }
         }
