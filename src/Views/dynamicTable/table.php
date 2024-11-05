@@ -12,8 +12,8 @@ namespace App\Views\dynamicTable;
     <?php foreach (array_keys($tableRows[0]->getAttributeArray()) as $attributeName) : ?>
         <th scope="col"><?= $attributeName; ?></th>
     <?php endforeach; ?>
-    <th scope="col">Löschen</th>
-    <th scope="col">Ändern</th>
+    <th scope="col" style="width: 5%;">Löschen</th>
+    <th scope="col" style="width: 5%;">Ändern</th>
   </tr>
     <?php foreach ($tableRows as $tableRow) : ?>
         <?php if ($tableRow->getId() !== null) : ?>
