@@ -34,7 +34,6 @@ function generateFields() {
 
             // Append the container to attributeFields
             attributeFields.appendChild(formGroup);
-            console.log(attributeFields);
         }
     });
 }

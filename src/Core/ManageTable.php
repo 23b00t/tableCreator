@@ -37,7 +37,7 @@ class ManageTable
         // Iterate over attribute names, add default datatype VARCHAR(65535) to them.
         // Implode the resulting array to a comma seperated string.
         $attributeString = implode(', ', array_map(function ($attribute) {
-            return '`' . $attribute . '`' . ' VARCHAR(65535)';
+            return '`' . $attribute . '`' . ' TEXT';
         }, $this->attributes));
 
         $sql = <<<SQL
@@ -77,11 +77,11 @@ class ManageTable
                 $oldAttribute = $oldAttributes[$index]->getAttributeName();
                 $sql[] = <<<SQL
                     ALTER TABLE `$this->tableName` 
-                    CHANGE `$oldAttribute` `$columnname` VARCHAR(65535);
+                    CHANGE `$oldAttribute` `$columnname` TEXT;
                 SQL;
             } else {
                 // If more attributes are given than existed before, a new column is added
-                $sql[] = "ALTER TABLE `{$this->tableName}` ADD COLUMN `{$columnname}` VARCHAR(65535);";
+                $sql[] = "ALTER TABLE `{$this->tableName}` ADD COLUMN `{$columnname}` TEXT;";
             }
         }
 

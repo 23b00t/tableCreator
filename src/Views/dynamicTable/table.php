@@ -8,13 +8,13 @@ namespace App\Views\dynamicTable;
 ?>
 
 <table class="table mt-4">
-    <tr>
-        <?php foreach (array_keys($tableRows[0]->getAttributeArray()) as $attributeName) : ?>
-            <th scope="col"><?= $attributeName; ?></th>
-        <?php endforeach; ?>
-        <th scope="col">Löschen</th>
-        <th scope="col">Ändern</th>
-    </tr>
+  <tr>
+    <?php foreach (array_keys($tableRows[0]->getAttributeArray()) as $attributeName) : ?>
+        <th scope="col"><?= $attributeName; ?></th>
+    <?php endforeach; ?>
+    <th scope="col">Löschen</th>
+    <th scope="col">Ändern</th>
+  </tr>
     <?php foreach ($tableRows as $tableRow) : ?>
         <?php if ($tableRow->getId() !== null) : ?>
         <tr>
@@ -23,15 +23,22 @@ namespace App\Views\dynamicTable;
                 <?= nl2br(htmlspecialchars($value)); ?>
               </td>
             <?php endforeach; ?>
+
+            <?php
+            $id = $tableRow->getId();
+            $tableName = $tableRow->getName();
+            $baseUrl = "index.php?area=dynamicTable";
+            ?>
+
           <td>
-            <a href="index.php?area=dynamicTable&action=delete&id=<?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
+            <a href="<?= "$baseUrl&action=delete&id=$id&tableName=$tableName"; ?>">
               <button class="btn btn-outline-danger">
                 <i class="fa-regular fa-trash-can"></i>
               </button>
             </a>
           </td>
           <td>
-            <a href="index.php?area=dynamicTable&action=showForm&id=<?= $tableRow->getId(); ?>&tableName=<?= $tableRow->getName(); ?>">
+            <a href="<?= "$baseUrl&action=showForm&id=$id&tableName=$tableName"; ?>">
               <button class="btn btn-outline-warning">
                 <i class="fa-solid fa-pencil"></i>
               </button>
@@ -43,7 +50,8 @@ namespace App\Views\dynamicTable;
 </table> 
 
 <div>
-  <a href="index.php?area=dynamicTable&action=showForm&tableName=<?= $tableRows[0]->getName(); ?>">
-    Eintrag hinzufügen
+  <a href="index.php?area=dynamicTable&action=showForm&tableName=<?= $tableRows[0]->getName(); ?>" 
+     class="btn btn-outline-success">
+     <i class="fa-solid fa-plus"></i> Eintrag hinzufügen
   </a>
 </div>
