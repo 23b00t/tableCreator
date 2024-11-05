@@ -156,31 +156,6 @@ class TableRow implements IModel
     }
 
     /**
-     * getId
-     *
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * getName
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getAttributeArray(): ?array
-    {
-        return $this->attributeArray;
-    }
-
-    /**
      * prepareAndExecuteQuery
      *
      * @param string $sql
@@ -214,5 +189,30 @@ class TableRow implements IModel
         }
 
         return $return;
+    }
+
+    /**
+     * getId
+     *
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * getName
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getAttributeArray(): ?array
+    {
+        return $this->attributeArray;
     }
 }

@@ -84,8 +84,7 @@ class ManageTable
                 $sql[] = "ALTER TABLE `{$this->tableName}` ADD COLUMN `{$columnname}` VARCHAR(255);";
             }
         }
-        // Modify datatype:
-        // ALTER TABLE table_name MODIFY COLUMN column_name new_data_type;
+
         foreach ($sql as $statement) {
             $pdo->exec($statement);
         }
@@ -99,7 +98,7 @@ class ManageTable
     public function drop(): void
     {
         $pdo = Db::getConnection();
-        $sql = 'DROP TABLE `' . $this->tableName . '`;';
+        $sql = "DROP TABLE `{$this->tableName}`;";
         $pdo->exec($sql);
     }
 
