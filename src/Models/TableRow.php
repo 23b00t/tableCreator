@@ -211,6 +211,11 @@ class TableRow implements IModel
         return $this->name;
     }
 
+    /**
+     * getAttributeArray
+     *
+     * @return array|null
+     */
     public function getAttributeArray(): ?array
     {
         return $this->attributeArray;
