@@ -39,17 +39,19 @@ class UpdateController extends BaseController
      */
     protected function datasetAction(): void
     {
+        // If table doesn't contain columns set its attributes to []
+        $values = isset($this->postData['attributes']) ? $this->postData['attributes'] : [];
         // Update child table
         (new ManageTable(
             $this->postData['datasetName'],
-            array_values($this->postData['attributes'])
+            array_values($values)
         ))->alter(...$this->getOldObject());
 
         // Update main table
         (new Dataset($this->id, $this->postData['datasetName']))->update();
 
         // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
-        foreach ($this->postData['attributes'] as $id => $name) {
+        foreach ($values as $id => $name) {
             $datasetAttribute = new DatasetAttribute($id, $this->id, $name);
             if ($datasetAttribute->getObjectById($id)) {
                 $datasetAttribute->update();
@@ -78,6 +80,7 @@ class UpdateController extends BaseController
      */
     private function getOldObject(): array
     {
+        // ManageTable needs the old values to find the corresponding DB table and rows
         $oldDataset = (new Dataset())->getObjectById($this->id);
         $oldName = $oldDataset->getName();
         $oldAttributes = $oldDataset->getAttributes();

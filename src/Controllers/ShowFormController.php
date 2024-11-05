@@ -16,10 +16,6 @@ class ShowFormController extends BaseController
      * @var int|null $id
      */
     private ?int $id;
-    /**
-     * @var string $action
-     */
-    private string $action;
 
     /**
      * __construct
@@ -52,6 +48,7 @@ class ShowFormController extends BaseController
                 $tableRow = (new TableRow($this->tableName))->getObjectById($this->id);
                 $array = [ 'tableRow' => $tableRow ];
             }
+        /** Show empty form for insert */
         } else {
             if ($this->area === 'dynamicTable') {
                 $tableRow = (new TableRow($this->tableName))->getColumnsByTableName();
@@ -59,15 +56,5 @@ class ShowFormController extends BaseController
             }
         }
         return $array;
-    }
-
-    /**
-     * getAction
-     *
-     * @return string
-     */
-    public function getAction(): string
-    {
-        return $this->action;
     }
 }

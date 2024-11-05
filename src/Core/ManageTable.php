@@ -40,17 +40,12 @@ class ManageTable
             return '`' . $attribute . '`' . ' VARCHAR(255)';
         }, $this->attributes));
 
-        $attributes = implode(', ', array_map(function ($attribute) {
-            return '`' . $attribute . '`';
-        }, $this->attributes));
-
         $sql = <<<SQL
-                CREATE TABLE `$this->tableName` (
-                    id INT AUTO_INCREMENT PRIMARY KEY, 
-                    $attributeString,
-                    FULLTEXT INDEX idx_fulltext ($attributes)
-                );
-                SQL;
+            CREATE TABLE `$this->tableName` (
+                id INT AUTO_INCREMENT PRIMARY KEY, 
+                $attributeString
+            );
+        SQL;
 
         try {
             $pdo->exec($sql);
@@ -81,16 +76,15 @@ class ManageTable
             if (isset($oldAttributes[$index])) {
                 $oldAttribute = $oldAttributes[$index]->getAttributeName();
                 $sql[] = <<<SQL
-                     ALTER TABLE `$this->tableName` 
-                     CHANGE `$oldAttribute` `$columnname` VARCHAR(255);
-                     SQL;
+                    ALTER TABLE `$this->tableName` 
+                    CHANGE `$oldAttribute` `$columnname` VARCHAR(255);
+                SQL;
             } else {
                 // If more attributes are given than existed before, a new column is added
                 $sql[] = "ALTER TABLE `{$this->tableName}` ADD COLUMN `{$columnname}` VARCHAR(255);";
             }
         }
-        // Modify datatype:
-        // ALTER TABLE table_name MODIFY COLUMN column_name new_data_type;
+
         foreach ($sql as $statement) {
             $pdo->exec($statement);
         }
@@ -104,7 +98,7 @@ class ManageTable
     public function drop(): void
     {
         $pdo = Db::getConnection();
-        $sql = 'DROP TABLE `' . $this->tableName . '`;';
+        $sql = "DROP TABLE `{$this->tableName}`;";
         $pdo->exec($sql);
     }
 

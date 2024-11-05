@@ -15,14 +15,3 @@ CREATE TABLE datasetAttribute (
     
     FOREIGN KEY (datasetId) REFERENCES dataset(id) ON DELETE CASCADE
 );
-
-INSERT INTO dataset (id, name) VALUES 
-  ( 1, 'PHP' ),
-  ( 2, 'Linux' );
-
-INSERT INTO datasetAttribute (id, datasetId, attributeName) VALUES 
-  ( 1, 1, 'Code Snippet' ),
-  ( 2, 1, 'Example' ),
-  ( 3, 2, 'Command' ),
-  ( 4, 2, 'Usage' ),
-  ( 5, 2, 'Example' );

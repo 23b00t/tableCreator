@@ -34,18 +34,20 @@ try {
     $array = $controller->invoke();
     extract($array);
 
-    /** After calling ShowFormController set the action depending on usecase - update or insert */
-    $action = $controllerName === 'App\Controllers\ShowFormController' ? $controller->getAction() : $action;
-
-    /** Get view set in the controller (Before catch, because it's possible that $controller is invalid) */
+    /** @var string $view: set in the controller (Before catch, because it's possible that $controller is invalid) */
     $view = $controller->getView();
+    /** Get area and action for the case they was manipulated by the controller */
     $area = $controller->getArea();
+    $action = $controller->getAction();
 } catch (PublicMessageException $exception) {
+    /** Catch custom exceptions to display the message to the user, e.g. if the user trys to make a duplicate table */
     $msg = $exception->getMessage();
     $view = $controller->getView();
 } catch (Throwable $error) {
+    /** Catch all other unpredictable errors and exceptions */
     $timestamp = (new DateTime())->format('Y-m-d H:i:s ');
     file_put_contents(LOG_PATH, $timestamp . $error->getMessage() . "\n", FILE_APPEND);
+    /** manually set $area and $view as controllers may not have worked in error case */
     $area = 'error';
     $view = 'message';
 } finally {

@@ -19,6 +19,10 @@ abstract class BaseController
      * @var string|null $tableName
      */
     protected ?string $tableName;
+    /**
+     * @var string|null $action
+     */
+    protected ?string $action;
 
     /**
      * __construct
@@ -30,6 +34,7 @@ abstract class BaseController
         $this->area = $requestData['area'] ?? 'dataset';
         $this->view = 'table';
         $this->tableName = $requestData['tableName'] ?? null;
+        $this->action = $requestData['action'] ?? null;
     }
 
     /**
@@ -53,7 +58,7 @@ abstract class BaseController
             return [ 'tableRows' => $tableRows ];
         }
 
-        // Fallback
+        // Fallback (neede in DeleteController)
         return [];
     }
 
@@ -97,8 +102,23 @@ abstract class BaseController
         $this->view = $view;
     }
 
+    /**
+     * getArea
+     *
+     * @return string
+     */
     public function getArea(): string
     {
         return $this->area;
+    }
+
+    /**
+     * getAction
+     *
+     * @return string
+     */
+    public function getAction(): string
+    {
+        return $this->action;
     }
 }

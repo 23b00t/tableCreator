@@ -146,44 +146,13 @@ class TableRow implements IModel
         $attributes = array_keys($this->getColumnsByTableName()->getAttributeArray());
         // Join LIKE statements for each attribute using array_map and implode
         $likeClause = implode(' OR ', array_map(fn ($attribute) => "`$attribute` LIKE '%$searchTerm%'", $attributes));
-        // Create the comma-separated list for MATCH
-        $matchAttributes = implode(', ', array_map(fn ($attribute) => "`$attribute`", $attributes));
 
         // SQL query
-        $sql = <<<SQL
-            SELECT * FROM `$this->name`
-            WHERE MATCH($matchAttributes) AGAINST('$searchTerm' IN NATURAL LANGUAGE MODE)
-            OR $likeClause;
-        SQL;
+        $sql = "SELECT * FROM `{$this->name}` WHERE $likeClause;";
 
         // Execute the query and create objects
         $result = $this->prepareAndExecuteQuery($sql);
         return $this->fetchAndCreateObjects($result);
-    }
-
-    /**
-     * getId
-     *
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * getName
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getAttributeArray(): ?array
-    {
-        return $this->attributeArray;
     }
 
     /**
@@ -220,5 +189,30 @@ class TableRow implements IModel
         }
 
         return $return;
+    }
+
+    /**
+     * getId
+     *
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * getName
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getAttributeArray(): ?array
+    {
+        return $this->attributeArray;
     }
 }
