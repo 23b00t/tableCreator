@@ -4,6 +4,8 @@ namespace App\Core;
 
 class ControllerDispatcher
 {
+    private string $view;
+
     /**
      * dispatch
      *
@@ -27,10 +29,21 @@ class ControllerDispatcher
         $result = $controller->invoke();
 
         $view = $controller->getView();
+        $this->view = $view;
         /** Get area and action for the case they was manipulated by the controller */
         $area = $controller->getArea();
         $action = $controller->getAction();
 
         return $result;
+    }
+
+    /**
+     * getView
+     *
+     * @return string
+     */
+    public function getView(): string
+    {
+        return $this->view;
     }
 }
