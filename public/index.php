@@ -39,6 +39,10 @@ try {
     /** Get area and action for the case they was manipulated by the controller */
     $area = $controller->getArea();
     $action = $controller->getAction();
+
+    /** Check if $area and $view are valid, otherwise throw Exception */
+    $filePath = __DIR__ . '/../src/Views/' . $area . '/' . $view . '.php';
+    !is_file($filePath) && throw new \Exception("File not found: $filePath");
 } catch (PublicMessageException $exception) {
     /** Catch custom exceptions to display the message to the user, e.g. if the user trys to make a duplicate table */
     $msg = $exception->getMessage();
