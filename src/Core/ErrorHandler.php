@@ -45,6 +45,7 @@ class ErrorHandler
         /** Catch all other unpredictable errors and exceptions */
         $timestamp = (new DateTime())->format('Y-m-d H:i:s ');
         file_put_contents(LOG_PATH, $timestamp . $error->getMessage() . "\n", FILE_APPEND);
+
         /** manually set $area and $view as controllers may not have worked in error case */
         return [ 'area' => 'error', 'view' => 'message' ];
     }

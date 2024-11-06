@@ -30,9 +30,9 @@ try {
     $data = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
 
     /** $area, $action and $view are manipulated in the dispatcher as refferences */
-    $dispatcher = new ControllerDispatcher();
+    $dispatcher = new ControllerDispatcher($area, $action, $view, $data);
     /** The Dispatcher returns an array of object(s) received by the controller */
-    $array = $dispatcher->dispatch($area, $action, $view, $data);
+    $array = $dispatcher->dispatch();
     extract($array);
 
     ErrorHandler::validateViewPath($area, $view);

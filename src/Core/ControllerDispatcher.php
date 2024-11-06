@@ -4,20 +4,51 @@ namespace App\Core;
 
 class ControllerDispatcher
 {
+    /**
+     * @var object|null $controller
+     */
     private ?object $controller = null;
+    /**
+     * @var string $area
+     */
+    private string $area;
+    /**
+     * @var string $action
+     */
+    private string $action;
+    /**
+     * @var string $view
+     */
+    private string $view;
+    /**
+     * @var array $data
+     */
+    private array $data;
+
+
+    /**
+     * @param string &$area
+     * @param string &$action
+     * @param string &$view
+     * @param array $data
+     */
+    public function __construct(string &$area, string &$action, string &$view, array $data)
+    {
+        $this->area = &$area;
+        $this->action = &$action;
+        $this->view = &$view;
+        $this->data = $data;
+    }
 
     /**
      * dispatch
      *
-     * @param string $area
-     * @param string $action
-     * @param array $data
      * @return array
      */
-    public function dispatch(string &$area, string &$action, string &$view, array $data): array
+    public function dispatch(): array
     {
         /** Build Action Controller Name from $action */
-        $controllerName = 'App\\Controllers\\' . ucfirst($action) . 'Controller';
+        $controllerName = 'App\\Controllers\\' . ucfirst($this->action) . 'Controller';
 
         // Throw Exception if the Controller doesn't exist aka invalid $action
         if (!class_exists($controllerName)) {
@@ -25,12 +56,12 @@ class ControllerDispatcher
         }
 
         /** Invoke the controller and save returned array of objects */
-        $this->controller = new $controllerName($data);
+        $this->controller = new $controllerName($this->data);
         $result = $this->controller->invoke();
 
-        $view = $this->controller->getView();
-        $area = $this->controller->getArea();
-        $action = $this->controller->getAction();
+        $this->view = $this->controller->getView();
+        $this->area = $this->controller->getArea();
+        $this->action = $this->controller->getAction();
 
         return $result;
     }
