@@ -50,9 +50,8 @@ abstract class BaseModel
      * getObjectById
      *
      * @param int $id
-     * @return TableRow
      */
-    public function getObjectById(int $id): TableRow
+    public function getObjectById(int $id): object
     {
         $sql = "SELECT * FROM `{$this->tableName}` WHERE id = ?;";
         $stmt = $this->prepareAndExecuteQuery($sql, [$id]);
@@ -67,17 +66,17 @@ abstract class BaseModel
      * insert
      *
      * @param array $values
-     * @return TableRow
+     * @return object
      */
-    // public function insert(array $values): TableRow
-    // {
-    //     $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
-    //     $sql = "INSERT INTO `{$this->tableName}` VALUES(NULL, {$placeholders});";
-    //     $this->prepareAndExecuteQuery($sql, $values);
-    //     $id = Db::getConnection()->lastInsertId();
+    public function insert(array $values): object
+    {
+        $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
+        $sql = "INSERT INTO `{$this->tableName}` VALUES(NULL, {$placeholders});";
+        $this->prepareAndExecuteQuery($sql, $values);
+        $id = Db::getConnection()->lastInsertId();
 
-    //     return new TableRow($this->name, $id, $values);
-    // }
+        return $this->createObject(attributes: array_merge([$id], $values));
+    }
 
     /**
      * getId

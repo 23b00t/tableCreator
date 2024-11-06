@@ -46,7 +46,7 @@ class InsertController extends BaseController
                     $this->postData['datasetName'],
                     array_values($this->postData['attributes'])
                 ))->create();
-                $dataset = (new Dataset())->insert($this->postData['datasetName']);
+                $dataset = (new Dataset())->insert([$this->postData['datasetName']]);
 
                 $id = $dataset->getId();
 

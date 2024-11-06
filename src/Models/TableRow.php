@@ -51,15 +51,15 @@ class TableRow extends BaseModel
      * @param array $values
      * @return TableRow
      */
-    public function insert(array $values): TableRow
-    {
-        $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
-        $sql = "INSERT INTO `{$this->tableName}` VALUES(NULL, {$placeholders});";
-        $this->prepareAndExecuteQuery($sql, $values);
-        $id = Db::getConnection()->lastInsertId();
+    // public function insert(array $values): TableRow
+    // {
+    //     $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
+    //     $sql = "INSERT INTO `{$this->tableName}` VALUES(NULL, {$placeholders});";
+    //     $this->prepareAndExecuteQuery($sql, $values);
+    //     $id = Db::getConnection()->lastInsertId();
 
-        return new TableRow($this->tableName, $id, $values);
-    }
+    //     return new TableRow($this->tableName, $id, $values);
+    // }
 
     /**
      * getColumnsByTableName
