@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\ControllerDispatcher;
 use App\Core\PublicMessageException;
 
 try {
@@ -17,9 +18,7 @@ try {
      * showTable as default action
      */
     $action = $_REQUEST['action'] ?? 'showTable';
-
-    /** Build Action Controller Name from $action */
-    $controllerName = 'App\\Controllers\\' . ucfirst($action) . 'Controller';
+    $view = 'table'; // default view
 
     /**
      * Determine request method (POST or GET) and securely pass the corresponding
@@ -27,18 +26,9 @@ try {
      */
     $data = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
 
-    /**
-     * Invoke the controller and extract variables from the returned array
-     */
-    $controller = new $controllerName($data);
-    $array = $controller->invoke();
-    extract($array);
+    $array = (new ControllerDispatcher())->dispatch($area, $action, $view, $data);
 
-    /** @var string $view: set in the controller (Before catch, because it's possible that $controller is invalid) */
-    $view = $controller->getView();
-    /** Get area and action for the case they was manipulated by the controller */
-    $area = $controller->getArea();
-    $action = $controller->getAction();
+    extract($array);
 
     /** Check if $area and $view are valid, otherwise throw Exception */
     $filePath = __DIR__ . '/../src/Views/' . $area . '/' . $view . '.php';
