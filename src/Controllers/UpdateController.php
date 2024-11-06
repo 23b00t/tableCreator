@@ -57,7 +57,7 @@ class UpdateController extends BaseController
                 $datasetAttribute->update();
             } else {
                 // If object doesn't exist yet, i.e. a new column was added
-                $datasetAttribute->insert($this->id, $name);
+                $datasetAttribute->insert([$this->id, $name]);
             }
         }
     }

@@ -50,8 +50,9 @@ abstract class BaseModel
      * getObjectById
      *
      * @param int $id
+     * @return object|null
      */
-    public function getObjectById(int $id): object
+    public function getObjectById(int $id): ?object
     {
         $sql = "SELECT * FROM `{$this->tableName}` WHERE id = ?;";
         $stmt = $this->prepareAndExecuteQuery($sql, [$id]);
@@ -99,7 +100,7 @@ abstract class BaseModel
         $caller = get_called_class();
 
         // Use `basename` on the class name using namespace separator
-        return strtolower(basename(str_replace('\\', '/', $caller)));
+        return lcfirst(basename(str_replace('\\', '/', $caller)));
     }
 
     protected function getAttributesArray(): array

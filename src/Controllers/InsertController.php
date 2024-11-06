@@ -51,7 +51,7 @@ class InsertController extends BaseController
                 $id = $dataset->getId();
 
                 foreach ($this->postData['attributes'] as $attribute) {
-                    (new DatasetAttribute())->insert($id, $attribute);
+                    (new DatasetAttribute())->insert([$id, $attribute]);
                 }
             } catch (PublicMessageException) {
                 $this->setView('form');

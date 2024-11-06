@@ -8,14 +8,10 @@ use PDO;
 /**
  * Class: DatasetAttribute
  *
- * @see IModel
+ * @see BaseModel
  */
-class DatasetAttribute implements IModel
+class DatasetAttribute extends BaseModel
 {
-    /**
-     * @var int|null $id
-     */
-    private ?int $id;
     /**
      * @var int|null $datasetId
      */
@@ -31,63 +27,11 @@ class DatasetAttribute implements IModel
      */
     public function __construct(int $id = null, int $datasetId = null, string $attributeName = null)
     {
+        parent::__construct($id);
         if (isset($id)) {
-            $this->id = $id;
             $this->datasetId = $datasetId;
             $this->attributeName = $attributeName;
         }
-    }
-
-    /**
-     * getAllAsObjects
-     *
-     * @return DatasetAttribute[]
-     */
-    public function getAllAsObjects(): array
-    {
-        $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM datasetAttribute';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $return = [];
-        foreach ($results as $object) {
-            $return[] = new DatasetAttribute(...$object);
-        }
-
-        return $return;
-    }
-
-    /**
-     * deleteObjectById
-     *
-     * @param int $id
-     * @return void
-     */
-    public function deleteObjectById(int $id): void
-    {
-        $pdo = Db::getConnection();
-        $sql = 'DELETE FROM datasetAttribute WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
-    }
-
-    /**
-     * getObjectById
-     *
-     * @param int $id
-     * @return DatasetAttribute|null
-     */
-    public function getObjectById(int $id): ?DatasetAttribute
-    {
-        $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM datasetAttribute WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $return = $result ? new DatasetAttribute(...$result) : null;
-
-        return $return;
     }
 
     /**
@@ -104,23 +48,6 @@ class DatasetAttribute implements IModel
         $stmt->execute(
             [$this->attributeName, $this->id]
         );
-    }
-
-    /**
-     * insert
-     *
-     * @param int $datasetId
-     * @param string $attributeName
-     * @return DatasetAttribute
-     */
-    public function insert(int $datasetId, string $attributeName): DatasetAttribute
-    {
-        $pdo = Db::getConnection();
-        $sql = 'INSERT INTO datasetAttribute VALUES(NULL, ?, ?)';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$datasetId, $attributeName]);
-        $id = $pdo->lastInsertId();
-        return new DatasetAttribute($id, $datasetId, $attributeName);
     }
 
     /**
@@ -145,16 +72,6 @@ class DatasetAttribute implements IModel
     }
 
     /**
-     * getId
-     *
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
      * getDatasetId
      *
      * @return int|null
@@ -172,5 +89,10 @@ class DatasetAttribute implements IModel
     public function getAttributeName(): ?string
     {
         return $this->attributeName;
+    }
+
+    protected function createObject(array $attributes): DatasetAttribute
+    {
+        return new DatasetAttribute(...$attributes);
     }
 }
