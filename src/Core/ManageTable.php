@@ -41,9 +41,7 @@ class ManageTable
     {
         // Iterate over attribute names, add default datatype VARCHAR(65535) to them.
         // Implode the resulting array to a comma seperated string.
-        $attributeString = implode(', ', array_map(function ($attribute) {
-            return '`' . $attribute . '`' . ' TEXT';
-        }, $this->attributes));
+        $attributeString = implode(', ', array_map(fn ($attribute) => "`{$attribute}` TEXT", $this->attributes));
 
         $sql = <<<SQL
             CREATE TABLE `$this->tableName` (
@@ -52,17 +50,7 @@ class ManageTable
             );
         SQL;
 
-        try {
-            $this->pdo->exec($sql);
-        } catch (\PDOException $e) {
-            // Check if the error message indicates that the table already exists
-            if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
-                throw new PublicMessageException("Die Tabelle '$this->tableName' existiert bereits.");
-            } else {
-                // For other this->pdo exceptions
-                throw new \Exception($e);
-            }
-        }
+        $this->pdo->exec($sql);
     }
 
     /**
@@ -85,7 +73,7 @@ class ManageTable
             }
         }
 
-        array_walk($sql, fn($statement) => $this->pdo->exec($statement));
+        array_walk($sql, fn ($statement) => $this->pdo->exec($statement));
     }
 
     /**

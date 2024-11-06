@@ -3,6 +3,8 @@
 namespace App\Core;
 
 use DateTime;
+use PDOException;
+use Throwable;
 
 class ErrorHandler
 {
@@ -33,6 +35,24 @@ class ErrorHandler
 
         return [ 'msg' => $msg, 'view' => $view ];
     }
+
+    /**
+     * handleDuplicateTableException
+     *
+     * @param \PDOException $e
+     * @param callable(): mixed $setViewCallback
+     * @return void
+     */
+    public static function handleDuplicateTableException(\PDOException $e, string $datasetName, object $controller): void
+    {
+        if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
+            $controller->setView('form');
+            throw new PublicMessageException("Die Tabelle '{$datasetName}' existiert bereits.");
+        } else {
+            throw new \Exception($e);
+        }
+    }
+
 
     /**
      * handleThrowable

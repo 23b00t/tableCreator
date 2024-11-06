@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\ErrorHandler;
 use App\Core\ManageTable;
 use App\Core\PublicMessageException;
 use App\Helpers\FilterData;
@@ -40,6 +41,8 @@ class InsertController extends BaseController
      */
     protected function datasetAction(): void
     {
+        // TODO: Implement
+        ErrorHandler::handeleNoColumnsException($this);
         if (!isset($this->postData['attributes'])) {
             $this->setView('form');
             throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');
@@ -53,14 +56,12 @@ class InsertController extends BaseController
             $dataset = (new Dataset())->insert([$datasetName]);
             $id = $dataset->getId();
 
-            foreach ($attributes as $attribute) {
-                (new DatasetAttribute())->insert([$id, $attribute]);
-            }
-        } catch (PublicMessageException) {
-            $this->setView('form');
-            throw new PublicMessageException(
-                "Die Tabelle '" . $this->postData['datasetName'] . "' existiert bereits."
-            );
+            array_walk($attributes, fn ($attribute) => (new DatasetAttribute())->insert([$id, $attribute]));
+        } catch (\PDOException $e) {
+            // Use a controller instance as a wrapper to allow the ErrorHandler to modify the view in case of an exception.
+            // By passing the controller itself, we can call instance-specific methods like setView() from within the static ErrorHandler,
+            // maintaining flexibility while handling errors outside the main controller logic.
+            ErrorHandler::handleDuplicateTableException($e, $this->postData['datasetName'], $this);
         }
     }
 
