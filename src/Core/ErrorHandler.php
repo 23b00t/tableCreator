@@ -43,15 +43,30 @@ class ErrorHandler
      * @param callable(): mixed $setViewCallback
      * @return void
      */
-    public static function handleDuplicateTableException(\PDOException $e, string $datasetName, object $controller): void
+    public static function handleDuplicateTableException(\PDOException $e, string $name, object $controller): void
     {
         if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
             $controller->setView('form');
-            throw new PublicMessageException("Die Tabelle '{$datasetName}' existiert bereits.");
+            throw new PublicMessageException("Die Tabelle '{$name}' existiert bereits.");
         } else {
             throw new \Exception($e);
         }
     }
+
+    /**
+     * handleNoColumnsException
+     *
+     * @param object $controller
+     * @return void
+     */
+    public static function handleNoColumnsException(object $controller): void
+    {
+        if (!isset($controller->postData['attributes'])) {
+            $controller->setView('form');
+            throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');
+        }
+    }
+
 
 
     /**
