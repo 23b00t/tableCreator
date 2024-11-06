@@ -17,6 +17,11 @@ class ManageTable
     private ?array $attributes;
 
     /**
+     * @var PDO $pdo
+     */
+    private \PDO $pdo;
+
+    /**
      * @param string $name
      * @param array $attributes
      */
@@ -24,6 +29,7 @@ class ManageTable
     {
         $this->tableName = $name;
         $this->attributes = $attributes;
+        $this->pdo = Db::getConnection();
     }
 
     /**
@@ -33,7 +39,6 @@ class ManageTable
      */
     public function create(): void
     {
-        $pdo = Db::getConnection();
         // Iterate over attribute names, add default datatype VARCHAR(65535) to them.
         // Implode the resulting array to a comma seperated string.
         $attributeString = implode(', ', array_map(function ($attribute) {
@@ -48,13 +53,13 @@ class ManageTable
         SQL;
 
         try {
-            $pdo->exec($sql);
+            $this->pdo->exec($sql);
         } catch (\PDOException $e) {
             // Check if the error message indicates that the table already exists
             if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
                 throw new PublicMessageException("Die Tabelle '$this->tableName' existiert bereits.");
             } else {
-                // For other PDO exceptions
+                // For other this->pdo exceptions
                 throw new \Exception($e);
             }
         }
@@ -69,25 +74,18 @@ class ManageTable
      */
     public function alter(string $oldName, array $oldAttributes): void
     {
-        $pdo = Db::getConnection();
-        $sql = [];
-        $sql[] = 'ALTER TABLE ' . $oldName . ' RENAME TO ' . $this->tableName;
+        $sql = ["ALTER TABLE `{$oldName}` RENAME TO `{$this->tableName}`;"];
         foreach ($this->attributes as $index => $columnname) {
             if (isset($oldAttributes[$index])) {
                 $oldAttribute = $oldAttributes[$index]->getAttributeName();
-                $sql[] = <<<SQL
-                    ALTER TABLE `$this->tableName` 
-                    CHANGE `$oldAttribute` `$columnname` TEXT;
-                SQL;
+                $sql[] = "ALTER TABLE `{$this->tableName}` CHANGE `{$oldAttribute}` `{$columnname}` TEXT;";
             } else {
                 // If more attributes are given than existed before, a new column is added
                 $sql[] = "ALTER TABLE `{$this->tableName}` ADD COLUMN `{$columnname}` TEXT;";
             }
         }
 
-        foreach ($sql as $statement) {
-            $pdo->exec($statement);
-        }
+        array_walk($sql, fn($statement) => $this->pdo->exec($statement));
     }
 
     /**
@@ -97,9 +95,8 @@ class ManageTable
      */
     public function drop(): void
     {
-        $pdo = Db::getConnection();
         $sql = "DROP TABLE `{$this->tableName}`;";
-        $pdo->exec($sql);
+        $this->pdo->exec($sql);
     }
 
     /**
@@ -110,8 +107,7 @@ class ManageTable
      */
     public function dropColumn(string $attributeName): void
     {
-        $pdo = Db::getConnection();
         $sql = "ALTER TABLE `{$this->tableName}` DROP COLUMN `{$attributeName}`;";
-        $pdo->exec($sql);
+        $this->pdo->exec($sql);
     }
 }

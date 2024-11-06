@@ -40,28 +40,27 @@ class InsertController extends BaseController
      */
     protected function datasetAction(): void
     {
-        if (isset($this->postData['attributes'])) {
-            try {
-                (new ManageTable(
-                    $this->postData['datasetName'],
-                    array_values($this->postData['attributes'])
-                ))->create();
-                $dataset = (new Dataset())->insert([$this->postData['datasetName']]);
-
-                $id = $dataset->getId();
-
-                foreach ($this->postData['attributes'] as $attribute) {
-                    (new DatasetAttribute())->insert([$id, $attribute]);
-                }
-            } catch (PublicMessageException) {
-                $this->setView('form');
-                throw new PublicMessageException(
-                    "Die Tabelle '" . $this->postData['datasetName'] . "' existiert bereits."
-                );
-            }
-        } else {
+        if (!isset($this->postData['attributes'])) {
             $this->setView('form');
             throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');
+        }
+
+        $datasetName = $this->postData['datasetName'];
+        $attributes = array_values($this->postData['attributes']);
+
+        try {
+            (new ManageTable($datasetName, $attributes))->create();
+            $dataset = (new Dataset())->insert([$datasetName]);
+            $id = $dataset->getId();
+
+            foreach ($attributes as $attribute) {
+                (new DatasetAttribute())->insert([$id, $attribute]);
+            }
+        } catch (PublicMessageException) {
+            $this->setView('form');
+            throw new PublicMessageException(
+                "Die Tabelle '" . $this->postData['datasetName'] . "' existiert bereits."
+            );
         }
     }
 
