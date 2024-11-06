@@ -2,20 +2,13 @@
 
 namespace App\Models;
 
-use App\Core\Db;
-use PDO;
-
 /**
  * Class: DatasetAttribute
  *
- * @see IModel
+ * @see BaseModel
  */
-class DatasetAttribute implements IModel
+class DatasetAttribute extends BaseModel
 {
-    /**
-     * @var int|null $id
-     */
-    private ?int $id;
     /**
      * @var int|null $datasetId
      */
@@ -31,63 +24,11 @@ class DatasetAttribute implements IModel
      */
     public function __construct(int $id = null, int $datasetId = null, string $attributeName = null)
     {
+        parent::__construct($id);
         if (isset($id)) {
-            $this->id = $id;
             $this->datasetId = $datasetId;
             $this->attributeName = $attributeName;
         }
-    }
-
-    /**
-     * getAllAsObjects
-     *
-     * @return DatasetAttribute[]
-     */
-    public function getAllAsObjects(): array
-    {
-        $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM datasetAttribute';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $return = [];
-        foreach ($results as $object) {
-            $return[] = new DatasetAttribute(...$object);
-        }
-
-        return $return;
-    }
-
-    /**
-     * deleteObjectById
-     *
-     * @param int $id
-     * @return void
-     */
-    public function deleteObjectById(int $id): void
-    {
-        $pdo = Db::getConnection();
-        $sql = 'DELETE FROM datasetAttribute WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
-    }
-
-    /**
-     * getObjectById
-     *
-     * @param int $id
-     * @return DatasetAttribute|null
-     */
-    public function getObjectById(int $id): ?DatasetAttribute
-    {
-        $pdo = Db::getConnection();
-        $sql = 'SELECT * FROM datasetAttribute WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $return = $result ? new DatasetAttribute(...$result) : null;
-
-        return $return;
     }
 
     /**
@@ -98,29 +39,8 @@ class DatasetAttribute implements IModel
     public function update(): void
     {
         // INFO: No functionality for changing datasetId as it is not a valid use case
-        $pdo = Db::getConnection();
         $sql = 'UPDATE datasetAttribute SET attributename = ? WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(
-            [$this->attributeName, $this->id]
-        );
-    }
-
-    /**
-     * insert
-     *
-     * @param int $datasetId
-     * @param string $attributeName
-     * @return DatasetAttribute
-     */
-    public function insert(int $datasetId, string $attributeName): DatasetAttribute
-    {
-        $pdo = Db::getConnection();
-        $sql = 'INSERT INTO datasetAttribute VALUES(NULL, ?, ?)';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$datasetId, $attributeName]);
-        $id = $pdo->lastInsertId();
-        return new DatasetAttribute($id, $datasetId, $attributeName);
+        $this->prepareAndExecuteQuery($sql, [$this->attributeName, $this->id]);
     }
 
     /**
@@ -131,27 +51,10 @@ class DatasetAttribute implements IModel
      */
     public function getAllObjectsByDatasetId(int $datasetId): array
     {
-        $pdo = Db::getConnection();
         $sql = 'SELECT * FROM datasetAttribute WHERE datasetId = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$datasetId]);
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $return = [];
-        foreach ($results as $object) {
-            $return[] = new DatasetAttribute(...$object);
-        }
 
-        return $return;
-    }
-
-    /**
-     * getId
-     *
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
+        $stmt = $this->prepareAndExecuteQuery($sql, [$datasetId]);
+        return $this->fetchAndCreateObjects($stmt);
     }
 
     /**
@@ -172,5 +75,10 @@ class DatasetAttribute implements IModel
     public function getAttributeName(): ?string
     {
         return $this->attributeName;
+    }
+
+    protected function createObject(array $attributes): DatasetAttribute
+    {
+        return new DatasetAttribute(...$attributes);
     }
 }
