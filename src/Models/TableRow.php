@@ -4,24 +4,15 @@ namespace App\Models;
 
 use App\Core\Db;
 use PDO;
-use PDOStatement;
 
 /**
  * Class: TableRow
  * Dynamic table model
  *
- * @see IModel
+ * @see BaseModel
  */
-class TableRow implements IModel
+class TableRow extends BaseModel
 {
-    /**
-     * @var string $name
-     */
-    private string $name;
-    /**
-     * @var int|null $id
-     */
-    private ?int $id;
     /**
      * @var array|null $attributeArray
      */
@@ -30,55 +21,13 @@ class TableRow implements IModel
 
     /**
      * @param string $name
-     * @param int $id
      * @param array $attributeArray
      */
     public function __construct(string $name, int $id = null, array $attributeArray = null)
     {
-        $this->name = $name;
-        $this->id = $id;
+        parent::__construct($id);
         $this->attributeArray = $attributeArray;
-    }
-
-    /**
-     * getAllAsObjects
-     *
-     * @return TableRow[]
-     */
-    public function getAllAsObjects(): array
-    {
-        $sql = "SELECT * FROM `$this->name`;";
-        $stmt = $this->prepareAndExecuteQuery($sql);
-        return $this->fetchAndCreateObjects($stmt);
-    }
-
-    /**
-     * deleteObjectById
-     *
-     * @param int $id
-     * @return void
-     */
-    public function deleteObjectById(int $id): void
-    {
-        $sql = "DELETE FROM `{$this->name}` WHERE id = ?;";
-        $this->prepareAndExecuteQuery($sql, [$id]);
-    }
-
-    /**
-     * getObjectById
-     *
-     * @param int $id
-     * @return TableRow
-     */
-    public function getObjectById(int $id): TableRow
-    {
-        $sql = "SELECT * FROM `{$this->name}` WHERE id = ?;";
-        $stmt = $this->prepareAndExecuteQuery($sql, [$id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        // Retrun object or null if no object was found
-        $return = $result ? new TableRow($this->name, array_shift($result), $result) : null;
-
-        return $return;
+        $this->tableName = $name;
     }
 
     /**
@@ -92,7 +41,7 @@ class TableRow implements IModel
             return "`{$attribute}` = ?";
         }, array_keys($this->attributeArray)));
 
-        $sql = "UPDATE `{$this->name}` SET {$attributeString} WHERE id = ?;";
+        $sql = "UPDATE `{$this->tableName}` SET {$attributeString} WHERE id = ?;";
         $this->prepareAndExecuteQuery($sql, array_merge(array_values($this->attributeArray), [$this->id]));
     }
 
@@ -105,11 +54,11 @@ class TableRow implements IModel
     public function insert(array $values): TableRow
     {
         $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
-        $sql = "INSERT INTO `{$this->name}` VALUES(NULL, {$placeholders});";
+        $sql = "INSERT INTO `{$this->tableName}` VALUES(NULL, {$placeholders});";
         $this->prepareAndExecuteQuery($sql, $values);
         $id = Db::getConnection()->lastInsertId();
 
-        return new TableRow($this->name, $id, $values);
+        return new TableRow($this->tableName, $id, $values);
     }
 
     /**
@@ -122,7 +71,7 @@ class TableRow implements IModel
         $sql = <<<SQL
             SELECT COLUMN_NAME 
             FROM INFORMATION_SCHEMA.COLUMNS 
-            WHERE TABLE_NAME = '$this->name' 
+            WHERE TABLE_NAME = '$this->tableName' 
             AND COLUMN_NAME != 'id';"
         SQL;
         $result = $this->prepareAndExecuteQuery($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -130,7 +79,7 @@ class TableRow implements IModel
         // array_fill_keys: take result from array_column as keys and fill the values with null
         $attributes = array_fill_keys(array_column($result, 'COLUMN_NAME'), null);
 
-        return new TableRow($this->name, null, $attributes);
+        return new TableRow($this->tableName, null, $attributes);
     }
 
     /**
@@ -148,57 +97,11 @@ class TableRow implements IModel
         $likeClause = implode(' OR ', array_map(fn ($attribute) => "`$attribute` LIKE '%$searchTerm%'", $attributes));
 
         // SQL query
-        $sql = "SELECT * FROM `{$this->name}` WHERE $likeClause;";
+        $sql = "SELECT * FROM `{$this->tableName}` WHERE $likeClause;";
 
         // Execute the query and create objects
         $result = $this->prepareAndExecuteQuery($sql);
         return $this->fetchAndCreateObjects($result);
-    }
-
-    /**
-     * prepareAndExecuteQuery
-     *
-     * @param string $sql
-     * @param array $params, default []
-     * @return PDOStatement
-     */
-    private function prepareAndExecuteQuery(string $sql, array $params = []): PDOStatement
-    {
-        $pdo = Db::getConnection();
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        return $stmt;
-    }
-
-    /**
-     * createObjects
-     *
-     * @param PDOStatement
-     * @return TableRow[]
-     */
-    private function fetchAndCreateObjects(PDOStatement $stmt): array
-    {
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $return = [];
-        foreach ($results as $attributeArray) {
-            $return[] = new TableRow(
-                $this->name,
-                array_shift($attributeArray),
-                $attributeArray
-            );
-        }
-
-        return $return;
-    }
-
-    /**
-     * getId
-     *
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     /**
@@ -208,7 +111,7 @@ class TableRow implements IModel
      */
     public function getName(): string
     {
-        return $this->name;
+        return $this->tableName;
     }
 
     /**
@@ -219,5 +122,14 @@ class TableRow implements IModel
     public function getAttributeArray(): ?array
     {
         return $this->attributeArray;
+    }
+
+    protected function createObject(array $attributes): TableRow
+    {
+        return new TableRow(
+            $this->tableName,
+            array_shift($attributes),
+            $attributes
+        );
     }
 }
