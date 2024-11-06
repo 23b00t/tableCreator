@@ -6,7 +6,6 @@ use App\Core\PublicMessageException;
 
 try {
     include_once __DIR__ . '/../config.php';
-
     require_once __DIR__ . '/../vendor/autoload.php';
 
     /**
@@ -19,7 +18,10 @@ try {
      * showTable as default action
      */
     $action = $_REQUEST['action'] ?? 'showTable';
-    $view = 'table'; // default view
+    /**
+     * @var string $view [defaults to table]
+     */
+    $view = 'table';
 
     /**
      * Determine request method (POST or GET) and securely pass the corresponding
@@ -27,10 +29,10 @@ try {
      */
     $data = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
 
+    /** $area, $action and $view are manipulated in the dispatcher as refferences */
     $dispatcher = new ControllerDispatcher();
-
+    /** The Dispatcher returns an array of object(s) received by the controller */
     $array = $dispatcher->dispatch($area, $action, $view, $data);
-
     extract($array);
 
     ErrorHandler::validateViewPath($area, $view);

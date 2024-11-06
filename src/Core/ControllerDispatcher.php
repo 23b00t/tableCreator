@@ -4,7 +4,7 @@ namespace App\Core;
 
 class ControllerDispatcher
 {
-    private string $view;
+    private ?object $controller = null;
 
     /**
      * dispatch
@@ -25,14 +25,12 @@ class ControllerDispatcher
         }
 
         /** Invoke the controller and save returned array of objects */
-        $controller = new $controllerName($data);
-        $result = $controller->invoke();
+        $this->controller = new $controllerName($data);
+        $result = $this->controller->invoke();
 
-        $view = $controller->getView();
-        $this->view = $view;
-        /** Get area and action for the case they was manipulated by the controller */
-        $area = $controller->getArea();
-        $action = $controller->getAction();
+        $view = $this->controller->getView();
+        $area = $this->controller->getArea();
+        $action = $this->controller->getAction();
 
         return $result;
     }
@@ -44,6 +42,6 @@ class ControllerDispatcher
      */
     public function getView(): string
     {
-        return $this->view;
+        return $this->controller ? $this->controller->getView() : 'table';
     }
 }
