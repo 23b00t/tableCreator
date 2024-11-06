@@ -8,13 +8,17 @@ use PDOStatement;
 
 abstract class BaseModel
 {
+    /**
+     * @var int|null $id
+     */
     protected ?int $id;
-
+    /**
+     * @var string $tableName;
+     */
     protected string $tableName;
 
-
     /**
-     * @param int $id = null
+     * @param int|null $id
      */
     public function __construct(int $id = null)
     {
@@ -25,7 +29,7 @@ abstract class BaseModel
     /**
      * getAllAsObjects
      *
-     * @return TableRow[]
+     * @return object[]
      */
     public function getAllAsObjects(): array
     {
@@ -103,11 +107,6 @@ abstract class BaseModel
         return lcfirst(basename(str_replace('\\', '/', $caller)));
     }
 
-    protected function getAttributesArray(): array
-    {
-        return [];
-    }
-
     /**
      * prepareAndExecuteQuery
      *
@@ -127,7 +126,7 @@ abstract class BaseModel
      * createObjects
      *
      * @param PDOStatement
-     * @return TableRow[]
+     * @return object[]
      */
     protected function fetchAndCreateObjects(PDOStatement $stmt): array
     {
@@ -148,4 +147,11 @@ abstract class BaseModel
      * @return object
      */
     abstract protected function createObject(array $attributes): object;
+
+    /**
+     * update
+     *
+     * @return void
+     */
+    abstract public function update(): void;
 }

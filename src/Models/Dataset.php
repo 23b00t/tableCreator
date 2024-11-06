@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Core\Db;
-
 /**
  * Class: Dataset
  *
@@ -40,12 +38,8 @@ class Dataset extends BaseModel
      */
     public function update(): void
     {
-        $pdo = Db::getConnection();
         $sql = 'UPDATE dataset SET name = ? WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(
-            [$this->name, $this->id]
-        );
+        $this->prepareAndExecuteQuery($sql, [$this->name, $this->id]);
     }
 
     /**

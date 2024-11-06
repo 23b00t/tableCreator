@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Core\Db;
-use PDO;
-
 /**
  * Class: DatasetAttribute
  *
@@ -42,12 +39,8 @@ class DatasetAttribute extends BaseModel
     public function update(): void
     {
         // INFO: No functionality for changing datasetId as it is not a valid use case
-        $pdo = Db::getConnection();
         $sql = 'UPDATE datasetAttribute SET attributename = ? WHERE id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(
-            [$this->attributeName, $this->id]
-        );
+        $this->prepareAndExecuteQuery($sql, [$this->attributeName, $this->id]);
     }
 
     /**
@@ -58,17 +51,10 @@ class DatasetAttribute extends BaseModel
      */
     public function getAllObjectsByDatasetId(int $datasetId): array
     {
-        $pdo = Db::getConnection();
         $sql = 'SELECT * FROM datasetAttribute WHERE datasetId = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$datasetId]);
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $return = [];
-        foreach ($results as $object) {
-            $return[] = new DatasetAttribute(...$object);
-        }
 
-        return $return;
+        $stmt = $this->prepareAndExecuteQuery($sql, [$datasetId]);
+        return $this->fetchAndCreateObjects($stmt);
     }
 
     /**

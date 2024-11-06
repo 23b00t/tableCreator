@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Core\Db;
 use PDO;
 
 /**
@@ -46,22 +45,6 @@ class TableRow extends BaseModel
     }
 
     /**
-     * insert
-     *
-     * @param array $values
-     * @return TableRow
-     */
-    // public function insert(array $values): TableRow
-    // {
-    //     $placeholders = rtrim(str_repeat('?, ', count($values)), ', ');
-    //     $sql = "INSERT INTO `{$this->tableName}` VALUES(NULL, {$placeholders});";
-    //     $this->prepareAndExecuteQuery($sql, $values);
-    //     $id = Db::getConnection()->lastInsertId();
-
-    //     return new TableRow($this->tableName, $id, $values);
-    // }
-
-    /**
      * getColumnsByTableName
      *
      * @return TableRow
@@ -79,7 +62,7 @@ class TableRow extends BaseModel
         // array_fill_keys: take result from array_column as keys and fill the values with null
         $attributes = array_fill_keys(array_column($result, 'COLUMN_NAME'), null);
 
-        return new TableRow($this->tableName, null, $attributes);
+        return $this->createObject(array_merge([null], $attributes));
     }
 
     /**
@@ -126,10 +109,6 @@ class TableRow extends BaseModel
 
     protected function createObject(array $attributes): TableRow
     {
-        return new TableRow(
-            $this->tableName,
-            array_shift($attributes),
-            $attributes
-        );
+        return new TableRow($this->tableName, array_shift($attributes), $attributes);
     }
 }
