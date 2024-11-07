@@ -51,7 +51,7 @@ namespace App\Views\dynamicTable;
 
 <div>
   <a href="index.php?area=dynamicTable&action=showForm&tableName=<?= $tableRows[0]->getName(); ?>" 
-     class="btn btn-outline-success">
+     class="btn btn-outline-success mb-2">
      <i class="fa-solid fa-plus"></i> Eintrag hinzufügen
   </a>
 </div>
