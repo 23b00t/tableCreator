@@ -1212,21 +1212,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/JetBrains/phpstorm-stubs.git",
-                "reference": "310f7c8fac3fb63b2a348e33f29449a45217199a"
+                "reference": "9fc456ec862e39bd4f81595e350061f8f4d7f521"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/310f7c8fac3fb63b2a348e33f29449a45217199a",
-                "reference": "310f7c8fac3fb63b2a348e33f29449a45217199a",
+                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/9fc456ec862e39bd4f81595e350061f8f4d7f521",
+                "reference": "9fc456ec862e39bd4f81595e350061f8f4d7f521",
                 "shasum": ""
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "v3.61.1",
+                "friendsofphp/php-cs-fixer": "v3.64.0",
                 "nikic/php-parser": "v5.3.1",
                 "phpdocumentor/reflection-docblock": "5.4.1",
-                "phpunit/phpunit": "11.3.0"
+                "phpunit/phpunit": "11.4.3"
             },
-            "time": "2024-10-27T20:49:00+00:00",
+            "time": "2024-11-05T08:57:17+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
@@ -1974,12 +1974,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpactor/phpactor.git",
-                "reference": "93a95126f117d627bf3a3f1478bb531acc6f36a8"
+                "reference": "44b0af9f4c06116962d1c57ab4535a7a4997f384"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpactor/phpactor/zipball/93a95126f117d627bf3a3f1478bb531acc6f36a8",
-                "reference": "93a95126f117d627bf3a3f1478bb531acc6f36a8",
+                "url": "https://api.github.com/repos/phpactor/phpactor/zipball/44b0af9f4c06116962d1c57ab4535a7a4997f384",
+                "reference": "44b0af9f4c06116962d1c57ab4535a7a4997f384",
                 "shasum": ""
             },
             "require": {
@@ -2061,7 +2061,7 @@
                 "squizlabs/php_codesniffer": "^3.7",
                 "symfony/var-dumper": "^5.2"
             },
-            "time": "2024-10-24T07:55:14+00:00",
+            "time": "2024-11-07T08:49:14+00:00",
             "default-branch": true,
             "bin": [
                 "bin/phpactor"
@@ -2673,12 +2673,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "108d436c2af470858bdaba3257baab3a74172017"
+                "reference": "c4ba980ca61a9eb18ee6bcc73f28e475852bb1ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/108d436c2af470858bdaba3257baab3a74172017",
-                "reference": "108d436c2af470858bdaba3257baab3a74172017",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c4ba980ca61a9eb18ee6bcc73f28e475852bb1ed",
+                "reference": "c4ba980ca61a9eb18ee6bcc73f28e475852bb1ed",
                 "shasum": ""
             },
             "require": {
@@ -2716,7 +2716,7 @@
                 "symfony/lock": "",
                 "symfony/process": ""
             },
-            "time": "2024-10-08T07:27:17+00:00",
+            "time": "2024-11-06T11:30:55+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -3561,19 +3561,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "95f3f19d0f8f06e4253c66a0828ddb69f8b8ede4"
+                "reference": "5d1662fb32ebc94f17ddb8d635454a776066733d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/95f3f19d0f8f06e4253c66a0828ddb69f8b8ede4",
-                "reference": "95f3f19d0f8f06e4253c66a0828ddb69f8b8ede4",
+                "url": "https://api.github.com/repos/symfony/process/zipball/5d1662fb32ebc94f17ddb8d635454a776066733d",
+                "reference": "5d1662fb32ebc94f17ddb8d635454a776066733d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
                 "symfony/polyfill-php80": "^1.16"
             },
-            "time": "2024-09-25T14:11:13+00:00",
+            "time": "2024-11-06T11:36:42+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -4022,12 +4022,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "494f010d29bf86e600fed21ce1d8477b66c475da"
+                "reference": "32e99c263d271c3259b70bbbf2ba76b6b4ddf455"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/494f010d29bf86e600fed21ce1d8477b66c475da",
-                "reference": "494f010d29bf86e600fed21ce1d8477b66c475da",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/32e99c263d271c3259b70bbbf2ba76b6b4ddf455",
+                "reference": "32e99c263d271c3259b70bbbf2ba76b6b4ddf455",
                 "shasum": ""
             },
             "require": {
@@ -4041,7 +4041,7 @@
                 "psr/container": "^1.0|^2.0",
                 "symfony/phpunit-bridge": "^5.4.9|^6.4|^7.0"
             },
-            "time": "2024-10-25T14:01:04+00:00",
+            "time": "2024-11-06T20:45:08+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",

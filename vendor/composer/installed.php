@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'user/table-creator',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'fd3195d4fde8e0bd3f99eb5b589e3e62ce00321d',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -179,7 +179,7 @@
         'jetbrains/phpstorm-stubs' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '310f7c8fac3fb63b2a348e33f29449a45217199a',
+            'reference' => '9fc456ec862e39bd4f81595e350061f8f4d7f521',
             'type' => 'library',
             'install_path' => __DIR__ . '/../jetbrains/phpstorm-stubs',
             'aliases' => array(
@@ -425,7 +425,7 @@
         'phpactor/phpactor' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '93a95126f117d627bf3a3f1478bb531acc6f36a8',
+            'reference' => '44b0af9f4c06116962d1c57ab4535a7a4997f384',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpactor/phpactor',
             'aliases' => array(
@@ -545,8 +545,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0',
-                1 => '1.0.0',
+                0 => '1.0.0',
+                1 => '1.0|2.0',
             ),
         ),
         'ramsey/collection' => array(
@@ -596,7 +596,7 @@
         'symfony/console' => array(
             'pretty_version' => '5.4.x-dev',
             'version' => '5.4.9999999.9999999-dev',
-            'reference' => '108d436c2af470858bdaba3257baab3a74172017',
+            'reference' => 'c4ba980ca61a9eb18ee6bcc73f28e475852bb1ed',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/console',
             'aliases' => array(),
@@ -697,7 +697,7 @@
         'symfony/process' => array(
             'pretty_version' => '5.4.x-dev',
             'version' => '5.4.9999999.9999999-dev',
-            'reference' => '95f3f19d0f8f06e4253c66a0828ddb69f8b8ede4',
+            'reference' => '5d1662fb32ebc94f17ddb8d635454a776066733d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/process',
             'aliases' => array(),
@@ -744,16 +744,16 @@
         'twig/twig' => array(
             'pretty_version' => '3.x-dev',
             'version' => '3.9999999.9999999.9999999-dev',
-            'reference' => '494f010d29bf86e600fed21ce1d8477b66c475da',
+            'reference' => '32e99c263d271c3259b70bbbf2ba76b6b4ddf455',
             'type' => 'library',
             'install_path' => __DIR__ . '/../twig/twig',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'user/table-creator' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'fd3195d4fde8e0bd3f99eb5b589e3e62ce00321d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
