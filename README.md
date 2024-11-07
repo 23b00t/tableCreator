@@ -37,7 +37,7 @@ The **Table Creator** project provides an easy-to-use web interface that allows 
 ## Installation and Setup
 1. Clone the repository:
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/23b00t/tableCreator.git 
    ```
 2. Copy the configuration template and fill in your database credentials:
    ```bash
