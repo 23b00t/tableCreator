@@ -49,9 +49,9 @@ namespace App\Views\dynamicTable;
     <?php endforeach; ?>
 </table> 
 
-<div>
+<div class="fixed-bottom text-end mb-3 me-4">
   <a href="index.php?area=dynamicTable&action=showForm&tableName=<?= $tableRows[0]->getName(); ?>" 
-     class="btn btn-outline-success mb-2">
-     <i class="fa-solid fa-plus"></i> Eintrag hinzufügen
+     class="btn btn-outline-success">
+     <i class="fa-solid fa-plus"></i> 
   </a>
 </div>

@@ -22,8 +22,9 @@ namespace App\Views;
   </head>
   <body>
     <?php if (isset($msg)) : ?>
-      <div class="alert alert-warning text-center" role="alert">
+      <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
           <?= $msg; ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     <?php endif; ?>
     <?php include __DIR__ . '/navbar.php'; ?>
