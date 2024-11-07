@@ -45,10 +45,11 @@ class ShowFormController extends BaseController
                 $dataset = (new Dataset())->getObjectById($this->id);
                 $array = [  'dataset' => $dataset ];
             } elseif ($this->area = 'dynamicTable') {
-                $tableRow = (new TableRow($this->tableName))->getObjectById($this->id);
+                $tableRow = (new TableRow($this->tableName))->getObjectById($this->id) ??
+                    throw new \Exception('Ungültige id');
                 $array = [ 'tableRow' => $tableRow ];
             }
-        /** Show empty form for insert */
+            /** Show empty form for insert */
         } else {
             if ($this->area === 'dynamicTable') {
                 $tableRow = (new TableRow($this->tableName))->getColumnsByTableName();
