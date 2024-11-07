@@ -69,6 +69,7 @@ class ControllerDispatcher
     /**
      * getView
      *
+     * To be called in ErrorHandler to get the correct view even if it has failed to invoke the controller
      * @return string
      */
     public function getView(): string
