@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Core\ErrorHandler;
 use App\Core\ManageTable;
-use App\Core\PublicMessageException;
 use App\Helpers\FilterData;
 use App\Models\Dataset;
 use App\Models\DatasetAttribute;
@@ -40,28 +40,24 @@ class InsertController extends BaseController
      */
     protected function datasetAction(): void
     {
-        if (isset($this->postData['attributes'])) {
-            try {
-                (new ManageTable(
-                    $this->postData['datasetName'],
-                    array_values($this->postData['attributes'])
-                ))->create();
-                $dataset = (new Dataset())->insert([$this->postData['datasetName']]);
+        /**
+         * INFO: Use a controller instance as a wrapper to allow the ErrorHandler to modify the view
+         * in case of an exception.  By passing the controller itself, we can call instance-specific
+         * methods like setView() from within the static ErrorHandler.
+         */
+        ErrorHandler::handleNoColumnsException($this, $this->postData['attributes']);
 
-                $id = $dataset->getId();
+        $datasetName = $this->postData['datasetName'];
+        $attributes = array_values($this->postData['attributes']);
 
-                foreach ($this->postData['attributes'] as $attribute) {
-                    (new DatasetAttribute())->insert([$id, $attribute]);
-                }
-            } catch (PublicMessageException) {
-                $this->setView('form');
-                throw new PublicMessageException(
-                    "Die Tabelle '" . $this->postData['datasetName'] . "' existiert bereits."
-                );
-            }
-        } else {
-            $this->setView('form');
-            throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');
+        try {
+            (new ManageTable($datasetName, $attributes))->create();
+            $dataset = (new Dataset())->insert([$datasetName]);
+            $id = $dataset->getId();
+
+            array_walk($attributes, fn ($attribute) => (new DatasetAttribute())->insert([$id, $attribute]));
+        } catch (\PDOException $e) {
+            ErrorHandler::handleDuplicateTableException($e, $this->postData['datasetName'], $this);
         }
     }
 

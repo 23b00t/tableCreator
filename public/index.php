@@ -37,9 +37,9 @@ try {
 
     ErrorHandler::validateViewPath($area, $view);
 } catch (PublicMessageException $exception) {
-    extract(ErrorHandler::handlePublicMessageExceptions($exception, $dispatcher));
+    ErrorHandler::handlePublicMessageExceptions($exception, $dispatcher, $msg, $view);
 } catch (Throwable $error) {
-    extract(ErrorHandler::handleThrowable($error));
+    ErrorHandler::handleThrowable($error, $area, $view);
 } finally {
     include __DIR__ . '/../src/Views/application.php';
 }

@@ -42,23 +42,17 @@ class UpdateController extends BaseController
         // If table doesn't contain columns set its attributes to []
         $values = isset($this->postData['attributes']) ? $this->postData['attributes'] : [];
         // Update child table
-        (new ManageTable(
-            $this->postData['datasetName'],
-            array_values($values)
-        ))->alter(...$this->getOldObject());
+        (new ManageTable($this->postData['datasetName'], array_values($values)))
+            ->alter(...$this->getOldObject());
 
         // Update main table
         (new Dataset($this->id, $this->postData['datasetName']))->update();
 
         // Iterate over POST attributes array that has the DatasetAttribute->id as key and its name as value
         foreach ($values as $id => $name) {
-            $datasetAttribute = new DatasetAttribute($id, $this->id, $name);
-            if ($datasetAttribute->getObjectById($id)) {
-                $datasetAttribute->update();
-            } else {
-                // If object doesn't exist yet, i.e. a new column was added
-                $datasetAttribute->insert([$this->id, $name]);
-            }
+            $dAttr = new DatasetAttribute($id, $this->id, $name);
+            // If object doesn't exist yet, i.e. a new column was added create it
+            $dAttr->getObjectById($id) ? $dAttr->update() : $dAttr->insert([$this->id, $name]);
         }
     }
 
@@ -81,9 +75,7 @@ class UpdateController extends BaseController
     private function getOldObject(): array
     {
         // ManageTable needs the old values to find the corresponding DB table and rows
-        $oldDataset = (new Dataset())->getObjectById($this->id);
-        $oldName = $oldDataset->getName();
-        $oldAttributes = $oldDataset->getAttributes();
-        return [$oldName, $oldAttributes];
+        $oldDs = (new Dataset())->getObjectById($this->id);
+        return [$oldDs->getName(), $oldDs->getAttributes()];
     }
 }

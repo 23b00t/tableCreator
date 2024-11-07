@@ -131,13 +131,10 @@ abstract class BaseModel
     protected function fetchAndCreateObjects(PDOStatement $stmt): array
     {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $return = [];
 
-        foreach ($results as $attributeArray) {
-            $return[] = $this->createObject($attributeArray);
-        }
-
-        return $return;
+        return array_map(function ($attributeArray) {
+            return $this->createObject($attributeArray);
+        }, $results);
     }
 
     /**
