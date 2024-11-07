@@ -1,3 +1,4 @@
 config.php
 .php-cs-fixer.cache
+.phpdoc
 vendor/*
