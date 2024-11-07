@@ -338,10 +338,19 @@ class DOMNode
     #[LanguageLevelTypeAware(['8.3' => 'bool'], default: '')]
     public function isEqualNode(#[LanguageLevelTypeAware(['8.3' => 'DOMNode|null'], default: 'DOMNode')] $otherNode) {}
 
+    /**
+     * @removed 8.0
+     */
     public function getFeature($feature, $version) {}
 
+    /**
+     * @removed 8.0
+     */
     public function setUserData($key, $data, $handler) {}
 
+    /**
+     * @removed 8.0
+     */
     public function getUserData($key) {}
 
     /**
@@ -673,7 +682,7 @@ class DOMDocument extends DOMNode implements DOMParentNode
      * @var string|null
      * @link https://php.net/manual/en/class.domdocument.php#domdocument.props.actualencoding
      */
-    #[Deprecated("Actual encoding of the document, is a readonly equivalent to encoding.")]
+    #[Deprecated("The property is deprecated", since: "8.4")]
     #[LanguageLevelTypeAware(['8.1' => 'string|null'], default: '')]
     public $actualEncoding;
 
@@ -682,7 +691,7 @@ class DOMDocument extends DOMNode implements DOMParentNode
      * @link https://php.net/manual/en/class.domdocument.php#domdocument.props.config
      * @see DOMDocument::normalizeDocument()
      */
-    #[Deprecated("Configuration used when DOMDocument::normalizeDocument() is invoked.")]
+    #[Deprecated("The property is deprecated", since: "8.4")]
     #[LanguageLevelTypeAware(['8.1' => 'mixed'], default: '')]
     public $config;
 
@@ -2327,6 +2336,7 @@ class DOMEntity extends DOMNode
      * parsed entity. This is NULL if it an entity from the internal subset or if it is not known.
      * @link https://php.net/manual/en/class.domentity.php#domentity.props.actualencoding
      */
+    #[Deprecated("The property is deprecated", since: "8.4")]
     #[LanguageLevelTypeAware(['8.1' => 'string|null'], default: '')]
     public $actualEncoding;
 
@@ -2336,6 +2346,7 @@ class DOMEntity extends DOMNode
      * parsed entity. This is NULL otherwise.
      * @link https://php.net/manual/en/class.domentity.php#domentity.props.encoding
      */
+    #[Deprecated("The property is deprecated", since: "8.4")]
     #[LanguageLevelTypeAware(['8.1' => 'string|null'], default: '')]
     public $encoding;
 
@@ -2345,6 +2356,7 @@ class DOMEntity extends DOMNode
      * external parsed entity. This is NULL otherwise.
      * @link https://php.net/manual/en/class.domentity.php#domentity.props.version
      */
+    #[Deprecated("The property is deprecated", since: "8.4")]
     #[LanguageLevelTypeAware(['8.1' => 'string|null'], default: '')]
     public $version;
 }
