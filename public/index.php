@@ -8,9 +8,7 @@ try {
     include_once __DIR__ . '/../config.php';
     require_once __DIR__ . '/../vendor/autoload.php';
 
-    /**
-     * @var string $area (Controller Name)
-     */
+    /** @var string $area (Controller Name) */
     $area = $_REQUEST['area'] ?? 'dataset';
 
     /**
@@ -18,10 +16,13 @@ try {
      * showTable as default action
      */
     $action = $_REQUEST['action'] ?? 'showTable';
-    /**
-     * @var string $view [defaults to table]
-     */
+    /** @var string $view [defaults to table] */
     $view = 'table';
+    /**
+     * @var string $msg
+     * To be set in controllers. For custom success messages.
+     */
+    $msg = '';
 
     /**
      * Determine request method (POST or GET) and securely pass the corresponding
@@ -29,8 +30,8 @@ try {
      */
     $data = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
 
-    /** $area, $action and $view are manipulated in the dispatcher as refferences */
-    $dispatcher = new ControllerDispatcher($area, $action, $view, $data);
+    /** $area, $action, $view and $msg are manipulated in the dispatcher as refferences */
+    $dispatcher = new ControllerDispatcher($area, $action, $view, $data, $msg);
     /** The Dispatcher returns an array of object(s) received by the controller */
     $array = $dispatcher->dispatch();
     extract($array);

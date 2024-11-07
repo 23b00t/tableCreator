@@ -44,7 +44,7 @@ class ErrorHandler
         string &$view
     ): void {
         /** Catch custom exceptions to display the message to the user, e.g. if the user trys to make a duplicate table */
-        $msg = $exception->getMessage();
+        $msg = 'Achtung: ' . $exception->getMessage();
         $view = $dispatcher->getView();
     }
 

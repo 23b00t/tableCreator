@@ -56,8 +56,6 @@ $datasetExists = isset($dataset) && $dataset instanceof Dataset;
           </div>
           <button id="submitAttributeNumber" class="btn btn-outline-success mt-2">Spalten erzeugen</button>
         </div>
-        <!-- Use JS to generate n fields specified in input field -->
-        <script src="./js/generateFields.js"></script>
       </div>
   </div>
   <div class="col-md-8">

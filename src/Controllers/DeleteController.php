@@ -28,6 +28,7 @@ class DeleteController extends BaseController
     {
         parent::__construct($requestData);
         $this->id = $requestData['id'];
+        $this->msg = 'Erfolgreich gelöscht';
     }
 
     public function invoke(): array

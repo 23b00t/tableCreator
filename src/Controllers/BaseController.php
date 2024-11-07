@@ -23,6 +23,10 @@ abstract class BaseController
      * @var string|null $action
      */
     protected ?string $action;
+    /**
+     * @var string $msg
+     */
+    protected string $msg;
 
     /**
      * __construct
@@ -35,6 +39,7 @@ abstract class BaseController
         $this->view = 'table';
         $this->tableName = $requestData['tableName'] ?? null;
         $this->action = $requestData['action'] ?? null;
+        $this->msg = '';
     }
 
     /**
@@ -120,5 +125,15 @@ abstract class BaseController
     public function getAction(): string
     {
         return $this->action;
+    }
+
+    /**
+     * getMsg
+     *
+     * @return string
+     */
+    public function getMsg(): string
+    {
+        return $this->msg;
     }
 }
