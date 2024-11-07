@@ -24,6 +24,10 @@ class ControllerDispatcher
      * @var array $data
      */
     private array $data;
+    /**
+     * @var string $msg
+     */
+    private string $msg;
 
 
     /**
@@ -32,12 +36,13 @@ class ControllerDispatcher
      * @param string &$view
      * @param array $data
      */
-    public function __construct(string &$area, string &$action, string &$view, array $data)
+    public function __construct(string &$area, string &$action, string &$view, array $data, string &$msg)
     {
         $this->area = &$area;
         $this->action = &$action;
         $this->view = &$view;
         $this->data = $data;
+        $this->msg = &$msg;
     }
 
     /**
@@ -62,6 +67,7 @@ class ControllerDispatcher
         $this->view = $this->controller->getView();
         $this->area = $this->controller->getArea();
         $this->action = $this->controller->getAction();
+        $this->msg = $this->controller->getMsg();
 
         return $result;
     }
