@@ -45,7 +45,7 @@ class InsertController extends BaseController
          * in case of an exception.  By passing the controller itself, we can call instance-specific
          * methods like setView() from within the static ErrorHandler.
          */
-        ErrorHandler::handleNoColumnsException($this);
+        ErrorHandler::handleNoColumnsException($this, $this->postData['attributes']);
 
         $datasetName = $this->postData['datasetName'];
         $attributes = array_values($this->postData['attributes']);

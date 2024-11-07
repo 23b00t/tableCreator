@@ -57,11 +57,12 @@ class ErrorHandler
      * handleNoColumnsException
      *
      * @param object $controller
+     * @param array $attributes
      * @return void
      */
-    public static function handleNoColumnsException(object $controller): void
+    public static function handleNoColumnsException(object $controller, array $attributes): void
     {
-        if (!isset($controller->postData['attributes'])) {
+        if (!isset($attributes)) {
             $controller->setView('form');
             throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');
         }
