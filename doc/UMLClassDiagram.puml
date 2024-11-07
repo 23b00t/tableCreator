@@ -1,0 +1,175 @@
+@startuml
+  package Core as Core {
+    class "PublicMessageException\n<b>Class: PublicMessageException</b>" as Core_PublicMessageException {
+    }
+    class "Db\n<b>Class Db</b>" as Core_Db {
+      -dbh : object
+      {static} +getConnection()
+    }
+    class "ErrorHandler\n<b>Class: ErrorHandler</b>" as Core_ErrorHandler {
+      {static} +validateViewPath(area, view)
+      {static} +handlePublicMessageExceptions(exception, dispatcher, msg, view)
+      {static} +handleDuplicateTableException(e, name, controller)
+      {static} +handleNoColumnsException(controller, attributes)
+      {static} +handleThrowable(error, area, view)
+    }
+    class "ManageTable\n<b>Class: ManageTable</b>" as Core_ManageTable {
+      -tableName : string
+      -attributes : array
+      -pdo : PDO
+      +__construct(name, attributes)
+      +create()
+      +alter(oldName, oldAttributes)
+      +drop()
+      +dropColumn(attributeName)
+    }
+    class "ControllerDispatcher" as Core_ControllerDispatcher {
+      -controller : object|null
+      -area : string
+      -action : string
+      -view : string
+      -data : array
+      +__construct(area, action, view, data)
+      +dispatch()
+      +getView()
+    }
+  }
+  package Controllers as Controllers {
+    class "InsertController\n<b>Class: InsertController</b>" as Controllers_InsertController {
+      -postData : array
+      +__construct(requestData)
+      #datasetAction()
+      #tableRowAction(tableRow)
+    }
+    class "ShowTableController\n<b>Class: ShowTableController</b>" as Controllers_ShowTableController {
+    }
+    class "SearchController" as Controllers_SearchController {
+      -searchTerm : string
+      +__construct(requestData)
+      +invoke()
+    }
+    class "BaseController" as Controllers_BaseController {
+      #area : string
+      #view : string
+      #tableName : string|null
+      #action : string|null
+      +__construct(requestData)
+      +invoke()
+      #datasetAction()
+      #tableRowAction(tableRow)
+      +getView()
+      +setView(view)
+      +getArea()
+      +getAction()
+    }
+    class "ShowFormController\n<b>Class: ShowFormController</b>" as Controllers_ShowFormController {
+      -id : int|null
+      +__construct(requestData)
+      +invoke()
+    }
+    class "UpdateController" as Controllers_UpdateController {
+      -id : int
+      -postData : array
+      +__construct(requestData)
+      #datasetAction()
+      #tableRowAction(tableRow)
+      -getOldObject()
+    }
+    class "DeleteController\n<b>Class: DeleteController</b>" as Controllers_DeleteController {
+      -id : int
+      +__construct(requestData)
+      +invoke()
+      #datasetAction()
+      #tableRowAction(tableRow)
+      -datasetAttributeAction(datasetAttribute)
+    }
+  }
+  package Models as Models {
+    class "TableRow\n<b>Class: TableRow</b>" as Models_TableRow {
+      -attributeArray : array|null
+      +__construct(name, id, attributeArray)
+      +update()
+      +getColumnsByTableName()
+      +getObjectsByFulltextSearch(searchTerm)
+      +getName()
+      +getAttributeArray()
+      #createObject(attributes)
+    }
+    class "DatasetAttribute\n<b>Class: DatasetAttribute</b>" as Models_DatasetAttribute {
+      -datasetId : int|null
+      -attributeName : string|null
+      +__construct(id, datasetId, attributeName)
+      +update()
+      +getAllObjectsByDatasetId(datasetId)
+      +getDatasetId()
+      +getAttributeName()
+      #createObject(attributes)
+    }
+    class "BaseModel" as Models_BaseModel {
+      #id : int|null
+      #tableName : string
+      +__construct(id)
+      +getAllAsObjects()
+      +deleteObjectById(id)
+      +getObjectById(id)
+      +insert(values)
+      +getId()
+      -getTableName()
+      #prepareAndExecuteQuery(sql, params)
+      #fetchAndCreateObjects(stmt)
+      {abstract} #createObject(attributes)
+      {abstract} +update()
+    }
+    class "Dataset\n<b>Class: Dataset</b>" as Models_Dataset {
+      -name : string|null
+      -attributes : DatasetAttribute[]
+      +__construct(id, name)
+      +update()
+      +getName()
+      +getAttributes()
+      +getAttributeNames()
+      #createObject(attributes)
+    }
+  }
+  package Helpers as Helpers {
+    class "FilterData\n<b>Class FilterData</b>" as Helpers_FilterData {
+      -requestData : array
+      +__construct(requestData)
+      +filter()
+    }
+  }
+  Controllers_BaseController -- Models_Dataset
+  Controllers_BaseController -- Models_TableRow
+  Controllers_BaseController <|-- Controllers_DeleteController
+  Controllers_BaseController <|-- Controllers_InsertController
+  Controllers_BaseController <|-- Controllers_SearchController
+  Controllers_BaseController <|-- Controllers_ShowFormController
+  Controllers_BaseController <|-- Controllers_ShowTableController
+  Controllers_BaseController <|-- Controllers_UpdateController
+  Controllers_DeleteController -- Core_ManageTable
+  Controllers_DeleteController -- Models_Dataset
+  Controllers_DeleteController -- Models_DatasetAttribute
+  Controllers_DeleteController -- Models_TableRow
+  Controllers_InsertController -- Core_ErrorHandler
+  Controllers_InsertController -- Core_ManageTable
+  Controllers_InsertController -- Helpers_FilterData
+  Controllers_InsertController -- Models_Dataset
+  Controllers_InsertController -- Models_DatasetAttribute
+  Controllers_InsertController -- Models_TableRow
+  Controllers_SearchController -- Models_TableRow
+  Controllers_ShowFormController -- Models_Dataset
+  Controllers_ShowFormController -- Models_TableRow
+  Controllers_UpdateController -- Core_ManageTable
+  Controllers_UpdateController -- Helpers_FilterData
+  Controllers_UpdateController -- Models_Dataset
+  Controllers_UpdateController -- Models_DatasetAttribute
+  Controllers_UpdateController -- Models_TableRow
+  Core_ErrorHandler -- Core_ControllerDispatcher
+  Core_ErrorHandler -- Core_PublicMessageException
+  Core_ManageTable -- Core_Db
+  Models_BaseModel -- Core_Db
+  Models_BaseModel <|-- Models_Dataset
+  Models_BaseModel <|-- Models_DatasetAttribute
+  Models_BaseModel <|-- Models_TableRow
+  Models_Dataset "1" --o "*" Models_DatasetAttribute
+@enduml

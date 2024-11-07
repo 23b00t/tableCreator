@@ -15,6 +15,7 @@ Das System "Table Creator" ermöglicht die dynamische Erstellung und Anzeige von
 
 *** 2.2 Datenverwaltung
 - **Datensätze hinzufügen:** Nutzer können neue Datensätze zu den bestehenden Tabellen hinzufügen.
+- **Datensätze anzeigen:** Nutzer können erstellte Datensätze tabellarisch anzeigen lassen.
 - **Datensätze bearbeiten:** Nutzer können bestehende Datensätze in den Tabellen bearbeiten.
 - **Datensätze löschen:** Nutzer können Datensätze aus den Tabellen löschen.
 
@@ -37,4 +38,4 @@ Das System "Table Creator" ermöglicht die dynamische Erstellung und Anzeige von
   der Tabellenstrukturen und -daten verwenden.
 - Die Benutzeroberfläche wird in HTML und JavaScript implementiert, unter Verwendung von Bootstrap für das Styling, 
   um eine interaktive Benutzererfahrung zu gewährleisten.
-- Die Fehler- und Ausnahmebehandlung wird über eine benutzerdefinierte Exception-Klasse realisiert.
+- Die vom Nutzer erstellten Tabellen sind in der Datenbank dynamisch zu erzeugen. 
