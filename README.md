@@ -33,17 +33,27 @@ The **Table Creator** project provides an easy-to-use web interface that allows 
 ## Requirements
 - PHP 8 or higher
 - MySQL or MariaDB for database management
+- Composer for managing dependencies
 
 ## Installation and Setup
 1. Clone the repository:
    ```bash
    git clone https://github.com/23b00t/tableCreator.git 
    ```
-2. Copy the configuration template and fill in your database credentials:
+2. Navigate to the project directory:
+   ```bash
+   cd tableCreator
+   ```
+3. Install the dependencies using Composer:
+   ```bash
+   composer install
+   ```
+4. Copy the configuration template and fill in your database credentials:
    ```bash
    cp configTemplate.php config.php
+   # Follow the instructions in the template file
    ```
-3. Set up the database with the initial tables and example data:
+5. Set up the database with the initial tables and example data:
    ```bash
    mysql -u <username> -p <database_name> < sql/create.sql
    ```
