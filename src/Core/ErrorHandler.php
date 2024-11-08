@@ -39,13 +39,13 @@ class ErrorHandler
      */
     public static function handlePublicMessageExceptions(
         Throwable $exception,
-        ControllerDispatcher $dispatcher,
         string &$msg = null,
         string &$view
     ): void {
-        /** Catch custom exceptions to display the message to the user, e.g. if the user trys to make a duplicate table */
-        $msg = 'Achtung: ' . $exception->getMessage();
-        $view = $dispatcher->getView();
+        if ($exception instanceof PublicMessageException) {
+            $msg = $exception->getResponse()->getMsg();
+            $view = $exception->getResponse()->getView();
+        }
     }
 
     /**
@@ -56,13 +56,16 @@ class ErrorHandler
      * @param object $controller
      * @return void
      */
-    public static function handleDuplicateTableException(PDOException $e, string $name, object $controller): void
+    public static function handleDuplicateTableException(PDOException $e, string $name): void
     {
         if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
-            $controller->setView('form');
-            throw new PublicMessageException("Die Tabelle '{$name}' existiert bereits.");
+            $response = new Response([]);
+            $response->setMsg("Achtung: Die Tabelle '{$name}' existiert bereits.");
+            $response->setView('form');
+
+            throw new PublicMessageException($response);
         } else {
-            throw new Exception($e);
+            throw new \Exception($e);
         }
     }
 
@@ -73,18 +76,21 @@ class ErrorHandler
      * @param array $attributes
      * @return void
      */
-    public static function handleNoColumnsException(object $controller, array $attributes = null): void
+    public static function handleNoColumnsException(array $attributes = null): void
     {
         if (!isset($attributes)) {
-            $controller->setView('form');
-            throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');
+            $response = new Response([]);
+            $response->setMsg("Achtung: Bitte füge Spalten zu deiner Tabelle hinzu!");
+            $response->setView('form');
+
+            throw new PublicMessageException($response);
         }
     }
 
     /**
      * handleThrowable
      *
-     * @param \Throwable $error
+     * @param Throwable $error
      * @param string &$area
      * @param string &$view
      * @return array

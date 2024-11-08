@@ -2,12 +2,25 @@
 
 namespace App\Core;
 
-/**
- * Class: PublicMessageException
- * Custom Exception class to display the thrown message to the user
- *
- * @see \Exception
- */
-class PublicMessageException extends \Exception
+use Exception;
+
+class PublicMessageException extends Exception
 {
+    private Response $response;
+
+    public function __construct(Response $response)
+    {
+        $this->response = $response;
+        parent::__construct($response->getMsg() ?: 'Es ist ein Fehler aufgetreten');
+    }
+
+    /**
+     * Get the Response object associated with this exception.
+     *
+     * @return Response
+     */
+    public function getResponse(): Response
+    {
+        return $this->response;
+    }
 }

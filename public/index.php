@@ -35,7 +35,7 @@ try {
     /** The Dispatcher returns an array of object(s) received by the controller */
     $response = $dispatcher->dispatch();
 
-    $view = $response->getView();
+    $view = empty($response->getView()) ? $view : $response->getView();
     $action = empty($response->getAction()) ? $action : $response->getAction();
     $area = empty($response->getArea()) ? $area : $response->getArea();
     $objectArray = $response->getObjectArray();
@@ -45,7 +45,7 @@ try {
 
     ErrorHandler::validateViewPath($area, $view);
 } catch (PublicMessageException $exception) {
-    ErrorHandler::handlePublicMessageExceptions($exception, $dispatcher, $msg, $view);
+    ErrorHandler::handlePublicMessageExceptions($exception, $msg, $view);
 } catch (Throwable $error) {
     ErrorHandler::handleThrowable($error, $area, $view);
 } finally {

@@ -49,15 +49,4 @@ class ControllerDispatcher
         $this->controller = new $controllerName($this->data);
         return $this->controller->invoke();
     }
-
-    /**
-     * getView
-     *
-     * To be called in ErrorHandler to get the correct view even if it has failed to invoke the controller
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->controller ? $this->controller->getView() : 'table';
-    }
 }

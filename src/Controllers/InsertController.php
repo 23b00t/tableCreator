@@ -41,12 +41,7 @@ class InsertController extends BaseController
      */
     protected function datasetAction(): void
     {
-        /**
-         * INFO: Use a controller instance as a wrapper to allow the ErrorHandler to modify the view
-         * in case of an exception.  By passing the controller itself, we can call instance-specific
-         * methods like setView() from within the static ErrorHandler.
-         */
-        ErrorHandler::handleNoColumnsException($this, $this->postData['attributes']);
+        ErrorHandler::handleNoColumnsException($this->postData['attributes']);
 
         $datasetName = $this->postData['datasetName'];
         $attributes = array_values($this->postData['attributes']);
@@ -58,7 +53,7 @@ class InsertController extends BaseController
 
             array_walk($attributes, fn ($attribute) => (new DatasetAttribute())->insert([$id, $attribute]));
         } catch (\PDOException $e) {
-            ErrorHandler::handleDuplicateTableException($e, $this->postData['datasetName'], $this);
+            ErrorHandler::handleDuplicateTableException($e, $this->postData['datasetName']);
         }
     }
 
