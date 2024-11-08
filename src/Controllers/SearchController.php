@@ -28,7 +28,7 @@ class SearchController extends BaseController
      *
      * @return Response
      */
-    public function invoke(): Response|\Exception
+    public function invoke(): Response
     {
         if ($this->area === 'dynamicTable') {
             $tableRow = (new TableRow($this->tableName));

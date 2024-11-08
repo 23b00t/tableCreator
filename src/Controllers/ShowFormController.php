@@ -36,7 +36,7 @@ class ShowFormController extends BaseController
      *
      * @return array
      */
-    public function invoke(): Response|\Throwable
+    public function invoke(): Response
     {
         $objectArray = [];
         /** Show edit form with pre-filled fields */

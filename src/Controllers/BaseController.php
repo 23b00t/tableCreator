@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\ErrorHandler;
 use App\Core\Response;
 use App\Models\TableRow;
 use App\Models\Dataset;
@@ -48,25 +49,29 @@ abstract class BaseController
      *
      * @return Response|Throwable
      */
-    public function invoke(): Response|\Throwable
+    public function invoke(): Response
     {
-        $objectArray = [];
-        if ($this->area === 'dataset') {
-            $this->datasetAction();
-            $datasets = (new Dataset())->getAllAsObjects();
-            $objectArray = ['datasets' => $datasets];
-        } elseif ($this->area === 'dynamicTable') {
-            $tableRow = (new TableRow($this->tableName));
-            $this->tableRowAction($tableRow);
-            $tableRows = $tableRow->getAllAsObjects();
-            $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
-            $objectArray = ['tableRows' => $tableRows];
-        }
+        try {
+            $objectArray = [];
+            if ($this->area === 'dataset') {
+                $this->datasetAction();
+                $datasets = (new Dataset())->getAllAsObjects();
+                $objectArray = ['datasets' => $datasets];
+            } elseif ($this->area === 'dynamicTable') {
+                $tableRow = (new TableRow($this->tableName));
+                $this->tableRowAction($tableRow);
+                $tableRows = $tableRow->getAllAsObjects();
+                $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
+                $objectArray = ['tableRows' => $tableRows];
+            }
 
-        $response = new Response($objectArray);
-        $response->setMsg($this->msg);
-        $response->setView($this->view);
-        return $response;
+            $response = new Response($objectArray);
+            $response->setMsg($this->msg);
+            $response->setView($this->view);
+            return $response;
+        } catch (\Throwable $e) {
+            return ErrorHandler::handle($e);
+        }
     }
 
     /**

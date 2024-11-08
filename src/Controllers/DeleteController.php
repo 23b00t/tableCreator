@@ -37,7 +37,7 @@ class DeleteController extends BaseController
      *
      * @return Response
      */
-    public function invoke(): Response|\Throwable
+    public function invoke(): Response
     {
         $response = parent::invoke();
         if ($this->area === 'datasetAttribute') {
