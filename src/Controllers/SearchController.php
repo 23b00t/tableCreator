@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Response;
 use App\Models\TableRow;
 
 class SearchController extends BaseController
@@ -25,16 +26,16 @@ class SearchController extends BaseController
     /**
      * invoke
      *
-     * @return array
+     * @return Response
      */
-    public function invoke(): array
+    public function invoke(): Response
     {
         if ($this->area === 'dynamicTable') {
             $tableRow = (new TableRow($this->tableName));
             $tableRows = $tableRow->getObjectsByFulltextSearch($this->searchTerm);
             $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
 
-            return [ 'tableRows' => $tableRows ];
+            return (new Response([ 'tableRows' => $tableRows ]));
         } else {
             throw new \Exception('SeachError: no valid table selected!');
         }

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Response;
 use App\Models\Dataset;
 use App\Models\TableRow;
 
@@ -35,27 +36,30 @@ class ShowFormController extends BaseController
      *
      * @return array
      */
-    public function invoke(): array
+    public function invoke(): Response
     {
-        $array = [];
+        $objectArray = [];
         /** Show edit form with pre-filled fields */
         if (isset($this->id)) {
             $this->action = 'update';
             if ($this->area === 'dataset') {
                 $dataset = (new Dataset())->getObjectById($this->id);
-                $array = [  'dataset' => $dataset ];
+                $objectArray = [  'dataset' => $dataset ];
             } elseif ($this->area = 'dynamicTable') {
                 $tableRow = (new TableRow($this->tableName))->getObjectById($this->id) ??
                     throw new \Exception('Ungültige id');
-                $array = [ 'tableRow' => $tableRow ];
+                $objectArray = [ 'tableRow' => $tableRow ];
             }
             /** Show empty form for insert */
         } else {
             if ($this->area === 'dynamicTable') {
                 $tableRow = (new TableRow($this->tableName))->getColumnsByTableName();
-                $array = [ 'tableRow' => $tableRow ];
+                $objectArray = [ 'tableRow' => $tableRow ];
             }
         }
-        return $array;
+        $response = new Response($objectArray);
+        $response->setView($this->view);
+        $response->setAction($this->action);
+        return $response;
     }
 }

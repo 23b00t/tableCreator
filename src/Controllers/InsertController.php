@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Core\ErrorHandler;
 use App\Core\ManageTable;
 use App\Helpers\FilterData;
 use App\Models\Dataset;
@@ -41,25 +40,19 @@ class InsertController extends BaseController
      */
     protected function datasetAction(): void
     {
-        /**
-         * INFO: Use a controller instance as a wrapper to allow the ErrorHandler to modify the view
-         * in case of an exception.  By passing the controller itself, we can call instance-specific
-         * methods like setView() from within the static ErrorHandler.
-         */
-        ErrorHandler::handleNoColumnsException($this, $this->postData['attributes']);
+        // Early return with an exception if attributes are missing
+        if (empty($this->postData['attributes'])) {
+            throw new \InvalidArgumentException("No attributes provided for dataset.");
+        }
 
         $datasetName = $this->postData['datasetName'];
         $attributes = array_values($this->postData['attributes']);
 
-        try {
-            (new ManageTable($datasetName, $attributes))->create();
-            $dataset = (new Dataset())->insert([$datasetName]);
-            $id = $dataset->getId();
+        (new ManageTable($datasetName, $attributes))->create();
+        $dataset = (new Dataset())->insert([$datasetName]);
+        $id = $dataset->getId();
 
-            array_walk($attributes, fn ($attribute) => (new DatasetAttribute())->insert([$id, $attribute]));
-        } catch (\PDOException $e) {
-            ErrorHandler::handleDuplicateTableException($e, $this->postData['datasetName'], $this);
-        }
+        array_walk($attributes, fn ($attribute) => (new DatasetAttribute())->insert([$id, $attribute]));
     }
 
     /**

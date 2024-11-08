@@ -4,7 +4,6 @@ namespace App\Core;
 
 use DateTime;
 use Exception;
-use PDOException;
 use Throwable;
 
 /**
@@ -19,7 +18,6 @@ class ErrorHandler
      *
      * @param string $area
      * @param stirng $view
-     * @return ErrorHandler
      */
     public static function validateViewPath(string $area, string $view): void
     {
@@ -29,65 +27,11 @@ class ErrorHandler
     }
 
     /**
-     * handlePublicMessageExceptions
-     *
-     * @param Throwable $exception
-     * @param ControllerDispatcher $dispatcher
-     * @param string &$message
-     * @param string &$view
-     * @return array
-     */
-    public static function handlePublicMessageExceptions(
-        Throwable $exception,
-        ControllerDispatcher $dispatcher,
-        string &$msg = null,
-        string &$view
-    ): void {
-        /** Catch custom exceptions to display the message to the user, e.g. if the user trys to make a duplicate table */
-        $msg = 'Achtung: ' . $exception->getMessage();
-        $view = $dispatcher->getView();
-    }
-
-    /**
-     * handleDuplicateTableException
-     *
-     * @param PDOException $e
-     * @param string $name
-     * @param object $controller
-     * @return void
-     */
-    public static function handleDuplicateTableException(PDOException $e, string $name, object $controller): void
-    {
-        if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
-            $controller->setView('form');
-            throw new PublicMessageException("Die Tabelle '{$name}' existiert bereits.");
-        } else {
-            throw new Exception($e);
-        }
-    }
-
-    /**
-     * handleNoColumnsException
-     *
-     * @param object $controller
-     * @param array $attributes
-     * @return void
-     */
-    public static function handleNoColumnsException(object $controller, array $attributes = null): void
-    {
-        if (!isset($attributes)) {
-            $controller->setView('form');
-            throw new PublicMessageException('Bitte füge Spalten zu deiner Tabelle hinzu!');
-        }
-    }
-
-    /**
      * handleThrowable
      *
-     * @param \Throwable $error
+     * @param Throwable $error
      * @param string &$area
      * @param string &$view
-     * @return array
      */
     public static function handleThrowable(Throwable $error, string &$area, string &$view): void
     {
@@ -98,5 +42,26 @@ class ErrorHandler
         /** manually set $area and $view as controllers may not have worked in error case */
         $area = 'error';
         $view = 'message';
+    }
+
+    /**
+     * handle
+     *
+     * @param Throwable $e
+     * @return Response
+     */
+    public static function handle(Throwable $e): Response
+    {
+        $response = new Response([]);
+        if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
+            $response->setMsg("Achtung: Die Tabelle existiert bereits.");
+            $response->setView('form');
+        } elseif ($e instanceof \InvalidArgumentException) {
+            $response->setMsg("Achtung: Bitte füge Spalten zu deiner Tabelle hinzu!");
+            $response->setView('form');
+        } else {
+            throw new Exception($e);
+        }
+        return $response;
     }
 }
