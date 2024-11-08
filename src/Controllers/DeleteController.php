@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\ManageTable;
+use App\Core\Response;
 use App\Models\Dataset;
 use App\Models\DatasetAttribute;
 use App\Models\TableRow;
@@ -31,9 +32,14 @@ class DeleteController extends BaseController
         $this->msg = 'Erfolgreich gelöscht';
     }
 
-    public function invoke(): array
+    /**
+     * invoke
+     *
+     * @return Response
+     */
+    public function invoke(): Response|\Throwable
     {
-        $result = parent::invoke();
+        $response = parent::invoke();
         if ($this->area === 'datasetAttribute') {
             // Create DatasetAttribute object
             $datasetAttribute = (new DatasetAttribute())->getObjectById($this->id);
@@ -41,9 +47,14 @@ class DeleteController extends BaseController
             $this->datasetAttributeAction($datasetAttribute);
             // Create new Dataset object and set area and view to redisplay the edit form without the deleted attribute
             $dataset = (new Dataset())->getObjectById($datasetAttribute->getDatasetId());
-            $result = [ 'dataset' => $dataset ];
+            $objectArray = [ 'dataset' => $dataset ];
+            $response->setObjectArray($objectArray);
+            $response->setView('form');
+            $response->setArea('dataset');
+            $response->setAction('update');
         }
-        return $result;
+
+        return $response;
     }
 
     /**
@@ -85,8 +96,5 @@ class DeleteController extends BaseController
         // Delete from index table
         $datasetAttribute->deleteObjectById($this->id);
         // Delete attributes in the Dataset edit form, so it has to be set as next route too
-        $this->area = 'dataset';
-        $this->view = 'form';
-        $this->action = 'update';
     }
 }

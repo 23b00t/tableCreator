@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Response;
 use App\Models\TableRow;
 use App\Models\Dataset;
 
@@ -45,26 +46,27 @@ abstract class BaseController
     /**
      * invoke
      *
-     * @return array
+     * @return Response|Throwable
      */
-    public function invoke(): array
+    public function invoke(): Response|\Throwable
     {
+        $objectArray = [];
         if ($this->area === 'dataset') {
             $this->datasetAction();
             $datasets = (new Dataset())->getAllAsObjects();
-
-            return [ 'datasets' => $datasets ];
+            $objectArray = ['datasets' => $datasets];
         } elseif ($this->area === 'dynamicTable') {
             $tableRow = (new TableRow($this->tableName));
             $this->tableRowAction($tableRow);
             $tableRows = $tableRow->getAllAsObjects();
             $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
-
-            return [ 'tableRows' => $tableRows ];
+            $objectArray = ['tableRows' => $tableRows];
         }
 
-        // Fallback (neede in DeleteController)
-        return [];
+        $response = new Response($objectArray);
+        $response->setMsg($this->msg);
+        $response->setView($this->view);
+        return $response;
     }
 
     /**
@@ -84,56 +86,5 @@ abstract class BaseController
      */
     protected function tableRowAction(TableRow $tableRow): void
     {
-    }
-
-    /**
-     * getView
-     *
-     * @return string
-     */
-    public function getView(): string
-    {
-        return $this->view;
-    }
-
-    /**
-     * setView
-     *
-     * @param string $view
-     * @return void
-     */
-    public function setView(string $view): void
-    {
-        $this->view = $view;
-    }
-
-    /**
-     * getArea
-     *
-     * @return string
-     */
-    public function getArea(): string
-    {
-        return $this->area;
-    }
-
-    /**
-     * getAction
-     *
-     * @return string
-     */
-    public function getAction(): string
-    {
-        return $this->action;
-    }
-
-    /**
-     * getMsg
-     *
-     * @return string
-     */
-    public function getMsg(): string
-    {
-        return $this->msg;
     }
 }

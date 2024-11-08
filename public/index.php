@@ -31,10 +31,17 @@ try {
     $data = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
 
     /** $area, $action, $view and $msg are manipulated in the dispatcher as refferences */
-    $dispatcher = new ControllerDispatcher($area, $action, $view, $data, $msg);
+    $dispatcher = new ControllerDispatcher($action, $data);
     /** The Dispatcher returns an array of object(s) received by the controller */
-    $array = $dispatcher->dispatch();
-    extract($array);
+    $response = $dispatcher->dispatch();
+
+    $view = $response->getView();
+    $action = empty($response->getAction()) ? $action : $response->getAction();
+    $area = empty($response->getArea()) ? $area : $response->getArea();
+    $objectArray = $response->getObjectArray();
+    $msg = $response->getMsg();
+
+    extract($objectArray);
 
     ErrorHandler::validateViewPath($area, $view);
 } catch (PublicMessageException $exception) {
