@@ -17,7 +17,8 @@ class ErrorHandler
      * validateViewPath
      *
      * @param string $area
-     * @param stirng $view
+     * @param string $view
+     * Checks if the view file exists for the given area, throws an exception if not
      */
     public static function validateViewPath(string $area, string $view): void
     {
@@ -32,6 +33,7 @@ class ErrorHandler
      * @param Throwable $error
      * @param string &$area
      * @param string &$view
+     * Handles unexpected errors by logging the error message and setting a default error area and view
      */
     public static function handleThrowable(Throwable $error, string &$area, string &$view): void
     {
@@ -49,6 +51,7 @@ class ErrorHandler
      *
      * @param Throwable $e
      * @return Response
+     * Maps specific exceptions to custom messages and views, and returns a response object
      */
     public static function handle(Throwable $e): Response
     {
@@ -64,6 +67,7 @@ class ErrorHandler
             ]
         ];
 
+        /** Check if exception matches any predefined codes/messages and set appropriate response */
         foreach ($exceptionsMap as $key => $settings) {
             if (($e->getCode() === $key) || ($e->getMessage() === $key)) {
                 $response->setMsg($settings['msg']);
@@ -72,6 +76,7 @@ class ErrorHandler
             }
         }
 
+        // If no predefined exception match, throw the original exception
         throw new Exception($e);
     }
 }

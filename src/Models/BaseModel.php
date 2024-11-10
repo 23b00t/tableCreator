@@ -10,15 +10,19 @@ abstract class BaseModel
 {
     /**
      * @var int|null $id
+     * The ID of the object, or null if not set
      */
     protected ?int $id;
+
     /**
-     * @var string $tableName;
+     * @var string $tableName
+     * The name of the table associated with the model
      */
     protected string $tableName;
 
     /**
      * @param int|null $id
+     * Constructor for initializing the model with an optional ID
      */
     public function __construct(int $id = null)
     {
@@ -29,7 +33,9 @@ abstract class BaseModel
     /**
      * getAllAsObjects
      *
-     * @return object[]
+     * Retrieves all objects from the database as an array of objects
+     *
+     * @return object[] Array of objects representing rows in the table
      */
     public function getAllAsObjects(): array
     {
@@ -41,7 +47,9 @@ abstract class BaseModel
     /**
      * deleteObjectById
      *
-     * @param int $id
+     * Deletes an object from the database by its ID
+     *
+     * @param int $id The ID of the object to delete
      * @return void
      */
     public function deleteObjectById(int $id): void
@@ -53,15 +61,17 @@ abstract class BaseModel
     /**
      * getObjectById
      *
-     * @param int $id
-     * @return object|null
+     * Retrieves a single object by its ID from the database
+     *
+     * @param int $id The ID of the object to retrieve
+     * @return object|null The object or null if not found
      */
     public function getObjectById(int $id): ?object
     {
         $sql = "SELECT * FROM `{$this->tableName}` WHERE id = ?;";
         $stmt = $this->prepareAndExecuteQuery($sql, [$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        // Retrun object or null if no object was found
+        // Return object or null if no object was found
         $return = $result ? $this->createObject($result) : null;
 
         return $return;
@@ -70,8 +80,10 @@ abstract class BaseModel
     /**
      * insert
      *
-     * @param array $values
-     * @return object
+     * Inserts a new object into the database
+     *
+     * @param array $values The values to insert into the table
+     * @return object The created object with the inserted data
      */
     public function insert(array $values): object
     {
@@ -80,13 +92,15 @@ abstract class BaseModel
         $this->prepareAndExecuteQuery($sql, $values);
         $id = Db::getConnection()->lastInsertId();
 
-        return $this->createObject(attributes: array_merge([$id], $values));
+        return $this->createObject(array_merge([$id], $values));
     }
 
     /**
      * getId
      *
-     * @return int|null
+     * Retrieves the ID of the object
+     *
+     * @return int|null The ID or null if not set
      */
     public function getId(): ?int
     {
@@ -96,7 +110,9 @@ abstract class BaseModel
     /**
      * getTableName
      *
-     * @return string
+     * Determines the table name based on the class name
+     *
+     * @return string The name of the table
      */
     private function getTableName(): string
     {
@@ -110,9 +126,11 @@ abstract class BaseModel
     /**
      * prepareAndExecuteQuery
      *
-     * @param string $sql
-     * @param array $params, default []
-     * @return PDOStatement
+     * Prepares and executes a SQL query with parameters
+     *
+     * @param string $sql The SQL query to execute
+     * @param array $params The parameters for the query (optional)
+     * @return PDOStatement The prepared and executed PDO statement
      */
     protected function prepareAndExecuteQuery(string $sql, array $params = []): PDOStatement
     {
@@ -123,10 +141,12 @@ abstract class BaseModel
     }
 
     /**
-     * createObjects
+     * fetchAndCreateObjects
      *
-     * @param PDOStatement
-     * @return object[]
+     * Fetches all results from the PDO statement and creates objects from them
+     *
+     * @param PDOStatement $stmt The PDO statement containing the results
+     * @return object[] An array of created objects from the fetched results
      */
     protected function fetchAndCreateObjects(PDOStatement $stmt): array
     {
@@ -140,13 +160,17 @@ abstract class BaseModel
     /**
      * createObject
      *
-     * @param array $attributes
-     * @return object
+     * Abstract method to create an object from an array of attributes
+     *
+     * @param array $attributes The attributes to populate the object with
+     * @return object The created object
      */
     abstract protected function createObject(array $attributes): object;
 
     /**
      * update
+     *
+     * Abstract method to update the object in the database
      *
      * @return void
      */

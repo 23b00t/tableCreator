@@ -3,7 +3,9 @@
 namespace App\Models;
 
 /**
- * Class: Dataset
+ * Class Dataset
+ *
+ * Represents a dataset and provides methods for interacting with it
  *
  * @see IModel
  */
@@ -11,16 +13,24 @@ class Dataset extends BaseModel
 {
     /**
      * @var string|null $name
+     * The name of the dataset
      */
     private ?string $name;
+
     /**
      * @var DatasetAttribute[] $attributes
+     * The attributes associated with the dataset
      */
     private array $attributes;
 
     /**
-     * @param int $id = null
-     * @param string $name = null
+     * Constructor for Dataset model
+     *
+     * Initializes a new Dataset object with optional ID and name.
+     * Also loads the attributes associated with the dataset if ID is provided.
+     *
+     * @param int|null $id The ID of the dataset (optional)
+     * @param string|null $name The name of the dataset (optional)
      */
     public function __construct(int $id = null, string $name = null)
     {
@@ -34,6 +44,8 @@ class Dataset extends BaseModel
     /**
      * update
      *
+     * Updates the dataset in the database by modifying its name
+     *
      * @return void
      */
     public function update(): void
@@ -45,7 +57,9 @@ class Dataset extends BaseModel
     /**
      * getName
      *
-     * @return string|null
+     * Retrieves the name of the dataset
+     *
+     * @return string|null The name of the dataset, or null if not set
      */
     public function getName(): ?string
     {
@@ -55,7 +69,9 @@ class Dataset extends BaseModel
     /**
      * getAttributes
      *
-     * @return DatasetAttribute[]
+     * Retrieves the attributes associated with the dataset
+     *
+     * @return DatasetAttribute[] Array of DatasetAttribute objects
      */
     public function getAttributes(): array
     {
@@ -65,13 +81,23 @@ class Dataset extends BaseModel
     /**
      * getAttributeNames
      *
-     * @return array
+     * Retrieves the names of all attributes associated with the dataset
+     *
+     * @return array An array of attribute names
      */
     public function getAttributeNames(): array
     {
         return array_map(fn ($attribute) => $attribute->getAttributeName(), $this->attributes);
     }
 
+    /**
+     * createObject
+     *
+     * Creates a new Dataset object from the given attributes
+     *
+     * @param array $attributes The attributes to initialize the Dataset object
+     * @return Dataset The created Dataset object
+     */
     protected function createObject(array $attributes): Dataset
     {
         return new Dataset(...$attributes);

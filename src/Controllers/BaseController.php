@@ -10,30 +10,36 @@ use App\Models\Dataset;
 abstract class BaseController
 {
     /**
-     * @var string $area
+     * @var string $area The entity on which the logic is applied (e.g., 'dataset' or 'dynamicTable').
      */
     protected string $area;
+
     /**
-     * @var string $view
+     * @var string $view The view to be rendered.
      */
     protected string $view;
+
     /**
-     * @var string|null $tableName
+     * @var string|null $tableName The name of the table for dynamic table actions.
      */
     protected ?string $tableName;
+
     /**
-     * @var string|null $action
+     * @var string|null $action The action to be executed by the controller.
      */
     protected ?string $action;
+
     /**
-     * @var string $msg
+     * @var string $msg Message to be passed along with the response.
      */
     protected string $msg;
 
     /**
-     * __construct
+     * Constructor
      *
-     * @param array $requestData
+     * Initializes the controller with request data.
+     *
+     * @param array $requestData Data from the incoming request.
      */
     public function __construct(array $requestData)
     {
@@ -45,9 +51,11 @@ abstract class BaseController
     }
 
     /**
-     * invoke
+     * Invoke the controller action and return a Response object.
      *
-     * @return Response|Throwable
+     * Handles the business logic for the given area (dataset or dynamicTable).
+     *
+     * @return Response The response object.
      */
     public function invoke(): Response
     {
@@ -75,7 +83,9 @@ abstract class BaseController
     }
 
     /**
-     * datasetAction
+     * Handle actions related to the dataset area.
+     *
+     * This method should be overridden in a derived class to define dataset-specific logic.
      *
      * @return void
      */
@@ -84,9 +94,11 @@ abstract class BaseController
     }
 
     /**
-     * tableRowAction
+     * Handle actions related to a specific table row.
      *
-     * @param TableRow $tableRow
+     * This method should be overridden in a derived class to define table row-specific logic.
+     *
+     * @param TableRow $tableRow The TableRow object for the dynamic table.
      * @return void
      */
     protected function tableRowAction(TableRow $tableRow): void

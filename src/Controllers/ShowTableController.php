@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 /**
- * Class: ShowTableController
+ * Class ShowTableController
+ *
+ * Controller for displaying a table of data.
  *
  * @see BaseController
  */

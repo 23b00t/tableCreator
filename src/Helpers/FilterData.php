@@ -15,6 +15,8 @@ class FilterData
     private array $requestData;
 
     /**
+     * __construct
+     *
      * @param array $requestData
      */
     public function __construct(array $requestData)
@@ -46,7 +48,7 @@ class FilterData
 
         $sanitizedData = [];
         foreach ($areaAttributes as $attribute) {
-            // If the attribute value is an empty string set it to null (neede for rentalTo)
+            // If the attribute value is an empty string set it to null (needed for rentalTo)
             if (isset($this->requestData[$attribute])) {
                 $value = $this->requestData[$attribute] === '' ? null : $this->requestData[$attribute];
                 $sanitizedData[$attribute] = $value;

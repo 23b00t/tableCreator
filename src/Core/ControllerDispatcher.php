@@ -5,20 +5,22 @@ namespace App\Core;
 class ControllerDispatcher
 {
     /**
-     * @var string $action
+     * @var string $action The action to be executed, corresponding to the controller.
      */
     private string $action;
+
     /**
-     * @var array $data
+     * @var array $data The data passed to the controller for processing.
      */
     private array $data;
 
-
     /**
-     * @param string &$area
-     * @param string &$action
-     * @param string &$view
-     * @param array $data
+     * __construct
+     *
+     * Initializes the dispatcher with the action to be executed and the data to be passed to the controller.
+     *
+     * @param string $action The action to be dispatched.
+     * @param array $data The data associated with the action.
      */
     public function __construct(string $action, array $data)
     {
@@ -29,19 +31,22 @@ class ControllerDispatcher
     /**
      * dispatch
      *
-     * @return Response
+     * Dispatches the action to the corresponding controller, invokes it, and returns the response object.
+     *
+     * @return Response The response object returned by the controller.
+     * @throws \Exception If the controller class does not exist for the given action.
      */
     public function dispatch(): Response
     {
-        /** Build Action Controller Name from $action */
+        // Build the fully qualified controller class name based on the action
         $controllerName = 'App\\Controllers\\' . ucfirst($this->action) . 'Controller';
 
-        // Throw Exception if the Controller doesn't exist aka invalid $action
+        // Throw an exception if the controller class does not exist (invalid action)
         if (!class_exists($controllerName)) {
             throw new \Exception("Controller $controllerName not found.");
         }
 
-        /** Invoke the controller and return response object handed over by controller */
+        // Instantiate the controller and invoke it, returning the response object
         return (new $controllerName($this->data))->invoke();
     }
 }
