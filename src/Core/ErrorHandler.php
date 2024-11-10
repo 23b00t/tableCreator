@@ -53,15 +53,25 @@ class ErrorHandler
     public static function handle(Throwable $e): Response
     {
         $response = new Response([]);
-        if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
-            $response->setMsg("Achtung: Die Tabelle existiert bereits.");
-            $response->setView('form');
-        } elseif ($e instanceof \InvalidArgumentException) {
-            $response->setMsg("Achtung: Bitte füge Spalten zu deiner Tabelle hinzu!");
-            $response->setView('form');
-        } else {
-            throw new Exception($e);
+        $exceptionsMap = [
+            '42S01' => [
+                'msg' => "Achtung: Die Tabelle existiert bereits.",
+                'view' => 'form'
+            ],
+            'missingColumns' => [
+                'msg' => "Achtung: Bitte füge Spalten zu deiner Tabelle hinzu!",
+                'view' => 'form'
+            ]
+        ];
+
+        foreach ($exceptionsMap as $key => $settings) {
+            if (($e->getCode() === $key) || ($e->getMessage() === $key)) {
+                $response->setMsg($settings['msg']);
+                $response->setView($settings['view']);
+                return $response;
+            }
         }
-        return $response;
+
+        throw new Exception($e);
     }
 }

@@ -42,7 +42,7 @@ class InsertController extends BaseController
     {
         // Early return with an exception if attributes are missing
         if (empty($this->postData['attributes'])) {
-            throw new \InvalidArgumentException("No attributes provided for dataset.");
+            throw new \InvalidArgumentException('missingColumns');
         }
 
         $datasetName = $this->postData['datasetName'];

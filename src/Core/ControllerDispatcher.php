@@ -5,10 +5,6 @@ namespace App\Core;
 class ControllerDispatcher
 {
     /**
-     * @var object|null $controller
-     */
-    private ?object $controller = null;
-    /**
      * @var string $action
      */
     private string $action;
@@ -45,8 +41,7 @@ class ControllerDispatcher
             throw new \Exception("Controller $controllerName not found.");
         }
 
-        /** Invoke the controller and save returned array of objects */
-        $this->controller = new $controllerName($this->data);
-        return $this->controller->invoke();
+        /** Invoke the controller and return response object handed over by controller */
+        return (new $controllerName($this->data))->invoke();
     }
 }

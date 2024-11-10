@@ -6,7 +6,7 @@ class Response
 {
     /**
      * @var array $objectArray
-     * Contains array of objects or a single object
+     * Contains array of object(s)
      */
     private array $objectArray = [];
     /**

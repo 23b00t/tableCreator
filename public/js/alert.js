@@ -14,12 +14,13 @@ export function showMessages() {
         } else {
             messageElement.classList.add('alert-success');
             messageElement.classList.remove('alert-warning');
+
+            // Auto-remove the success message after 3 seconds)
+            setTimeout(() => {
+                messageElement.style.display = "none";
+            }, 3000);
         }
 
-        // Auto-remove the alert after 10 seconds)
-        setTimeout(() => {
-            messageElement.style.display = "none";
-        }, 10000);
     }
 
 }

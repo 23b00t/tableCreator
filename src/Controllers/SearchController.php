@@ -30,14 +30,10 @@ class SearchController extends BaseController
      */
     public function invoke(): Response
     {
-        if ($this->area === 'dynamicTable') {
-            $tableRow = (new TableRow($this->tableName));
-            $tableRows = $tableRow->getObjectsByFulltextSearch($this->searchTerm);
-            $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
+        $tableRow = (new TableRow($this->tableName));
+        $tableRows = $tableRow->getObjectsByFulltextSearch($this->searchTerm);
+        $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
 
-            return (new Response([ 'tableRows' => $tableRows ]));
-        } else {
-            throw new \Exception('SeachError: no valid table selected!');
-        }
+        return (new Response([ 'tableRows' => $tableRows ]));
     }
 }
