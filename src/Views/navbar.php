@@ -23,7 +23,7 @@ namespace App\Views;
           </a>
         </li>
       </ul>
-      <!-- Fulltext search -->
+      <!-- Fulltext search; display only in table view of dynamic tables -->
       <?php if ($area === 'dynamicTable' && isset($tableRows)) : ?>
         <form class="d-flex ms-auto" action="index.php" method="POST">
           <input class="form-control me-2" type="search" placeholder="Search" name="searchTerm" aria-label="Search">

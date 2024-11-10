@@ -1,21 +1,35 @@
 @startuml
   package Core as Core {
-    class "PublicMessageException\n<b>Class: PublicMessageException</b>" as Core_PublicMessageException {
-    }
     class "Db\n<b>Class Db</b>" as Core_Db {
       -dbh : object
       {static} +getConnection()
     }
+    class "Response" as Core_Response {
+      -objectArray : array
+      -msg : string
+      -action : string
+      -view : string
+      -area : string
+      +__construct(objectArray)
+      +getObjectArray()
+      +getMsg()
+      +getAction()
+      +getView()
+      +setMsg(msg)
+      +setAction(action)
+      +setView(view)
+      +setObjectArray(objectArray)
+      +getArea()
+      +setArea(area)
+    }
     class "ErrorHandler\n<b>Class: ErrorHandler</b>" as Core_ErrorHandler {
       {static} +validateViewPath(area, view)
-      {static} +handlePublicMessageExceptions(exception, dispatcher, msg, view)
-      {static} +handleDuplicateTableException(e, name, controller)
-      {static} +handleNoColumnsException(controller, attributes)
       {static} +handleThrowable(error, area, view)
+      {static} +handle(e)
     }
     class "ManageTable\n<b>Class: ManageTable</b>" as Core_ManageTable {
       -tableName : string
-      -attributes : array
+      -attributes : array|null
       -pdo : PDO
       +__construct(name, attributes)
       +create()
@@ -24,26 +38,22 @@
       +dropColumn(attributeName)
     }
     class "ControllerDispatcher" as Core_ControllerDispatcher {
-      -controller : object|null
-      -area : string
       -action : string
-      -view : string
       -data : array
-      +__construct(area, action, view, data)
+      +__construct(action, data)
       +dispatch()
-      +getView()
     }
   }
   package Controllers as Controllers {
-    class "InsertController\n<b>Class: InsertController</b>" as Controllers_InsertController {
+    class "InsertController\n<b>Class InsertController</b>" as Controllers_InsertController {
       -postData : array
       +__construct(requestData)
       #datasetAction()
       #tableRowAction(tableRow)
     }
-    class "ShowTableController\n<b>Class: ShowTableController</b>" as Controllers_ShowTableController {
+    class "ShowTableController\n<b>Class ShowTableController</b>" as Controllers_ShowTableController {
     }
-    class "SearchController" as Controllers_SearchController {
+    class "SearchController\n<b>Class SearchController</b>" as Controllers_SearchController {
       -searchTerm : string
       +__construct(requestData)
       +invoke()
@@ -53,16 +63,13 @@
       #view : string
       #tableName : string|null
       #action : string|null
+      #msg : string
       +__construct(requestData)
       +invoke()
       #datasetAction()
       #tableRowAction(tableRow)
-      +getView()
-      +setView(view)
-      +getArea()
-      +getAction()
     }
-    class "ShowFormController\n<b>Class: ShowFormController</b>" as Controllers_ShowFormController {
+    class "ShowFormController\n<b>Class ShowFormController</b>" as Controllers_ShowFormController {
       -id : int|null
       +__construct(requestData)
       +invoke()
@@ -75,7 +82,7 @@
       #tableRowAction(tableRow)
       -getOldObject()
     }
-    class "DeleteController\n<b>Class: DeleteController</b>" as Controllers_DeleteController {
+    class "DeleteController\n<b>Class DeleteController</b>" as Controllers_DeleteController {
       -id : int
       +__construct(requestData)
       +invoke()
@@ -85,7 +92,7 @@
     }
   }
   package Models as Models {
-    class "TableRow\n<b>Class: TableRow</b>" as Models_TableRow {
+    class "TableRow\n<b>Class TableRow</b>" as Models_TableRow {
       -attributeArray : array|null
       +__construct(name, id, attributeArray)
       +update()
@@ -95,7 +102,7 @@
       +getAttributeArray()
       #createObject(attributes)
     }
-    class "DatasetAttribute\n<b>Class: DatasetAttribute</b>" as Models_DatasetAttribute {
+    class "DatasetAttribute\n<b>Class DatasetAttribute</b>" as Models_DatasetAttribute {
       -datasetId : int|null
       -attributeName : string|null
       +__construct(id, datasetId, attributeName)
@@ -120,7 +127,7 @@
       {abstract} #createObject(attributes)
       {abstract} +update()
     }
-    class "Dataset\n<b>Class: Dataset</b>" as Models_Dataset {
+    class "Dataset\n<b>Class Dataset</b>" as Models_Dataset {
       -name : string|null
       -attributes : DatasetAttribute[]
       +__construct(id, name)
@@ -138,8 +145,11 @@
       +filter()
     }
   }
+  Controllers_BaseController -- Core_ErrorHandler
+  Controllers_BaseController -- Core_Response
   Controllers_BaseController -- Models_Dataset
   Controllers_BaseController -- Models_TableRow
+  Controllers_BaseController -- Core_ControllerDispatcher
   Controllers_BaseController <|-- Controllers_DeleteController
   Controllers_BaseController <|-- Controllers_InsertController
   Controllers_BaseController <|-- Controllers_SearchController
@@ -147,25 +157,32 @@
   Controllers_BaseController <|-- Controllers_ShowTableController
   Controllers_BaseController <|-- Controllers_UpdateController
   Controllers_DeleteController -- Core_ManageTable
+  Controllers_DeleteController -- Core_Response
   Controllers_DeleteController -- Models_Dataset
   Controllers_DeleteController -- Models_DatasetAttribute
   Controllers_DeleteController -- Models_TableRow
-  Controllers_InsertController -- Core_ErrorHandler
+  Controllers_DeleteController -- Core_ControllerDispatcher
   Controllers_InsertController -- Core_ManageTable
   Controllers_InsertController -- Helpers_FilterData
   Controllers_InsertController -- Models_Dataset
   Controllers_InsertController -- Models_DatasetAttribute
   Controllers_InsertController -- Models_TableRow
+  Controllers_InsertController -- Core_ControllerDispatcher
+  Controllers_SearchController -- Core_Response
   Controllers_SearchController -- Models_TableRow
+  Controllers_SearchController -- Core_ControllerDispatcher
+  Controllers_ShowFormController -- Core_Response
   Controllers_ShowFormController -- Models_Dataset
   Controllers_ShowFormController -- Models_TableRow
+  Controllers_ShowFormController -- Core_ControllerDispatcher
   Controllers_UpdateController -- Core_ManageTable
   Controllers_UpdateController -- Helpers_FilterData
   Controllers_UpdateController -- Models_Dataset
   Controllers_UpdateController -- Models_DatasetAttribute
   Controllers_UpdateController -- Models_TableRow
-  Core_ErrorHandler -- Core_ControllerDispatcher
-  Core_ErrorHandler -- Core_PublicMessageException
+  Controllers_UpdateController -- Core_ControllerDispatcher
+  Core_ControllerDispatcher -- Core_Response
+  Core_ErrorHandler -- Core_Response
   Core_ManageTable -- Core_Db
   Models_BaseModel -- Core_Db
   Models_BaseModel <|-- Models_Dataset

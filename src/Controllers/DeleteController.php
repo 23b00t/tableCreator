@@ -9,43 +9,49 @@ use App\Models\DatasetAttribute;
 use App\Models\TableRow;
 
 /**
- * Class: DeleteController
+ * Class DeleteController
+ *
+ * Controller for handling deletion logic of various entities such as datasets, dataset attributes, and table rows.
  *
  * @see BaseController
  */
 class DeleteController extends BaseController
 {
     /**
-     * @var int $id
+     * @var int $id The ID of the entity to be deleted.
      */
     private int $id;
 
     /**
-     * __construct
+     * Constructor
      *
-     * @param array $requestData
+     * Initializes the DeleteController with the request data and sets the message.
+     *
+     * @param array $requestData Data from the incoming request.
      */
     public function __construct(array $requestData)
     {
         parent::__construct($requestData);
         $this->id = $requestData['id'];
-        $this->msg = 'Erfolgreich gelöscht';
+        $this->msg = 'Erfolgreich gelöscht'; // Message indicating successful deletion
     }
 
     /**
-     * invoke
+     * Invoke the delete action and return the appropriate Response.
      *
-     * @return Response
+     * Handles the deletion process for different areas like dataset or datasetAttribute.
+     *
+     * @return Response The response object after deletion.
      */
     public function invoke(): Response
     {
         $response = parent::invoke();
         if ($this->area === 'datasetAttribute') {
-            // Create DatasetAttribute object
+            // Create DatasetAttribute object by ID
             $datasetAttribute = (new DatasetAttribute())->getObjectById($this->id);
-            // Delete it from DB and delete its corresponding row in the table it refferes to
+            // Delete the dataset attribute from the DB and remove corresponding table row
             $this->datasetAttributeAction($datasetAttribute);
-            // Create new Dataset object and set area and view to redisplay the edit form without the deleted attribute
+            // Create new Dataset object to update the view after deletion
             $dataset = (new Dataset())->getObjectById($datasetAttribute->getDatasetId());
             $objectArray = [ 'dataset' => $dataset ];
             $response->setObjectArray($objectArray);
@@ -58,24 +64,27 @@ class DeleteController extends BaseController
     }
 
     /**
-     * datasetAction
+     * Handle the deletion of a dataset.
+     *
+     * Deletes the dataset from the index table and from the database.
      *
      * @return void
      */
     protected function datasetAction(): void
     {
-        // Instanciate object by id to hand over its name to ManageTable
+        // Instantiate the dataset object by ID and delete it from the index table
         $dataset = (new Dataset())->getObjectById($this->id);
-        // Delete it from index table
         $dataset->deleteObjectById($this->id);
-        // Delete it from DB
+        // Remove the dataset's corresponding table in the database
         (new ManageTable($dataset->getName()))->drop();
     }
 
     /**
-     * tableRowAction
+     * Handle the deletion of a table row.
      *
-     * @param TableRow $tableRow
+     * Deletes the specified table row by its ID.
+     *
+     * @param TableRow $tableRow The TableRow object to be deleted.
      * @return void
      */
     protected function tableRowAction(TableRow $tableRow): void
@@ -84,17 +93,19 @@ class DeleteController extends BaseController
     }
 
     /**
-     * datasetAttributeAction
+     * Handle the deletion of a dataset attribute.
      *
-     * @param DatasetAttribute $datasetAttribute
+     * Deletes the attribute from the child table, the index table, and updates the dataset edit form.
+     *
+     * @param DatasetAttribute $datasetAttribute The DatasetAttribute object to be deleted.
      * @return void
      */
     private function datasetAttributeAction(DatasetAttribute $datasetAttribute): void
     {
-        // Delete from child table
+        // Delete the column corresponding to the dataset attribute from the child table
         (new ManageTable($this->tableName))->dropColumn($datasetAttribute->getAttributeName());
-        // Delete from index table
+        // Delete the dataset attribute from the index table
         $datasetAttribute->deleteObjectById($this->id);
-        // Delete attributes in the Dataset edit form, so it has to be set as next route too
+        // Attributes should be removed from the Dataset edit form for the next route
     }
 }

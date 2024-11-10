@@ -17,7 +17,8 @@ class ErrorHandler
      * validateViewPath
      *
      * @param string $area
-     * @param stirng $view
+     * @param string $view
+     * Checks if the view file exists for the given area, throws an exception if not
      */
     public static function validateViewPath(string $area, string $view): void
     {
@@ -32,6 +33,7 @@ class ErrorHandler
      * @param Throwable $error
      * @param string &$area
      * @param string &$view
+     * Handles unexpected errors by logging the error message and setting a default error area and view
      */
     public static function handleThrowable(Throwable $error, string &$area, string &$view): void
     {
@@ -49,19 +51,36 @@ class ErrorHandler
      *
      * @param Throwable $e
      * @return Response
+     * Maps specific exceptions to custom messages and views, and returns a response object
      */
     public static function handle(Throwable $e): Response
     {
         $response = new Response([]);
-        if ($e->getCode() === '42S01') { // SQLSTATE code for "table already exists"
-            $response->setMsg("Achtung: Die Tabelle existiert bereits.");
-            $response->setView('form');
-        } elseif ($e instanceof \InvalidArgumentException) {
-            $response->setMsg("Achtung: Bitte füge Spalten zu deiner Tabelle hinzu!");
-            $response->setView('form');
-        } else {
-            throw new Exception($e);
+        $exceptionsMap = [
+            '42S01' => [
+                'msg' => "Achtung: Die Tabelle existiert bereits.",
+                'view' => 'form'
+            ],
+            'missingColumns' => [
+                'msg' => "Achtung: Bitte füge Spalten zu deiner Tabelle hinzu!",
+                'view' => 'form'
+            ],
+            '42S21' => [
+                'msg' => 'Achtung: Die Spalte existiert bereits:',
+                'view' => 'form'
+            ]
+        ];
+
+        /** Check if exception matches any predefined codes/messages and set appropriate response */
+        foreach ($exceptionsMap as $key => $settings) {
+            if (($e->getCode() === $key) || ($e->getMessage() === $key)) {
+                $response->setMsg($settings['msg']);
+                $response->setView($settings['view']);
+                return $response;
+            }
         }
-        return $response;
+
+        // If no predefined exception match, throw the original exception
+        throw new Exception($e);
     }
 }

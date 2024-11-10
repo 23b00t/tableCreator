@@ -6,27 +6,33 @@ class Response
 {
     /**
      * @var array $objectArray
-     * Contains array of objects or a single object
+     * Contains array of object(s)
      */
     private array $objectArray = [];
+
     /**
      * @var string $msg
      */
     private string $msg = '';
+
     /**
      * @var string $action
      */
     private string $action = '';
+
     /**
      * @var string $view
      */
     private string $view = '';
+
     /**
      * @var string $area
      */
     private string $area = '';
 
     /**
+     * __construct
+     *
      * @param array $objectArray
      */
     public function __construct(array $objectArray)
@@ -35,7 +41,7 @@ class Response
     }
 
     /**
-     * getArray
+     * getObjectArray
      *
      * @return array
      */
@@ -118,11 +124,22 @@ class Response
         $this->objectArray = $objectArray;
     }
 
+    /**
+     * getArea
+     *
+     * @return string
+     */
     public function getArea(): string
     {
         return $this->area;
     }
 
+    /**
+     * setArea
+     *
+     * @param string $area
+     * @return void
+     */
     public function setArea(string $area): void
     {
         $this->area = $area;
