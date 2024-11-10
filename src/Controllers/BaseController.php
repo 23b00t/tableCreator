@@ -69,6 +69,7 @@ abstract class BaseController
                 $tableRow = (new TableRow($this->tableName));
                 $this->tableRowAction($tableRow);
                 $tableRows = $tableRow->getAllAsObjects();
+
                 $tableRows = empty($tableRows) ? [$tableRow->getColumnsByTableName()] : $tableRows;
                 $objectArray = ['tableRows' => $tableRows];
             }
