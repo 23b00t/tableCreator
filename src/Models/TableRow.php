@@ -69,10 +69,10 @@ class TableRow extends BaseModel
         $sql = <<<SQL
             SELECT COLUMN_NAME 
             FROM INFORMATION_SCHEMA.COLUMNS 
-            WHERE TABLE_NAME = '$this->tableName' 
+            WHERE TABLE_NAME = ? 
             AND COLUMN_NAME != 'id';"
         SQL;
-        $result = $this->prepareAndExecuteQuery($sql)->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->prepareAndExecuteQuery($sql, [$this->tableName])->fetchAll(PDO::FETCH_ASSOC);
 
         // Fill attribute array with column names as keys and null as values
         $attributes = array_fill_keys(array_column($result, 'COLUMN_NAME'), null);
