@@ -139,6 +139,11 @@ class TableRow extends BaseModel
      */
     protected function createObject(array $attributes): TableRow
     {
-        return new TableRow($this->tableName, array_shift($attributes), $attributes);
+        // NOTE: Workaround for array_shift which is buggy with Numbers as key
+        // (even if they are strings) that are not ment as indexes
+        $id = $attributes[key($attributes)]; // Saves the first element
+        unset($attributes[key($attributes)]); // removes the first element
+
+        return new TableRow($this->tableName, $id, $attributes);
     }
 }
