@@ -77,7 +77,7 @@ class TableRow extends BaseModel
         // Fill attribute array with column names as keys and null as values
         $attributes = array_fill_keys(array_column($result, 'COLUMN_NAME'), null);
 
-        return $this->createObject(array_merge([null], $attributes));
+        return $this->createObject(['id' => null] + $attributes);
     }
 
     /**

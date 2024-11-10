@@ -64,6 +64,10 @@ class ErrorHandler
             'missingColumns' => [
                 'msg' => "Achtung: Bitte füge Spalten zu deiner Tabelle hinzu!",
                 'view' => 'form'
+            ],
+            '42S21' => [
+                'msg' => 'Achtung: Die Spalte existiert bereits:',
+                'view' => 'form'
             ]
         ];
 
