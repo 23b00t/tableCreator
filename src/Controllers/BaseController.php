@@ -7,6 +7,11 @@ use App\Core\Response;
 use App\Models\TableRow;
 use App\Models\Dataset;
 
+/**
+ * Class: BaseController
+ *
+ * @abstract
+ */
 abstract class BaseController
 {
     /**
