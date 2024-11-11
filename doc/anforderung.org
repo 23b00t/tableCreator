@@ -7,17 +7,17 @@ Das System "Table Creator" ermöglicht die dynamische Erstellung und Anzeige von
 ** 2. Funktionale Anforderungen
 
 *** 2.1 Tabellenverwaltung
-- **Erstellen:** Das System ermöglicht das Erstellen neuer Tabellen mit dynamisch definierbaren Attributen über ein Formular.
-- **Anzeigen:** Der Nutzer kann die erstellten Tabellen in einer übersichtlichen Ansicht anzeigen.
-- **Bearbeiten:** Nutzer können bestehende Tabellen und deren Attribute bearbeiten (z.B. Umbenennen von Spalten).
-- **Löschen:** Nutzer können Tabellen und Attribute löschen, wobei sicherzustellen ist, dass referenzielle 
+- *Erstellen:* Das System ermöglicht das Erstellen neuer Tabellen mit dynamisch definierbaren Attributen über ein Formular.
+- *Anzeigen:* Der Nutzer kann die erstellten Tabellen in einer übersichtlichen Ansicht anzeigen.
+- *Bearbeiten:* Nutzer können bestehende Tabellen und deren Attribute bearbeiten (z.B. Umbenennen von Spalten).
+- *Löschen:* Nutzer können Tabellen und Attribute löschen, wobei sicherzustellen ist, dass referenzielle 
   Integrität durch ON DELETE CASCADE gewahrt bleibt.
 
 *** 2.2 Datenverwaltung
-- **Datensätze hinzufügen:** Nutzer können neue Datensätze zu den bestehenden Tabellen hinzufügen.
-- **Datensätze anzeigen:** Nutzer können erstellte Datensätze tabellarisch anzeigen lassen.
-- **Datensätze bearbeiten:** Nutzer können bestehende Datensätze in den Tabellen bearbeiten.
-- **Datensätze löschen:** Nutzer können Datensätze aus den Tabellen löschen.
+- *Datensätze hinzufügen:* Nutzer können neue Datensätze zu den bestehenden Tabellen hinzufügen.
+- *Datensätze anzeigen:* Nutzer können erstellte Datensätze tabellarisch anzeigen lassen.
+- *Datensätze bearbeiten:* Nutzer können bestehende Datensätze in den Tabellen bearbeiten.
+- *Datensätze löschen:* Nutzer können Datensätze aus den Tabellen löschen.
 
 *** 2.3 Fehlerbehandlung
 - Das System implementiert eine robuste Fehlerbehandlung, um Benutzer über Fehler wie doppelte Tabellennamen 
