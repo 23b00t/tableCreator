@@ -1,8 +1,10 @@
-* Funktionale Anforderung für das Projekt "Table Creator"
+* Lastenheft für das Projekt "Table Creator"
 
 ** 1. Zielsetzung
-Das System "Table Creator" ermöglicht die dynamische Erstellung und Anzeige von Tabellen in einer Datenbank
-über eine benutzerfreundliche Weboberfläche.
+- Das System "Table Creator" ermöglicht die dynamische Erstellung und Anzeige von Tabellen in einer Datenbank
+  über eine benutzerfreundliche Weboberfläche.
+- Das Projekt ist in 2 Wochen fertigzustellen.
+- Für das Einloggen wird die vorgefundene App benutzt. 
 
 ** 2. Funktionale Anforderungen
 *** 2.1 Tabellenverwaltung
