@@ -1,17 +1,16 @@
 * Funktionale Anforderung für das Projekt "Table Creator"
 
 ** 1. Zielsetzung
-Das System "Table Creator" ermöglicht die dynamische Erstellung und Anzeige von Tabellen in einer Datenbank (MariaDB) 
+Das System "Table Creator" ermöglicht die dynamische Erstellung und Anzeige von Tabellen in einer Datenbank
 über eine benutzerfreundliche Weboberfläche.
 
 ** 2. Funktionale Anforderungen
-
 *** 2.1 Tabellenverwaltung
 - *Erstellen:* Das System ermöglicht das Erstellen neuer Tabellen mit dynamisch definierbaren Attributen über ein Formular.
 - *Anzeigen:* Der Nutzer kann die erstellten Tabellen in einer übersichtlichen Ansicht anzeigen.
 - *Bearbeiten:* Nutzer können bestehende Tabellen und deren Attribute bearbeiten (z.B. Umbenennen von Spalten).
 - *Löschen:* Nutzer können Tabellen und Attribute löschen, wobei sicherzustellen ist, dass referenzielle 
-  Integrität durch ON DELETE CASCADE gewahrt bleibt.
+  Integrität gewahrt bleibt.
 
 *** 2.2 Datenverwaltung
 - *Datensätze hinzufügen:* Nutzer können neue Datensätze zu den bestehenden Tabellen hinzufügen.
