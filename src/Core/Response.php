@@ -2,6 +2,11 @@
 
 namespace App\Core;
 
+/**
+ * Class: Response
+ *
+ * Create Response object containing all relevant data processed by controllers
+ */
 class Response
 {
     /**

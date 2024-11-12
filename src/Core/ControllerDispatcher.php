@@ -2,6 +2,10 @@
 
 namespace App\Core;
 
+/**
+ * Class: ControllerDispatcher
+ *
+ */
 class ControllerDispatcher
 {
     /**

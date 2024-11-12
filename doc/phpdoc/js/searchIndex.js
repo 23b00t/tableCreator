@@ -3,7 +3,7 @@ Search.appendIndex(
                 {
             "fqsen": "\\App\\Controllers\\BaseController",
             "name": "BaseController",
-            "summary": "",
+            "summary": "Class\u003A\u0020BaseController",
             "url": "classes/App-Controllers-BaseController.html"
         },                {
             "fqsen": "\\App\\Controllers\\BaseController\u003A\u003A__construct\u0028\u0029",
@@ -158,7 +158,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Controllers\\UpdateController",
             "name": "UpdateController",
-            "summary": "",
+            "summary": "Class\u003A\u0020UpdateController",
             "url": "classes/App-Controllers-UpdateController.html"
         },                {
             "fqsen": "\\App\\Controllers\\UpdateController\u003A\u003A__construct\u0028\u0029",
@@ -193,7 +193,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Core\\ControllerDispatcher",
             "name": "ControllerDispatcher",
-            "summary": "",
+            "summary": "Class\u003A\u0020ControllerDispatcher",
             "url": "classes/App-Core-ControllerDispatcher.html"
         },                {
             "fqsen": "\\App\\Core\\ControllerDispatcher\u003A\u003A__construct\u0028\u0029",
@@ -298,7 +298,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Core\\Response",
             "name": "Response",
-            "summary": "",
+            "summary": "Class\u003A\u0020Response",
             "url": "classes/App-Core-Response.html"
         },                {
             "fqsen": "\\App\\Core\\Response\u003A\u003A__construct\u0028\u0029",
@@ -403,7 +403,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Models\\BaseModel",
             "name": "BaseModel",
-            "summary": "",
+            "summary": "Class\u003A\u0020BaseModel",
             "url": "classes/App-Models-BaseModel.html"
         },                {
             "fqsen": "\\App\\Models\\BaseModel\u003A\u003A__construct\u0028\u0029",

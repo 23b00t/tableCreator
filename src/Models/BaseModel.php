@@ -6,6 +6,11 @@ use App\Core\Db;
 use PDO;
 use PDOStatement;
 
+/**
+ * Class: BaseModel
+ *
+ * @abstract
+ */
 abstract class BaseModel
 {
     /**

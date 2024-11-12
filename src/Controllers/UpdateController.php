@@ -8,6 +8,13 @@ use App\Models\Dataset;
 use App\Models\DatasetAttribute;
 use App\Models\TableRow;
 
+/**
+ * Class: UpdateController
+ *
+ * Controller for updating data
+ *
+ * @see BaseController
+ */
 class UpdateController extends BaseController
 {
     /**
