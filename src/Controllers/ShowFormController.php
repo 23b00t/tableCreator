@@ -65,8 +65,7 @@ class ShowFormController extends BaseController
         }
 
         // Prepare response with object data, view, and action
-        $response = new Response($objectArray);
-        $response->setView($this->view);
+        $response = new Response($objectArray, $this->view);
         $response->setAction($this->action);
 
         return $response;

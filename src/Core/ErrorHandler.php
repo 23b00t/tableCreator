@@ -55,7 +55,6 @@ class ErrorHandler
      */
     public static function handle(Throwable $e): Response
     {
-        $response = new Response([]);
         $exceptionsMap = [
             '42S01' => [
                 'msg' => "Achtung: Die Tabelle existiert bereits.",
@@ -74,8 +73,7 @@ class ErrorHandler
         /** Check if exception matches any predefined codes/messages and set appropriate response */
         foreach ($exceptionsMap as $key => $settings) {
             if (($e->getCode() === $key) || ($e->getMessage() === $key)) {
-                $response->setMsg($settings['msg']);
-                $response->setView($settings['view']);
+                $response = new Response([], $settings['view'], $settings['msg']);
                 return $response;
             }
         }

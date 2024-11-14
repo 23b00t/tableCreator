@@ -18,7 +18,7 @@ class Response
     /**
      * @var string $msg
      */
-    private string $msg = '';
+    private string $msg;
 
     /**
      * @var string $action
@@ -28,7 +28,7 @@ class Response
     /**
      * @var string $view
      */
-    private string $view = '';
+    private string $view;
 
     /**
      * @var string $area
@@ -40,9 +40,11 @@ class Response
      *
      * @param array $objectArray
      */
-    public function __construct(array $objectArray)
+    public function __construct(array $objectArray, string $view = '', string $msg = '')
     {
         $this->objectArray = $objectArray;
+        $this->view = $view;
+        $this->msg = $msg;
     }
 
     /**
@@ -86,14 +88,13 @@ class Response
     }
 
     /**
-     * setMsg
+     * getArea
      *
-     * @param string $msg
-     * @return void
+     * @return string
      */
-    public function setMsg(string $msg): void
+    public function getArea(): string
     {
-        $this->msg = $msg;
+        return $this->area;
     }
 
     /**
@@ -127,16 +128,6 @@ class Response
     public function setObjectArray(array $objectArray): void
     {
         $this->objectArray = $objectArray;
-    }
-
-    /**
-     * getArea
-     *
-     * @return string
-     */
-    public function getArea(): string
-    {
-        return $this->area;
     }
 
     /**

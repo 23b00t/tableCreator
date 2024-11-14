@@ -326,10 +326,10 @@ Search.appendIndex(
             "summary": "getView",
             "url": "classes/App-Core-Response.html#method_getView"
         },                {
-            "fqsen": "\\App\\Core\\Response\u003A\u003AsetMsg\u0028\u0029",
-            "name": "setMsg",
-            "summary": "setMsg",
-            "url": "classes/App-Core-Response.html#method_setMsg"
+            "fqsen": "\\App\\Core\\Response\u003A\u003AgetArea\u0028\u0029",
+            "name": "getArea",
+            "summary": "getArea",
+            "url": "classes/App-Core-Response.html#method_getArea"
         },                {
             "fqsen": "\\App\\Core\\Response\u003A\u003AsetAction\u0028\u0029",
             "name": "setAction",
@@ -345,11 +345,6 @@ Search.appendIndex(
             "name": "setObjectArray",
             "summary": "setObjectArray",
             "url": "classes/App-Core-Response.html#method_setObjectArray"
-        },                {
-            "fqsen": "\\App\\Core\\Response\u003A\u003AgetArea\u0028\u0029",
-            "name": "getArea",
-            "summary": "getArea",
-            "url": "classes/App-Core-Response.html#method_getArea"
         },                {
             "fqsen": "\\App\\Core\\Response\u003A\u003AsetArea\u0028\u0029",
             "name": "setArea",
