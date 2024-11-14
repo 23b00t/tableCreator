@@ -10,12 +10,11 @@
       -action : string
       -view : string
       -area : string
-      +__construct(objectArray)
+      +__construct(objectArray, view, msg)
       +getObjectArray()
       +getMsg()
       +getAction()
       +getView()
-      +setMsg(msg)
       +setAction(action)
       +setView(view)
       +setObjectArray(objectArray)

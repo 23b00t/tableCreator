@@ -79,9 +79,7 @@ abstract class BaseController
                 $objectArray = ['tableRows' => $tableRows];
             }
 
-            $response = new Response($objectArray);
-            $response->setMsg($this->msg);
-            $response->setView($this->view);
+            $response = new Response($objectArray, $this->view, $this->msg);
             return $response;
         } catch (\Throwable $e) {
             return ErrorHandler::handle($e);
