@@ -187,5 +187,5 @@
   Models_BaseModel <|-- Models_Dataset
   Models_BaseModel <|-- Models_DatasetAttribute
   Models_BaseModel <|-- Models_TableRow
-  Models_Dataset "1" --o "*" Models_DatasetAttribute
+  Models_Dataset "1" *-- "1..*" Models_DatasetAttribute
 @enduml
